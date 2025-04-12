@@ -3,6 +3,19 @@ class Team::ScavHuntsController < Team::BaseController
     @scav_hunts = @team.team_scav_hunts
   end
 
+  def edit
+    @team_scav_hunt = @team.team_scav_hunts.find_by(slug: params[:slug])
+  end
+
+  def update
+    @team.team_scav_hunts.find_by(slug: params[:slug]).update(params[:team_scav_hunt].permit(
+      :discord_items_channel_id,
+      :discord_pages_channel_id,
+      :discord_guild_id
+    ))
+    redirect_to action: :show
+  end
+
   def show
     @team_scav_hunt = @team.team_scav_hunts.find_by(slug: params[:slug])
     item_page_numbers = @team_scav_hunt.items.group(:page_number).select(:page_number).map(&:page_number)

@@ -39,15 +39,16 @@ class Init < ActiveRecord::Migration[8.0]
 
     create_table :team_scav_hunts do |t|
       t.text :name, null: false
-      t.text :slug, null: false, index: {unique: true}
+      t.text :slug, null: false
       t.references :scav_hunt, null: false, foreign_key: true
       t.references :team, null: false, foreign_key: true
       t.index [:team_id, :scav_hunt_id], unique: true
+      t.index [:team_id, :slug], unique: true
       t.text :discord_guild_id
-      t.text :discord_items_channel_id
-      t.text :discord_pages_channel_id
-      t.text :discord_items_message_id
-      t.text :discord_pages_message_id
+      t.text :discord_items_channel_id, index: {unique: true}
+      t.text :discord_pages_channel_id, index: {unique: true}
+      t.text :discord_items_message_id, index: {unique: true}
+      t.text :discord_pages_message_id, index: {unique: true}
 
       t.timestamps
     end
@@ -81,19 +82,21 @@ class Init < ActiveRecord::Migration[8.0]
 
     create_table :items do |t|
       t.references :team_scav_hunt, null: false, foreign_key: true
-      t.text :number
+      t.integer :number
       t.integer :page_number
-      t.text :content, null: false
-      t.text :discord_thread_id
+      t.text :content
+      t.text :discord_thread_id, index: {unique: true}
+      t.index [:team_scav_hunt_id, :number], unique: true
 
       t.timestamps
     end
 
     create_table :pages do |t|
       t.references :team_scav_hunt, null: false, foreign_key: true
-      t.text :page_number, null: false
-      t.text :discord_thread_id
-      t.text :discord_message_id
+      t.integer :page_number, null: false
+      t.text :discord_thread_id, index: {unique: true}
+      t.text :discord_message_id, index: {unique: true}
+      t.index [:team_scav_hunt_id, :page_number], unique: true
 
       t.timestamps
     end

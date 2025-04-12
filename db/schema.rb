@@ -37,12 +37,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_05_163210) do
 
   create_table "items", force: :cascade do |t|
     t.bigint "team_scav_hunt_id", null: false
-    t.text "number"
+    t.integer "number"
     t.integer "page_number"
-    t.text "content", null: false
+    t.text "content"
     t.text "discord_thread_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["discord_thread_id"], name: "index_items_on_discord_thread_id", unique: true
+    t.index ["team_scav_hunt_id", "number"], name: "index_items_on_team_scav_hunt_id_and_number", unique: true
     t.index ["team_scav_hunt_id"], name: "index_items_on_team_scav_hunt_id"
   end
 
@@ -59,11 +61,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_05_163210) do
 
   create_table "pages", force: :cascade do |t|
     t.bigint "team_scav_hunt_id", null: false
-    t.text "page_number", null: false
+    t.integer "page_number", null: false
     t.text "discord_thread_id"
     t.text "discord_message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["discord_message_id"], name: "index_pages_on_discord_message_id", unique: true
+    t.index ["discord_thread_id"], name: "index_pages_on_discord_thread_id", unique: true
+    t.index ["team_scav_hunt_id", "page_number"], name: "index_pages_on_team_scav_hunt_id_and_page_number", unique: true
     t.index ["team_scav_hunt_id"], name: "index_pages_on_team_scav_hunt_id"
   end
 
@@ -117,9 +122,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_05_163210) do
     t.text "discord_pages_message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["discord_items_channel_id"], name: "index_team_scav_hunts_on_discord_items_channel_id", unique: true
+    t.index ["discord_items_message_id"], name: "index_team_scav_hunts_on_discord_items_message_id", unique: true
+    t.index ["discord_pages_channel_id"], name: "index_team_scav_hunts_on_discord_pages_channel_id", unique: true
+    t.index ["discord_pages_message_id"], name: "index_team_scav_hunts_on_discord_pages_message_id", unique: true
     t.index ["scav_hunt_id"], name: "index_team_scav_hunts_on_scav_hunt_id"
-    t.index ["slug"], name: "index_team_scav_hunts_on_slug", unique: true
     t.index ["team_id", "scav_hunt_id"], name: "index_team_scav_hunts_on_team_id_and_scav_hunt_id", unique: true
+    t.index ["team_id", "slug"], name: "index_team_scav_hunts_on_team_id_and_slug", unique: true
     t.index ["team_id"], name: "index_team_scav_hunts_on_team_id"
   end
 

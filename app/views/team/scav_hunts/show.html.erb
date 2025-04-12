@@ -27,6 +27,7 @@
         <li><%= link_to "Pending users (#{@team.team_users.where(approved: nil).count})", team_users_pending_path(@team) %></li>
         <li><%= link_to "Banned users", team_users_banned_path(@team) %></li>
         <li><%= link_to "Add Page Captain", new_team_scav_hunt_page_path(@team, @team_scav_hunt) %></li>
+        <li><%= link_to "Configure Discord", edit_team_scav_hunt_path(@team, @team_scav_hunt) %></li>
       </ul>
     </li>
   <% end %>
