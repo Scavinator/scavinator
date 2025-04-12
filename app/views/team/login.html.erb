@@ -1,0 +1,10 @@
+<main>
+  <h2><%= @team.affiliation %> Log In</h2>
+  <p>Welcome back to Scavinator!</p>
+
+  <%= form_with url: team_create_session_path(@team) do |form| %>
+    <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Email" %>
+    <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Password" %>
+    <%= form.submit "Sign in" %>
+  <% end %>
+</main>

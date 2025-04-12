@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  team_scav_hunt: one
+  number: MyText
+  page: 1
+  content: MyText
+  discord_id: MyText
+
+two:
+  team_scav_hunt: two
+  number: MyText
+  page: 1
+  content: MyText
+  discord_id: MyText

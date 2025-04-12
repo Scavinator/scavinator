@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  team: one
+  user: one
+  captain: false
+  approved: false
+  invited: false
+
+two:
+  team: two
+  user: two
+  captain: false
+  approved: false
+  invited: false

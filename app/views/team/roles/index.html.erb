@@ -1,0 +1,7 @@
+<h1>Team <%= @team.affiliation %> Roles</h1>
+<%= link_to "+ Create Role", new_team_role_path(@team) %>
+<ul>
+  <% @roles.each do |role| %>
+    <li><%= link_to role.name, team_role_path(@team, role) %></li>
+  <% end %>
+</ul>

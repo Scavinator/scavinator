@@ -1,0 +1,6 @@
+<h1>All Registered Hunts</h1>
+<ul>
+  <% @scav_hunts.each do |hunt| %>
+    <li><%= link_to hunt.name, team_scav_hunt_path(@team, hunt) %></li>
+  <% end %>
+</ul>

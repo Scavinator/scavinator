@@ -1,0 +1,57 @@
+<main>
+  <h2>Thanks for signing up!</h2>
+  <p>
+    We'll need some details from you, all of which will be visible to your team (aside from your password of course).
+    <br>
+    You can also update any of them aside from your username at any time.
+  </p>
+  <%= form_with url: root_users_path do |form| %>
+    <h3>Your account</h3>
+    <p><i>If you don't need to make a team (aka you aren't a captain), <b>get a sign up link from your captain</b> instead of using this form</i></p>
+    <%= form.text_field :user_name, required: true, placeholder: "Name" %>
+    <%= form.email_field :email_address, required: true, placeholder: "Email address" %>
+    <%= form.password_field :password, required: true, placeholder: "Password" %>
+    <%= form.password_field :password_again, required: true, placeholder: "Password again..." %>
+    <h3>Your team</h3>
+    <p><b>Note: Your team will need to be reviewed by an admin before it will be visible</b></p>
+    <fieldset>
+      <legend>Organizational Affilation</legend>
+      <label for="affiliation">
+        <p>What organization is behind your team? This could be an RSO, a dorm, or even a friend group.</p>
+        <p><small><i>Some examples include Snitchcock Scav, GASH, and Valois Bois.</i></small></p>
+        <p>Affiliation: <input required id="affiliation" type="text" name="affiliation" placeholder="Mansueto User Group"></p>
+      </label>
+    </fieldset>
+    <fieldset>
+      <legend>Domain Prefix</legend>
+      <label for="prefix">
+        <p>Your team will get your own domain under .scavinator.com! What would you like your prefix to be?</p>
+        <p><small><b>Note: This is subject to review from a site admin before it will go live</b></small></p>
+        <input required id="prefix" type="text" name="prefix" placeholder="mug">.scavinator.com
+      </label>
+    </fieldset>
+    <fieldset>
+      <legend>Is your team UChicago affiliated?</legend>
+      <label for="uchicago-true">
+        <input required type="radio" id="uchicago-true" name="uchicago" value="true">
+        My team is primarily based out of UChicago
+      </label>
+      <label for="uchicago-false">
+        <input required type="radio" id="uchicago-false" name="uchicago" value="false">
+        My team is based from a different organization / university
+      </label>
+    </fieldset>
+    <fieldset>
+      <legend>Is your team in-person or virtual?</legend>
+      <label for="virtual-true">
+        <input required type="radio" id="virtual-true" name="virtual" value="true">
+        My team is local to UChicago / We have an HQ where our team is based out of
+      </label>
+      <label for="virtual-false">
+        <input required type="radio" id="virtual-false" name="virtual" value="false">
+        My team is geographically distributed / We will be coordinating mostly digitally
+      </label>
+    </fieldset>
+    <%= form.submit "Sign Up & Create Team" %>
+  <% end %>
+</main>

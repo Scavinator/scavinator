@@ -1,0 +1,12 @@
+<h1>Team <%= @team.affiliation %> Tags</h1>
+<%= link_to "+ Create Tag", new_team_tag_path(@team) %>
+<ul>
+  <% @tags.each do |tag| %>
+    <li>
+      <%= link_to tag.name, edit_team_tag_path(@team, tag) %>
+      <% if tag.team_role %>
+        (<%= tag.team_role.name %>)
+      <% end %>
+    </li>
+  <% end %>
+</ul>

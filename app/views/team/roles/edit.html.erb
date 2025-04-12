@@ -1,0 +1,9 @@
+<h1>Edit Role</h1>
+<!-- TODO: FORM TO ADD MEMBER HERE. leaving till later once there's a path to do this on a different controller -->
+<%= form_with model: @role, url: team_role_path(@team, @role) do |form| %>
+  <%= form.label :name %>
+  <%= form.text_field :name, required: true, placeholder: "Name" %>
+  <%= form.label :enabled %>
+  <%= form.checkbox :enabled %>
+  <%= form.submit "Create" %>
+<% end %>

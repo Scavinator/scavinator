@@ -1,0 +1,11 @@
+<h1>Manage Scav Hunts</h1>
+<% if @scav_hunts.empty? %>
+  <p><i>No hunts created. <%= link_to "Create one!", new_scav_hunt_path %></i></p>
+<% else %>
+  <p><%= link_to "+ Create Hunt", new_scav_hunt_path %></p>
+  <ul>
+    <% @scav_hunts.each do |hunt| %>
+      <li><%= link_to hunt.name, scav_hunt_path(hunt) %></li>
+    <% end %>
+  </ul>
+<% end %>

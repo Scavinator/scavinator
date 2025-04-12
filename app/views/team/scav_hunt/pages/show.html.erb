@@ -1,0 +1,25 @@
+<h1>Page <%= @page_number %></h1>
+<% if captain? %>
+  <h4>Add Page Captain</h4>
+  <%= form_with model: @team_scav_hunt.page_captains.new, url: team_scav_hunt_pages_path(@team, @team_scav_hunt) do |form| %>
+    <%= form.hidden_field :page_number, value: @page_number %>
+    <%= form.select :user_id, [["N/A", nil], *@team_users.map { |tu| [tu.user.name, tu.user.id] }] %>
+    <%= form.submit "Add" %>
+  <% end %>
+<% end %>
+<h3>Page Captains</h3>
+<ul>
+  <% @page_captains.each do |page_captain| %>
+    <li>
+      <%= page_captain.user.name %>
+      <% if page_owner? || captain? %>
+        <%= form_with model: page_captain, method: :DELETE, url: team_scav_hunt_page_path(@team, @team_scav_hunt, @page_number) do |form| %>
+          <%= form.hidden_field :user_id %>
+          <%= form.submit "Delete" %>
+        <% end %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+<h3>Items</h3>
+<%= render "team/scav_hunt/items/list", items: @items %>

@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  item: one
+  team_tag: one
+  accepted: false
+
+two:
+  item: two
+  team_tag: two
+  accepted: false

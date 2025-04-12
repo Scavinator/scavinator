@@ -1,0 +1,41 @@
+<p>Page: <%= @item.page_number %>
+<p><small><%= link_to "(permalink)", team_scav_hunt_item_path(@team, @team_scav_hunt, @item) %></small></p>
+<p><%= link_to "(edit)", edit_team_scav_hunt_item_path(@team, @team_scav_hunt, @item) %></p>
+<p><b>Item <%= @item.number %>:</b> <%= @item.content %></p>
+<h3>Assignees</h3>
+<ul>
+  <li>
+    <%= form_with model: @item.item_users.new, url: team_scav_hunt_item_users_path(@team, @team_scav_hunt, @item) do |form| %>
+      <%= form.label :user_id, "Assign:" %>
+      <%= form.select :user_id, [["N/A", nil], *@team_users.map { |team_user| [team_user.user.name, team_user.user.id] }] %>
+      <%= form.submit "Assign" %>
+    <% end %>
+  </li>
+  <% @item.item_users.all.each do |item_user| %>
+    <li>
+      <%= item_user.user.name %>
+      <%= form_with model: item_user, method: :delete, url: team_scav_hunt_item_user_path(@team, @team_scav_hunt, @item) do |form| %>
+        <%= form.hidden_field :id %>
+        <%= form.submit "Unassign" %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+<h3>Tags</h3>
+<ul>
+  <li>
+    <%= form_with model: @item.item_tags.new, url: team_scav_hunt_item_tags_path(@team, @team_scav_hunt, @item) do |form| %>
+      <%= form.label :tag_id, "Add tag:" %>
+      <%= form.select :tag_id, [["N/A", nil], *@tags.map { |tag| [tag.name, tag.id] }] %>
+      <%= form.submit "Add" %>
+    <% end %>
+  </li>
+  <% @item.item_tags.all.each do |item_tag| %>
+    <li>
+      <%= link_to item_tag.team_tag.name, team_scav_hunt_tag_path(@team, @team_scav_hunt, item_tag.team_tag) %>
+      <%= form_with model: item_tag, method: :delete, url: team_scav_hunt_item_tag_path(@team, @team_scav_hunt, @item, item_tag) do |form| %>
+        <%= form.submit "Delete" %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

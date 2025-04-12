@@ -1,0 +1,14 @@
+<h1>Banned Members of <%= @team.affiliation %></h1>
+<ul>
+  <% @members.each do |member| %>
+    <li>
+      <%= member.user.name %>
+      <% if captain? %>
+        <%= form_with model: member, url: team_user_path(@team, member.user) do |form| %>
+          <%= form.hidden_field :approved, value: true %>
+          <%= form.submit "Unban" %>
+        <% end %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

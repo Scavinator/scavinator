@@ -1,0 +1,10 @@
+<h1>Create Item</h1>
+<%= form_with model: @team_scav_hunt.items.new, url: team_scav_hunt_items_path(@team, @team_scav_hunt) do |form| %>
+  <%= form.label :page_number %>
+  <%= form.number_field :page_number, required: true, placeholder: "Page Number" %>
+  <%= form.label :number %>
+  <%= form.number_field :number, required: true, placeholder: "Item Number" %>
+  <%= form.label :content %>
+  <%= form.text_field :content, required: true, placeholder: "Item text" %>
+  <%= form.submit "Create" %>
+<% end %>

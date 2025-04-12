@@ -1,0 +1,2 @@
+module ScavHuntsHelper
+end

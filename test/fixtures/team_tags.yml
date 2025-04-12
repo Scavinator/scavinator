@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyText
+  enabled: false
+  color: MyText
+  team: one
+
+two:
+  name: MyText
+  enabled: false
+  color: MyText
+  team: two

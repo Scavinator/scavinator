@@ -1,0 +1,8 @@
+<h1><%= @scav_hunt.name %></h1>
+<p><%= @scav_hunt.start %> - <%= @scav_hunt.end %></p>
+<h3>Teams</h3>
+<ul>
+  <% @teams.each do |team| %>
+    <li><%= team.name %> (<%= team.team.affiliation %>)</li>
+  <% end %>
+</ul>
