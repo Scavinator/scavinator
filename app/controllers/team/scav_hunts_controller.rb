@@ -31,6 +31,6 @@ class Team::ScavHuntsController < Team::BaseController
 
   def create
     hunt = @team.team_scav_hunts.create(params[:team_scav_hunt].permit(:slug, :name, :scav_hunt_id))
-    redirect_to team_scav_hunt_path(@team, hunt)
+    redirect_to team_scav_hunt_path(hunt)
   end
 end

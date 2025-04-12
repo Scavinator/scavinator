@@ -1,11 +1,9 @@
-class TeamController < ApplicationController
-  before_action :set_team_by_prefix
-  before_action :set_user_by_cookie, :set_team_user, except: [:new_session, :create_session]
-  skip_before_action :require_authentication, only: [:new_session, :create_session]
+class TeamController < Team::BaseController
+  skip_before_action :require_authentication, :set_user_by_cookie, :set_team_user, only: [:new_session, :create_session]
 
   def show
     @scav_hunt = @team.team_scav_hunts.first
-    redirect_to team_scav_hunt_path(@team, @scav_hunt) unless @scav_hunt.nil? || @team_user.captain
+    redirect_to team_scav_hunt_path(@scav_hunt) unless @scav_hunt.nil? || @team_user.captain
   end
 
   def new_session
@@ -15,7 +13,7 @@ class TeamController < ApplicationController
   def create_session
     if user = User.authenticate_by(params.permit(:email_address, :password))
       start_new_session_for user
-      redirect_to team_path(@team)
+      redirect_to team_path
     else
       redirect_to team_new_session_path, alert: "Try another email address or password."
     end

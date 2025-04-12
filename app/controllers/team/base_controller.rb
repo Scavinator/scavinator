@@ -3,7 +3,7 @@ class Team::BaseController < ApplicationController
 
   private
     def set_team_by_prefix
-      @team = Team.find_by!(prefix: params.expect(:team_prefix))
+      @team = Team.find_by!(prefix: request.path_parameters[:prefix])
     end
 
     def set_user_by_cookie

@@ -11,7 +11,7 @@
   <tbody>
     <% items.each do |item| %>
       <tr>
-        <td><%= link_to item.number, team_scav_hunt_item_path(@team, @team_scav_hunt, item) %></td>
+        <td><%= link_to item.number, team_scav_hunt_item_path(@team_scav_hunt, item) %></td>
         <td><%= item.content %></td>
         <%= yield item %>
       </tr>

@@ -31,11 +31,11 @@ module Authentication
 
     def request_authentication
       session[:return_to_after_authenticating] = request.url
-      prefix = request.path_parameters[:prefix] || request.path_parameters[:team_prefix]
+      prefix = request.path_parameters[:prefix]
       if prefix.nil?
         redirect_to new_session_path
       else
-        redirect_to team_new_session_path(Team.new(prefix: prefix))
+        redirect_to team_new_session_path
       end
     end
 
@@ -46,12 +46,12 @@ module Authentication
     def start_new_session_for(user)
       user.sessions.create!(user_agent: request.user_agent, ip_address: request.remote_ip).tap do |session|
         Current.session = session
-        cookies.signed.permanent[:session_id] = { value: session.id, httponly: true, same_site: :lax }
+        cookies.signed.permanent[:session_id] = { value: session.id, httponly: true, same_site: :strict, domain: "scavinator.com" }
       end
     end
 
     def terminate_session
       Current.session.destroy
-      cookies.delete(:session_id)
+      cookies.delete(:session_id, domain: "scavinator.com")
     end
 end

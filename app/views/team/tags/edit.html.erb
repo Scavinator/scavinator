@@ -1,5 +1,5 @@
 <h1>Edit Tag</h1>
-<%= form_with model: @tag, url: team_tag_path(@team, @tag) do |form| %>
+<%= form_with model: @tag, url: team_tag_path(@tag) do |form| %>
   <%= form.label :name %>
   <%= form.text_field :name, required: true, placeholder: "Name" %>
   <%= form.label :color %>

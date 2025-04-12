@@ -4,11 +4,11 @@
     <li>
       <%= member.user.name %>
       <% if captain? %>
-        <%= form_with model: member, url: team_user_path(@team, member.user) do |form| %>
+        <%= form_with model: member, url: team_user_path(member.user) do |form| %>
           <%= form.hidden_field :approved, value: false %>
           <%= form.submit "Ban" %>
         <% end %>
-        <%= form_with model: member, url: team_user_path(@team, member.user) do |form| %>
+        <%= form_with model: member, url: team_user_path(member.user) do |form| %>
           <%= form.hidden_field :approved, value: true %>
           <%= form.submit "Approve" %>
         <% end %>

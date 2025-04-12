@@ -1,5 +1,5 @@
 <h1>Set Up <%= @team_scav_hunt.name %> (<%= @team.affiliation %>)</h1>
-<%= form_with model: @team_scav_hunt, url: team_scav_hunt_path(@team, @team_scav_hunt) do |form| %>
+<%= form_with model: @team_scav_hunt, url: team_scav_hunt_path(@team_scav_hunt) do |form| %>
   <%= form.label :discord_items_channel_id, "Items Channel ID:" %>
   <%= form.text_field :discord_items_channel_id %>
   <%= form.label :discord_pages_channel_id, "Pages Channel ID:" %>

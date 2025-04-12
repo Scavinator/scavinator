@@ -1,7 +1,7 @@
 <h1>The List</h1>
 <i>As transcribed by <%= @team_scav_hunt.name %></i>
-<p><%= link_to "+ Create Item", new_team_scav_hunt_item_path(@team, @team_scav_hunt) %></p>
+<p><%= link_to "+ Create Item", new_team_scav_hunt_item_path(@team_scav_hunt) %></p>
 <% @items_by_page.each do |page_number, items| %>
-  <h4><%= page_number %></h4>
+  <h4>Page <%= page_number %></h4>
   <%= render "list", items: items %>
 <% end %>

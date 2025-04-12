@@ -1,5 +1,5 @@
 <h4>Add Page Captain</h4>
-<%= form_with model: @team_scav_hunt.page_captains.new, url: team_scav_hunt_pages_path(@team, @team_scav_hunt) do |form| %>
+<%= form_with model: @team_scav_hunt.page_captains.new, url: team_scav_hunt_pages_path(@team_scav_hunt) do |form| %>
   <%= form.label :page_number, "Page Number:" %>
   <%= form.number_field :page_number, required: true %>
   <%= form.label :user_id, "Page Captain:" %>

@@ -1,5 +1,5 @@
 <h1>Current Captains</h1>
-<%= form_with model: @team.team_users.new, url: team_users_captains_path(@team), html: {autocomplete: 'off'} do |form| %>
+<%= form_with model: @team.team_users.new, url: team_users_captains_path, html: {autocomplete: 'off'} do |form| %>
   <%= form.label :user_id, "Add captain:" %>
   <%= form.select :user_id, [["N/A", nil], *@team_users.map { |tu| [tu.user.name, tu.user.id] }] %>
   <%= form.submit "Add" %>
@@ -9,7 +9,7 @@
     <li>
       <%= team_user.user.name %>
       <% if team_user.user.id == @user.id %>
-        <%= form_with model: team_user, method: :DELETE, url: team_users_captain_path(@team, team_user) do |form| %>
+        <%= form_with model: team_user, method: :DELETE, url: team_users_captain_path(team_user) do |form| %>
           <%= form.submit "Remove Captain" %>
         <% end %>
       <% end %>

@@ -1,22 +1,22 @@
 <h1><%= @team_scav_hunt.name %> (<%= @team.affiliation %>)</h1>
 <ul>
-  <li><%= link_to "Leadership", team_scav_hunt_role_members_path(@team, @team_scav_hunt) %></li>
-  <li><%= link_to "Directory", team_users_path(@team) %></li>
-  <li><%= link_to "My Items (#{@my_items.count})", team_scav_hunt_items_mine_path(@team, @team_scav_hunt) %></li>
+  <li><%= link_to "Leadership", team_scav_hunt_role_members_path(@team_scav_hunt) %></li>
+  <li><%= link_to "Directory", team_users_path %></li>
+  <li><%= link_to "My Items (#{@my_items.count})", team_scav_hunt_items_mine_path(@team_scav_hunt) %></li>
   <li>
     My Roles
     <ul>
       <% @my_roles.each do |team_role| %>
         <!-- TODO: don't just link to the first tag page. you need a proper role page. -->
-        <li><%= link_to team_role.name, team_scav_hunt_tag_path(@team, @team_scav_hunt, team_role.team_tags.first) %></li>
+        <li><%= link_to team_role.name, team_scav_hunt_tag_path(@team_scav_hunt, team_role.team_tags.first) %></li>
       <% end %>
     </ul>
   </li>
   <li>
-    <%= link_to "Full List", team_scav_hunt_items_path(@team, @team_scav_hunt) %>
+    <%= link_to "Full List", team_scav_hunt_items_path(@team_scav_hunt) %>
     <ul>
       <% @page_numbers.each do |page_number| %>
-        <li><%= link_to "Page #{page_number}", team_scav_hunt_page_path(@team, @team_scav_hunt, page_number) %></li>
+        <li><%= link_to "Page #{page_number}", team_scav_hunt_page_path(@team_scav_hunt, page_number) %></li>
       <% end %>
     </ul>
   </li>
@@ -24,10 +24,10 @@
     <li>
       Admin
       <ul>
-        <li><%= link_to "Pending users (#{@team.team_users.where(approved: nil).count})", team_users_pending_path(@team) %></li>
-        <li><%= link_to "Banned users", team_users_banned_path(@team) %></li>
-        <li><%= link_to "Add Page Captain", new_team_scav_hunt_page_path(@team, @team_scav_hunt) %></li>
-        <li><%= link_to "Configure Discord", edit_team_scav_hunt_path(@team, @team_scav_hunt) %></li>
+        <li><%= link_to "Pending users (#{@team.team_users.where(approved: nil).count})", team_users_pending_path %></li>
+        <li><%= link_to "Banned users", team_users_banned_path %></li>
+        <li><%= link_to "Add Page Captain", new_team_scav_hunt_page_path(@team_scav_hunt) %></li>
+        <li><%= link_to "Configure Discord", edit_team_scav_hunt_path(@team_scav_hunt) %></li>
       </ul>
     </li>
   <% end %>
