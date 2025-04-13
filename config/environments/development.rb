@@ -2,6 +2,8 @@ require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
   config.scavinator_domain = "scavinator.test"
+  config.scavinator_uri = "http://#{Rails.configuration.scavinator_domain}:3000"
+  config.session_store :cookie_store, domain: Rails.configuration.scavinator_domain
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Make code changes take effect immediately without server restart.

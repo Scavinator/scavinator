@@ -1,0 +1,9 @@
+<h1>Configure Account</h1>
+<p>Discord Account Linking:
+  <% if @user.discord_id %>
+    Discord account is currently linked!
+  <% else %>
+    <%= link_to "Click here to link your discord account", "https://discord.com/oauth2/authorize?response_type=code&client_id=#{Rails.application.credentials.discord_client_id!}&scope=identify&redirect_uri=#{Rails.configuration.scavinator_uri}/users/me/discord" %>
+  <% end %>
+</p>
+    <%= link_to "Click here to link your discord account", discord_oauth_uri %>

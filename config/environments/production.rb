@@ -2,6 +2,8 @@ require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
   config.scavinator_domain = "scavinator.com"
+  config.scavinator_uri = "https://#{Rails.configuration.scavinator_domain}"
+  config.session_store :cookie_store, domain: Rails.configuration.scavinator_domain
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.

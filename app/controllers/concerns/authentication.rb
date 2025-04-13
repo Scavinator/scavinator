@@ -46,12 +46,16 @@ module Authentication
     def start_new_session_for(user)
       user.sessions.create!(user_agent: request.user_agent, ip_address: request.remote_ip).tap do |session|
         Current.session = session
-        cookies.signed.permanent[:session_id] = { value: session.id, httponly: true, same_site: :strict, domain: Rails.configuration.scavinator_domain }
+        cookies.signed.permanent[:session_id] = { value: session.id, httponly: true, same_site: :lax, domain: Rails.configuration.scavinator_domain }
       end
     end
 
     def terminate_session
       Current.session.destroy
       cookies.delete(:session_id, domain: Rails.configuration.scavinator_domain)
+    end
+
+    def set_user_by_cookie
+      @user = find_session_by_cookie.user
     end
 end

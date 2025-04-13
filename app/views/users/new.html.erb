@@ -5,7 +5,7 @@
     <br>
     You can also update any of them aside from your username at any time.
   </p>
-  <%= form_with url: root_users_path do |form| %>
+  <%= form_with url: users_path do |form| %>
     <h3>Your account</h3>
     <p><i>If you don't need to make a team (aka you aren't a captain), <b>get a sign up link from your captain</b> instead of using this form</i></p>
     <%= form.text_field :user_name, required: true, placeholder: "Name" %>
@@ -27,7 +27,7 @@
       <label for="prefix">
         <p>Your team will get your own domain under .<%= Rails.configuration.scavinator_domain %>! What would you like your prefix to be?</p>
         <p><small><b>Note: This is subject to review from a site admin before it will go live</b></small></p>
-        <input required id="prefix" type="text" name="prefix" placeholder="mug">.<%= Rails.config.scavinator_domain %>
+        <input required id="prefix" type="text" name="prefix" placeholder="mug">.<%= Rails.configuration.scavinator_domain %>
       </label>
     </fieldset>
     <fieldset>
