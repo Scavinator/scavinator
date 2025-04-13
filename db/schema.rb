@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_13_000153) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_13_155843) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -48,6 +48,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_13_000153) do
     t.index ["list_category_id"], name: "index_items_on_list_category_id"
     t.index ["team_scav_hunt_id", "list_category_id", "number"], name: "idx_on_team_scav_hunt_id_list_category_id_number_65820b60c9", unique: true, nulls_not_distinct: true
     t.index ["team_scav_hunt_id"], name: "index_items_on_team_scav_hunt_id"
+    t.check_constraint "NOT (page_number IS NULL AND list_category_id IS NULL)", name: "list_category_or_page_number"
   end
 
   create_table "list_categories", force: :cascade do |t|
