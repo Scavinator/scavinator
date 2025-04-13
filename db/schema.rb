@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_05_163210) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_13_000153) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,9 +43,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_05_163210) do
     t.text "discord_thread_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "list_category_id"
     t.index ["discord_thread_id"], name: "index_items_on_discord_thread_id", unique: true
-    t.index ["team_scav_hunt_id", "number"], name: "index_items_on_team_scav_hunt_id_and_number", unique: true
+    t.index ["list_category_id"], name: "index_items_on_list_category_id"
+    t.index ["team_scav_hunt_id", "list_category_id", "number"], name: "idx_on_team_scav_hunt_id_list_category_id_number_65820b60c9", unique: true, nulls_not_distinct: true
     t.index ["team_scav_hunt_id"], name: "index_items_on_team_scav_hunt_id"
+  end
+
+  create_table "list_categories", force: :cascade do |t|
+    t.text "name", null: false
+    t.bigint "team_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["team_id"], name: "index_list_categories_on_team_id"
   end
 
   create_table "page_captains", force: :cascade do |t|
@@ -181,7 +191,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_05_163210) do
   add_foreign_key "item_tags", "team_tags"
   add_foreign_key "item_users", "items"
   add_foreign_key "item_users", "users"
+  add_foreign_key "items", "list_categories"
   add_foreign_key "items", "team_scav_hunts"
+  add_foreign_key "list_categories", "teams"
   add_foreign_key "page_captains", "team_scav_hunts"
   add_foreign_key "page_captains", "users"
   add_foreign_key "pages", "team_scav_hunts"
