@@ -6,6 +6,10 @@ class Team < ApplicationRecord
   has_many :team_tags
   has_many :team_roles
 
+  def to_domain
+    "#{self.prefix}.#{Rails.configuration.scavinator_domain}"
+  end
+
   def to_param
     self.prefix
   end

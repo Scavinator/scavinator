@@ -25,9 +25,9 @@
     <fieldset>
       <legend>Domain Prefix</legend>
       <label for="prefix">
-        <p>Your team will get your own domain under .scavinator.com! What would you like your prefix to be?</p>
+        <p>Your team will get your own domain under .<%= Rails.configuration.scavinator_domain %>! What would you like your prefix to be?</p>
         <p><small><b>Note: This is subject to review from a site admin before it will go live</b></small></p>
-        <input required id="prefix" type="text" name="prefix" placeholder="mug">.scavinator.com
+        <input required id="prefix" type="text" name="prefix" placeholder="mug">.<%= Rails.config.scavinator_domain %>
       </label>
     </fieldset>
     <fieldset>

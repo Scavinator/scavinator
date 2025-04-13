@@ -1,7 +1,7 @@
 <h2>Your teams:</h2>
 <ul>
   <% @teams.each do |team| %>
-    <li><%= link_to team.affiliation, team_url(domain: "#{team.prefix}.scavinator.com") %></li>
+    <li><%= link_to team.affiliation, team_url(domain: team.to_domain) %></li>
   <% end %>
 </ul>
 

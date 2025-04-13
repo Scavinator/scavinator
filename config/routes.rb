@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  constraints host: "scavinator.com" do
+  constraints host: Rails.configuration.scavinator_domain do
     draw(:root)
   end
-  constraints (-> (req) { m = req.host.match /([^\.]+)\.scavinator\.com/; req.path_parameters[:prefix] = m[1] if m; return m }) do
+  constraints (-> (req) { m = req.host.match /([^\.]+)\.#{Regexp.quote Rails.configuration.scavinator_domain}/; req.path_parameters[:prefix] = m[1] if m; return m }) do
     resource :team, controller: :team, path: ""
     scope "", as: :team, controller: :team do
       draw(:team)

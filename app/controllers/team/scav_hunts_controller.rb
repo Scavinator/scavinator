@@ -18,7 +18,7 @@ class Team::ScavHuntsController < Team::BaseController
 
   def show
     @team_scav_hunt = @team.team_scav_hunts.find_by(slug: params[:slug])
-    item_page_numbers = @team_scav_hunt.items.group(:page_number).select(:page_number).map(&:page_number)
+    item_page_numbers = @team_scav_hunt.items.group(:page_number).select(:page_number).where.not(page_number: nil).map(&:page_number)
     page_captain_page_numbers = @team_scav_hunt.page_captains.group(:page_number).select(:page_number).map(&:page_number)
     @page_numbers = [item_page_numbers, page_captain_page_numbers].flatten.uniq.sort
     @my_items = @team_scav_hunt.items.joins(:item_users).where(item_users: {user_id: @user.id})
