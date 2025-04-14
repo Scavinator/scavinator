@@ -25,6 +25,6 @@ module Scavinator
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-    config.middleware.swap Rails::Rack::Logger, LoggerWithHost
+    config.middleware.swap Rails::Rack::Logger, Rails::Rack::LoggerWithHost
   end
 end
