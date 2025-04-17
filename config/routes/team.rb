@@ -5,7 +5,8 @@ resources :scav_hunts, module: :team, path: "hunts", param: :slug do
   namespace :items, module: :scav_hunt do
     get 'mine', to: 'items#index_mine', as: :mine
   end
-  resources :items, module: :scav_hunt do
+  resources :items, module: :scav_hunt, param: :number, only: [:index, :create, :new]
+  resources :items, module: :scav_hunt, param: :number, only: [:show, :edit, :update, :destroy], path: "items/(:list_category_slug)" do
     resources :tags, module: :item, param: :item_tag_id do
     end
     namespace :tag, module: :item do

@@ -3,6 +3,7 @@ class Team::ScavHunt::Item::BaseController < Team::ScavHunt::BaseController
 
   private
     def set_item
-      @item = @team_scav_hunt.items.find_by!(id: params[:item_id])
+      @list_category = ListCategory.find_by!(slug: request.path_parameters[:list_category_slug]) unless request.path_parameters[:list_category_slug].nil?
+      @item = @team_scav_hunt.items.find_by!(number: request.path_parameters[:number] || request.path_parameters[:item_number], list_category_id: @list_category&.id)
     end
 end
