@@ -1,7 +1,7 @@
-class Team::ScavHuntsController < Team::BaseController
+class Team::ScavHuntsController < Team::ScavHunt::BaseController
   include Discord
 
-  before_action :set_team_scav_hunt, only: [:edit, :update]
+  skip_before_action :set_team_scav_hunt, except: [:edit, :update, :show]
 
   def index
     @scav_hunts = @team.team_scav_hunts
@@ -28,7 +28,6 @@ class Team::ScavHuntsController < Team::BaseController
   end
 
   def show
-    @team_scav_hunt = @team.team_scav_hunts.find_by(slug: params[:slug])
     item_page_numbers = @team_scav_hunt.items.group(:page_number).select(:page_number).where.not(page_number: nil).map(&:page_number)
     page_captain_page_numbers = @team_scav_hunt.page_captains.group(:page_number).select(:page_number).map(&:page_number)
     @page_numbers = [item_page_numbers, page_captain_page_numbers].flatten.uniq.sort
@@ -41,7 +40,7 @@ class Team::ScavHuntsController < Team::BaseController
   end
 
   def create
-    hunt = @team.team_scav_hunts.create(params[:team_scav_hunt].permit(:slug, :name, :scav_hunt_id))
+    hunt = @team.team_scav_hunts.create(params[:team_scav_hunt].permit(:name, :scav_hunt_id))
     redirect_to team_scav_hunt_path(hunt)
   end
 
@@ -49,10 +48,6 @@ class Team::ScavHuntsController < Team::BaseController
     def update_team
       @team_scav_hunt.update(discord_params)
       redirect_to action: :show
-    end
-
-    def set_team_scav_hunt
-      @team_scav_hunt = @team.team_scav_hunts.find_by!(slug: params[:slug])
     end
 
     def discord_params

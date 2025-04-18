@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_16_154830) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_17_233531) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -91,6 +91,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_16_154830) do
     t.text "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "slug", null: false
+    t.index ["slug"], name: "index_scav_hunts_on_slug", unique: true
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -125,7 +127,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_16_154830) do
 
   create_table "team_scav_hunts", force: :cascade do |t|
     t.text "name", null: false
-    t.text "slug", null: false
     t.bigint "scav_hunt_id", null: false
     t.bigint "team_id", null: false
     t.text "discord_guild_id"
@@ -141,7 +142,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_16_154830) do
     t.index ["discord_pages_message_id"], name: "index_team_scav_hunts_on_discord_pages_message_id", unique: true
     t.index ["scav_hunt_id"], name: "index_team_scav_hunts_on_scav_hunt_id"
     t.index ["team_id", "scav_hunt_id"], name: "index_team_scav_hunts_on_team_id_and_scav_hunt_id", unique: true
-    t.index ["team_id", "slug"], name: "index_team_scav_hunts_on_team_id_and_slug", unique: true
     t.index ["team_id"], name: "index_team_scav_hunts_on_team_id"
   end
 

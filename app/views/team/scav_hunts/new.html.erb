@@ -2,7 +2,6 @@
 <p><b>Note:</b> <i>This is NOT the official registration, just Scavinator setup. You still need to register with the judges, that's the important part</i></p>
 <%= form_with model: TeamScavHunt.new do |form| %>
   <%= form.text_field :name, required: true, placeholder: "Name" %>
-  <%= form.text_field :slug, required: true, placeholder: "URL Slug (i.e. #{@team.to_domain}/MY_SLUG/...." %>
   <%= form.select :scav_hunt_id, @eligable_scav_hunts.map { |hunt| [hunt.name, hunt.id] } %>
   <%= form.submit "Register" %>
 <% end %>

@@ -14,7 +14,7 @@ class ScavHuntsController < ApplicationController
   end
 
   def create
-    ScavHunt.create(params[:scav_hunt].permit(:name, :start, :end))
+    ScavHunt.create(params[:scav_hunt].permit(:name, :start, :end, :slug))
     redirect_to action: :index
   end
 

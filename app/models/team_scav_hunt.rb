@@ -6,6 +6,7 @@ class TeamScavHunt < ApplicationRecord
   has_many :page_captains
 
   def to_param
-    self.slug
+    # TODO: Delete this....
+    self.scav_hunt.slug
   end
 end

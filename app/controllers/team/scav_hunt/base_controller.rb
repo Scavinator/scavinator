@@ -3,6 +3,7 @@ class Team::ScavHunt::BaseController < Team::BaseController
 
   private
     def set_team_scav_hunt
-      @team_scav_hunt = @team.team_scav_hunts.find_by!(slug: request.path_parameters[:slug] || request.path_parameters[:scav_hunt_slug])
+      slug_param = request.path_parameters[:slug] || request.path_parameters[:scav_hunt_slug]
+      @team_scav_hunt = @team.team_scav_hunts.joins(:scav_hunt).find_by!({scav_hunt: {slug: slug_param}})
     end
 end

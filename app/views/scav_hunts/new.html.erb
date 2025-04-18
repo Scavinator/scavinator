@@ -2,6 +2,8 @@
 <%= form_with model: ScavHunt.new do |form| %>
   <%= form.label :name %>
   <%= form.text_field :name, required: true, placeholder: "Name" %>
+  <%= form.label :slug %>
+  <%= form.text_field :slug, required: true, placeholder: "URL Slug" %>
   <%= form.label :start %>
   <%= form.datetime_local_field :start, placeholder: "Start Date / Time" %>
   <%= form.label :end %>
