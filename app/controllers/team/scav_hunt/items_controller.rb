@@ -21,8 +21,13 @@ class Team::ScavHunt::ItemsController < Team::ScavHunt::Item::BaseController
   end
 
   def update
-    item = @item.update(params[:item].permit(:number, :page_number, :content))
-    redirect_to action: :show, id: params[:id]
+    if @team_user.captain
+      item_params = params[:item].permit(:number, :page_number, :content, :discord_thread_id)
+    else
+      item_params = params[:item].permit(:number, :page_number, :content)
+    end
+    @item.update(item_params)
+    redirect_to team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url)
   end
 
   def show

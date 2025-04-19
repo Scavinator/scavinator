@@ -1,10 +1,14 @@
 <h1>Edit Item</h1>
 <%= form_with model: @item, url: team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url) do |form| %>
   <%= form.label :page_number %>
-  <%= form.number_field :page_number, required: true, placeholder: "Page Number" %>
+  <%= form.number_field :page_number, required: !@item.page_number.nil?, placeholder: "Page Number" %>
   <%= form.label :number %>
   <%= form.number_field :number, required: true, placeholder: "Item Number" %>
   <%= form.label :content %>
-  <%= form.text_field :content, required: true, placeholder: "Item text" %>
+  <%= form.text_field :content, required: !@item.content.empty?, placeholder: "Item text" %>
+  <% if captain? %>
+    <%= form.label :discord_thread_id %>
+    <%= form.text_field :discord_thread_id, placeholder: "Discord Thread ID" %>
+  <% end %>
   <%= form.submit "Update" %>
 <% end %>

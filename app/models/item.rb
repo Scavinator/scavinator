@@ -4,7 +4,7 @@ class Item < ApplicationRecord
   has_many :team_tags, through: :item_tags
   has_many :item_users
   has_many :users, through: :item_users
-  belongs_to :list_category
+  belongs_to :list_category, optional: true
 
   def for_url
     if category_slug = list_category&.slug
