@@ -4,6 +4,10 @@
   <%= form.number_field :page_number, required: true, placeholder: "Page Number" %>
   <%= form.label :number %>
   <%= form.number_field :number, required: true, placeholder: "Item Number" %>
+  <%= form.label :list_category_id %>
+  <p>
+    <%= form.select :list_category_id, [["N/A", nil], *@list_categories.map { |lc| [lc.name, lc.id] }], default: nil %>
+  </p>
   <%= form.label :content %>
   <%= form.text_field :content, required: true, placeholder: "Item text" %>
   <%= form.submit "Create" %>

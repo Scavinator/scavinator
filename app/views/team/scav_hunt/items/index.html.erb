@@ -1,7 +1,17 @@
 <h1>The List</h1>
 <i>As transcribed by <%= @team_scav_hunt.name %></i>
 <p><%= link_to "+ Create Item", new_team_scav_hunt_item_path(@team_scav_hunt) %></p>
-<% @items_by_page.each do |page_number, items| %>
-  <h4>Page <%= page_number %></h4>
-  <%= render "list", items: items %>
+<% @items_by_category_by_page.each.with_index do |(category_name, pages), idx| %>
+  <% if category_name != :nil %>
+    <h3><%= category_name %></h3>
+  <% end %>
+  <% pages.each do |page_number, items| %>
+    <% if page_number != :nil %>
+      <h4>Page <%= page_number %></h4>
+    <% end %>
+    <%= render "list", items: items %>
+  <% end %>
+  <% if idx < @items_by_category_by_page.length - 1 %>
+    <hr>
+  <% end %>
 <% end %>
