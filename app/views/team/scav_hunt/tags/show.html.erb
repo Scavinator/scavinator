@@ -1,11 +1,13 @@
 <h1>Tag: <%= @tag.name %></h1>
 
-<h3>Pending Items</h3>
-<% @pending_items.each do |item| %>
-  <%= form_with model: item, url: team_scav_hunt_item_tag_approve_path(@team_scav_hunt, *item.for_url, item.item_tags.find_by(team_tag_id: @tag.id)), id: "approve-item-#{item.id}" %>
-<% end %>
-<%= render "team/scav_hunt/items/list", items: @pending_items, item_headers: [nil] do |item| %>
-  <td><button form="approve-item-<%= item.id %>">Accept Item</button></td>
+<% if @pending_items %>
+  <h3>Pending Items</h3>
+  <% @pending_items.each do |item| %>
+    <%= form_with model: item, url: team_scav_hunt_item_tag_approve_path(@team_scav_hunt, *item.for_url, item.item_tags.find_by(team_tag_id: @tag.id)), id: "approve-item-#{item.id}" %>
+  <% end %>
+  <%= render "team/scav_hunt/items/list", items: @pending_items, item_headers: [nil] do |item| %>
+    <td><button form="approve-item-<%= item.id %>">Accept Item</button></td>
+  <% end %>
 <% end %>
 
 <h3>Items</h3>

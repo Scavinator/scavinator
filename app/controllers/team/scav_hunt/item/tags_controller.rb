@@ -13,8 +13,8 @@ class Team::ScavHunt::Item::TagsController < Team::ScavHunt::Item::BaseControlle
 
   def approve
     tag = ItemTag.joins(:team_tag).find_by!(id: params[:item_tag_id], team_tag: {team_id: @team.id}).team_tag
-    render nothing: true, status: 403 unless (tag.team_role && tag.team_role.team_role_members.exists?(user_id: @user.id)) || @team_user.captain
+    render nothing: true, status: 403 unless owns_tag? tag
     @item.item_tags.find(params[:item_tag_id]).update(accepted: true)
-    redirect_to team_scav_hunt_tag_path(@team_scav_hunt, tag)
+    redirect_back fallback_location: team_scav_hunt_tag_path(@team_scav_hunt, tag)
   end
 end

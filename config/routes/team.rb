@@ -1,5 +1,6 @@
 resources :scav_hunts, module: :team, path: "hunts", param: :slug do
   resources :role_members, module: :scav_hunt
+  resources :roles, module: :scav_hunt
   resources :pages, module: :scav_hunt, param: :page_number
   resources :tags, module: :scav_hunt
   namespace :items, module: :scav_hunt do

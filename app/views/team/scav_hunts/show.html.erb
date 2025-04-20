@@ -7,8 +7,7 @@
     My Roles
     <ul>
       <% @my_roles.each do |team_role| %>
-        <!-- TODO: don't just link to the first tag page. you need a proper role page. -->
-        <li><%= link_to team_role.name, team_scav_hunt_tag_path(@team_scav_hunt, team_role.team_tags.first) %></li>
+        <li><%= link_to team_role.name, team_scav_hunt_role_path(@team_scav_hunt, team_role) %></li>
       <% end %>
     </ul>
   </li>

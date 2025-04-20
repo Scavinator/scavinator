@@ -1,0 +1,23 @@
+<h1><%= @role.name %> Dashboard</h1>
+
+<% @role_items_by_tag.each do |tag, items| %>
+  <h2><%= link_to tag.name, team_scav_hunt_tag_path(@team_scav_hunt, tag) %></h2>
+  <% if !items[:pending].nil? %>
+    <h3>Pending Items</h3>
+    <% items[:pending].each do |item| %>
+      <% item.item_tags.where(accepted: [false, nil]).each do |tag| %>
+        <%= form_with model: item, url: team_scav_hunt_item_tag_approve_path(@team_scav_hunt, *item.for_url, tag), id: "approve-item-#{item.id}-#{tag.id}" %>
+      <% end %>
+    <% end %>
+    <%= render "team/scav_hunt/items/list", items: items[:pending], item_headers: ([nil] * @role.team_tags.count) do |item| %>
+      <%# AR where.not uses != which is always false when compared with null so won't turn up null values  %>
+      <% item.item_tags.where(accepted: [false, nil]).each do |tag| %>
+        <td><button form="approve-item-<%= item.id %>-<%= tag.id %>">Accept Item (<%= tag.team_tag.name %>)</button></td>
+      <% end %>
+    <% end %>
+  <% end %>
+  <h3>Items</h3>
+  <% if !items[:accepted].nil? %>
+    <%= render "team/scav_hunt/items/list", items: items[:accepted] %>
+  <% end %>
+<% end %>

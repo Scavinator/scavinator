@@ -1,8 +1,11 @@
 <h1><%= @role.name %></h1>
 <%= link_to "(edit)", edit_team_role_path(@role) %>
-<h3>Members</h3>
-<ul>
-  <% @role.team_role_members.each do |member| %>
+<h3>Past Members</h3>
+<% @role_members_by_year.each do |year, members| %>
+  <h4><%= year.name %></h4>
+  <ul>
+  <% members.each do |member| %>
     <li><%= member.user.name %></li>
   <% end %>
-</ul>
+  </ul>
+<% end %>

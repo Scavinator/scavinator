@@ -9,6 +9,7 @@ class Team::RolesController < Team::BaseController
 
   def show
     @role = @team.team_roles.find(params[:id])
+    @role_members_by_year = TeamRoleMember.joins(:team_scav_hunt).where(team_scav_hunt: {team_id: @team.id}, team_role_id: @role.id).order(:team_scav_hunt_id).group_by(&:team_scav_hunt)
   end
 
   def edit
