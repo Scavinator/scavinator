@@ -23,6 +23,6 @@
   </head>
 
   <body>
-    <%= yield %>
+    <%= content_for?(:inner_layout) ? yield(:inner_layout) : yield %>
   </body>
 </html>

@@ -9,14 +9,14 @@
 <% @leadership.each do |role| %>
   <h3><%= role.name %></h3>
   <% if captain? %>
-    <%= form_with model: role.team_role_members.new, url: team_scav_hunt_role_members_path(@team_scav_hunt), html: {autocomplete: 'off'} do |form| %>
-      <%= form.hidden_field :team_role_id, value: role.id %>
+    <%= form_with model: TeamRoleMember.new(team_role: role, team_scav_hunt: @team_scav_hunt), url: team_scav_hunt_role_members_path(@team_scav_hunt), html: {autocomplete: 'off'} do |form| %>
+      <%= form.hidden_field :team_role_id %>
       <%= form.select :user_id, [["N/A", nil], *@team_users.map { |tu| [tu.user.name, tu.user.id] }] %>
       <%= form.submit "Add" %>
     <% end %>
   <% end %>
   <ul>
-    <% role.team_role_members.all.each do |member| %>
+    <% TeamRoleMember.where(team_role: role, team_scav_hunt: @team_scav_hunt).all.each do |member| %>
       <li>
         <%= member.user.name %>
         <% if captain? %>

@@ -1,21 +1,7 @@
-<h1><%= @team.affiliation %></h1>
 <% if @scav_hunt.nil? %>
 <p>Your captains haven't registered your team yet!</p>
 <% elsif captain? %>
   <%= link_to "Go to per-year team pages", team_scav_hunts_path %>
 <% else %>
   <%= link_to "Click here? You should never see this.", team_scav_hunt_path(@scav_hunt) %>
-<% end %>
-
-<% if captain? %>
-  <h3>Captain Menu</h3>
-  <ul>
-    <li><%= link_to "Team registration", new_team_scav_hunt_path %></li>
-    <li><%= link_to "Manage item tags", team_tags_path %></li>
-    <li><%= link_to "Manage team roles", team_roles_path %></li>
-    <li><%= link_to "Approved users", team_users_path %></li>
-    <li><%= link_to "Pending users (#{@team.team_users.where(approved: nil).count})", team_users_pending_path %></li>
-    <li><%= link_to "Banned users", team_users_banned_path %></li>
-    <li><%= link_to "Manage captains", team_users_captains_path %></li>
-  </ul>
 <% end %>

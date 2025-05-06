@@ -10,9 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_17_233531) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_03_221412) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "item_status", ["claimed", "help", "box"]
 
   create_table "item_tags", force: :cascade do |t|
     t.bigint "item_id", null: false
@@ -44,6 +48,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_17_233531) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "list_category_id"
+    t.enum "status", enum_type: "item_status"
+    t.text "discord_message_id"
     t.index ["discord_thread_id"], name: "index_items_on_discord_thread_id", unique: true
     t.index ["list_category_id"], name: "index_items_on_list_category_id"
     t.index ["team_scav_hunt_id", "list_category_id", "number"], name: "idx_on_team_scav_hunt_id_list_category_id_number_65820b60c9", unique: true, nulls_not_distinct: true

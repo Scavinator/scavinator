@@ -4,9 +4,9 @@ class Team::ScavHunt::RoleMembersController < Team::ScavHunt::BaseController
     @team_users = @team.team_users.where(approved: true)
     @page_captains = @team_scav_hunt.page_captains.all
     if @team_user.captain
-      @leadership = @team.team_roles.left_joins(:team_role_members).where(enabled: true, team_id: @team.id)
+      @leadership = @team.team_roles.left_joins(:all_team_role_members).where(enabled: true, team_id: @team.id)
     else
-      @leadership = TeamRole.joins(:team_role_members).where(team_role_members: {team_scav_hunt_id: @team_scav_hunt.id}, team_id: @team.id, enabled: true)
+      @leadership = TeamRole.joins(:all_team_role_members).where(all_team_role_members: {team_scav_hunt_id: @team_scav_hunt.id}, team_id: @team.id, enabled: true)
     end
   end
 
