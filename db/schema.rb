@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_03_221412) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_31_003154) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -110,6 +110,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_03_221412) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "team_integrations", force: :cascade do |t|
+    t.bigint "team_id", null: false
+    t.jsonb "integration_data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["integration_data"], name: "index_team_integrations_on_integration_data", unique: true
+    t.index ["team_id"], name: "index_team_integrations_on_team_id"
+  end
+
   create_table "team_role_members", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "team_scav_hunt_id", null: false
@@ -133,7 +142,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_03_221412) do
 
   create_table "team_scav_hunts", force: :cascade do |t|
     t.text "name", null: false
-    t.bigint "scav_hunt_id", null: false
+    t.bigint "scav_hunt_id"
     t.bigint "team_id", null: false
     t.text "discord_guild_id"
     t.text "discord_items_channel_id"
@@ -178,7 +187,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_03_221412) do
 
   create_table "teams", force: :cascade do |t|
     t.text "affiliation", null: false
-    t.text "prefix", null: false
+    t.text "prefix"
     t.boolean "virtual", null: false
     t.boolean "uchicago", null: false
     t.datetime "created_at", null: false
@@ -208,6 +217,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_03_221412) do
   add_foreign_key "page_captains", "users"
   add_foreign_key "pages", "team_scav_hunts"
   add_foreign_key "sessions", "users"
+  add_foreign_key "team_integrations", "teams"
   add_foreign_key "team_role_members", "team_roles"
   add_foreign_key "team_role_members", "team_scav_hunts"
   add_foreign_key "team_role_members", "users"
