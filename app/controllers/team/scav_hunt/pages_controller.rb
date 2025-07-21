@@ -4,7 +4,7 @@ class Team::ScavHunt::PagesController < Team::ScavHunt::BaseController
 
   def show
     @page_number = params[:page_number]
-    @items = @team_scav_hunt.items.where(page_number: @page_number)
+    @items = @team_scav_hunt.items.where(page_number: @page_number, list_category_id: nil).order(:number)
     @page_captains = @team_scav_hunt.page_captains.where(page_number: @page_number)
     @team_users = @team.team_users.where(approved: true)
   end
