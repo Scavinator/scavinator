@@ -1,12 +1,24 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyText
-  enabled: false
+  name: EnabledTag
+  enabled: true
   color: MyText
   team: one
 
 two:
+  name: EnabledTag2
+  enabled: true
+  color: MyText
+  team: one
+
+one_disabled:
+  name: DisabledTag
+  enabled: false
+  color: MyText
+  team: one
+
+three:
   name: MyText
   enabled: false
   color: MyText

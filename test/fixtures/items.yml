@@ -2,14 +2,24 @@
 
 one:
   team_scav_hunt: one
-  number: MyText
-  page: 1
+  number: 1
+  page_number: 1
   content: MyText
-  discord_id: MyText
 
 two:
+  team_scav_hunt: one
+  page_number: 1
+  number: 2
+  content: MyText
+
+three:
+  team_scav_hunt: one
+  page_number: 1
+  number: 3
+
+four:
   team_scav_hunt: two
   number: MyText
-  page: 1
+  page_number: 1
+  number: 1
   content: MyText
-  discord_id: MyText

@@ -7,26 +7,15 @@ class Team::Users::CaptainsController < Team::BaseController
   end
 
   def create
-    if captain?
-      @team.team_users.find(params[:team_user][:user_id]).update(captain: true)
-    end
-    redirect_back fallback_location: :index
+    @team.team_users.find(params.require(:team_user).require(:user_id)).update(captain: true)
+    redirect_to team_users_captains_url(@team)
   end
 
   def destroy
-    team_user = @team.team_users.find(params[:id])
+    team_user = @team.team_users.find(params.require(:id))
     if @user.id == team_user.user.id
       team_user.update(captain: false)
     end
-    redirect_back fallback_location: :index
+    redirect_to team_users_captains_url(@team)
   end
-
-  private
-    def param_bool(param)
-      return param == 'true' ? true : (param == 'false' ? false : nil)
-    end
-
-    def captain?
-      @team_user.captain
-    end
 end

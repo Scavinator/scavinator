@@ -6,6 +6,8 @@ class Team < ApplicationRecord
   has_many :team_tags
   has_many :team_roles
 
+  validates :prefix, length: { minimum: 3 }, format: { with: /\A[a-z\-]+\z/, message: "only allows valid subdomain characters" }
+
   def to_domain
     "#{self.prefix}.#{Rails.configuration.scavinator_domain}"
   end

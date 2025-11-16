@@ -4,14 +4,8 @@ one:
   name: MyText
   scav_hunt: one
   team: one
-  discord_id: MyText
-  name: MyText
-  slug: MyText
 
 two:
   name: MyText
   scav_hunt: two
   team: two
-  discord_id: MyText
-  name: MyText
-  slug: MyText

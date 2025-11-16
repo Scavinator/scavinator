@@ -7,11 +7,12 @@ class TeamController < Team::BaseController
   end
 
   def new_session
-    render 'login'
+    render 'login', layout: 'layouts/application'
   end
 
   def create_session
-    if user = User.authenticate_by(params.permit(:email_address, :password))
+    user = User.authenticate_by(email_address: params[:email_address], password: params[:password])
+    if user
       start_new_session_for user
       redirect_to team_path
     else

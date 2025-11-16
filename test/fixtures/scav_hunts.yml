@@ -4,8 +4,10 @@ one:
   start: 2025-04-05 10:17:43
   end: 2025-04-05 10:17:43
   name: MyText
+  slug: ScavHuntOne
 
 two:
   start: 2025-04-05 10:17:43
   end: 2025-04-05 10:17:43
   name: MyText
+  slug: ScavHuntTwo

@@ -4,6 +4,9 @@
 # and recreated between test runs. Don't rely on the data there!
 
 Rails.application.configure do
+  config.scavinator_domain = "scavinator.test"
+  config.scavinator_uri = "http://#{Rails.configuration.scavinator_domain}:3000"
+  config.session_store :cookie_store, domain: Rails.configuration.scavinator_domain
   # Settings specified here will take precedence over those in config/application.rb.
 
   # While tests run files are not watched, reloading is not necessary.
@@ -50,4 +53,8 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Stop dropping my test DB :/
+  config.active_record.maintain_test_schema = false
+  config.active_record.verify_foreign_keys_for_fixtures = false
 end

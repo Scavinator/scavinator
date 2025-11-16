@@ -1,4 +1,6 @@
 class Team::RolesController < Team::BaseController
+  before_action :require_captain, except: [:index, :show]
+
   def new
   end
 

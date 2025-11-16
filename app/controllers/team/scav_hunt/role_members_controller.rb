@@ -1,4 +1,6 @@
 class Team::ScavHunt::RoleMembersController < Team::ScavHunt::BaseController
+  before_action :require_captain, except: %i[index]
+
   def index
     @captains = @team.team_users.where(captain: true)
     @team_users = @team.team_users.where(approved: true)

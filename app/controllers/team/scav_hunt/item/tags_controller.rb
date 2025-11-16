@@ -1,6 +1,6 @@
 class Team::ScavHunt::Item::TagsController < Team::ScavHunt::Item::BaseController
   def create
-    tag = @team.team_tags.where(enabled: true).find(params[:item_tag][:tag_id])
+    tag = @team.team_tags.where(enabled: true).find(params.require(:item_tag).require(:tag_id))
     @item.item_tags.create(team_tag_id: tag.id)
     redirect_to team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url)
   end

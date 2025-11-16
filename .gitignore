@@ -35,3 +35,7 @@
 
 /config/database.yml
 /config/credentials.yml.enc
+
+# Ignore local simplecov configuration and outputs
+/coverage
+/.simplecov

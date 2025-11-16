@@ -46,19 +46,19 @@ class UsersController < ApplicationController
 
   def create
     ActiveRecord::Base.transaction do
-      @user = User.create(
+      @user = User.create!(
         name: params["user_name"],
         email_address: params["email_address"],
         password: params["password"],
         password_confirmation: params["password_again"]
       )
-      @team = Team.create(
+      @team = Team.create!(
         affiliation: params["affiliation"],
         prefix: params["prefix"],
-        virtual: params["virtual"] == "true" ? true : (params["virtual"] == "false" ? false : nil),
-        uchicago: params["uchicago"] == "true" ? true : (params["uchicago"] == "false" ? false : nil)
+        virtual: params["virtual"] == "true",
+        uchicago: params["uchicago"] == "true"
       )
-      TeamUser.create(team_id: @team.id, user_id: @user.id, captain: true, approved: true, invited: false)
+      TeamUser.create!(team_id: @team.id, user_id: @user.id, captain: true, approved: true, invited: false)
     end
     start_new_session_for @user
     redirect_to @team

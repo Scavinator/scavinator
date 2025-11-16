@@ -15,7 +15,7 @@ class Team::ScavHunt::ItemsController < Team::ScavHunt::Item::BaseController
   end
 
   def create
-    item = @team_scav_hunt.items.create(params[:item].permit(:number, :page_number, :content, :list_category_id))
+    item = @team_scav_hunt.items.create(params.require(:item).permit(:number, :page_number, :content, :list_category_id))
     redirect_to team_scav_hunt_item_path(@team_scav_hunt, *item.for_url)
   end
 
@@ -24,9 +24,9 @@ class Team::ScavHunt::ItemsController < Team::ScavHunt::Item::BaseController
 
   def update
     if @team_user.captain
-      item_params = params[:item].permit(:number, :page_number, :content, :discord_thread_id)
+      item_params = params.require(:item).permit(:number, :page_number, :content, :discord_thread_id)
     else
-      item_params = params[:item].permit(:number, :page_number, :content)
+      item_params = params.require(:item).permit(:number, :page_number, :content)
     end
     @item.update(item_params)
     redirect_to team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url)

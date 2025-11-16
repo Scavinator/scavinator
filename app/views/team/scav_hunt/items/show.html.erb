@@ -14,7 +14,7 @@
   <% @item.item_users.all.each do |item_user| %>
     <li>
       <%= item_user.user.name %>
-      <%= form_with model: item_user, method: :delete, url: team_scav_hunt_item_user_path(@team_scav_hunt, *@item.for_url) do |form| %>
+      <%= form_with model: item_user, method: :delete, url: team_scav_hunt_item_user_path(@team_scav_hunt, *@item.for_url, item_user) do |form| %>
         <%= form.hidden_field :id %>
         <%= form.submit "Unassign" %>
       <% end %>

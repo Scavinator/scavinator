@@ -5,7 +5,7 @@
   <%= form.label :number %>
   <%= form.number_field :number, required: true, placeholder: "Item Number" %>
   <%= form.label :content %>
-  <%= form.text_field :content, required: !@item.content.empty?, placeholder: "Item text" %>
+  <%= form.text_field :content, required: !@item.content.present?, placeholder: "Item text" %>
   <% if captain? %>
     <%= form.label :discord_thread_id %>
     <%= form.text_field :discord_thread_id, placeholder: "Discord Thread ID" %>

@@ -4,7 +4,14 @@ one:
   team: one
   user: one
   captain: false
-  approved: false
+  approved: true
+  invited: false
+
+one_captain:
+  team: one
+  user: one_captain
+  captain: true
+  approved: true
   invited: false
 
 two:

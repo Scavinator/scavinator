@@ -3,7 +3,9 @@
 one:
   name: MyText
   team: one
+  slug: MyTextOne
 
 two:
   name: MyText
   team: two
+  slug: MyTextTwo

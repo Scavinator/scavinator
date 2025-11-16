@@ -1,11 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyText
-  prefix: MyText
-  discord_id: MyText
+  affiliation: MyText
+  prefix: one
+  virtual: true
+  uchicago: true
 
 two:
-  name: MyText
-  prefix: MyText
-  discord_id: MyText
+  affiliation: MyText
+  prefix: two
+  virtual: true
+  uchicago: true

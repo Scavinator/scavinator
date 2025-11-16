@@ -6,6 +6,7 @@ class Team::ScavHunt::PagesController < Team::ScavHunt::BaseController
     @page_number = params[:page_number]
     @items = @team_scav_hunt.items.where(page_number: @page_number, list_category_id: nil).order(:number)
     @page_captains = @team_scav_hunt.page_captains.where(page_number: @page_number)
+    raise ActiveRecord::RecordNotFound, "No such page" if @page_captains.empty? && @items.empty?
     @team_users = @team.team_users.where(approved: true)
   end
 
@@ -21,7 +22,7 @@ class Team::ScavHunt::PagesController < Team::ScavHunt::BaseController
 
   def destroy
     @page_number = params[:page_number]
-    @team_scav_hunt.page_captains.find_by!(user_id: params[:page_captain][:user_id], page_number: @page_number).delete
+    @team_scav_hunt.page_captains.find_by!(user_id: params.require(:page_captain).require(:user_id), page_number: @page_number).delete
     redirect_to action: :show, page_number: @page_number
   end
 

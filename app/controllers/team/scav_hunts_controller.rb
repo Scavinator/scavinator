@@ -2,6 +2,7 @@ class Team::ScavHuntsController < Team::ScavHunt::BaseController
   include Discord
 
   skip_before_action :set_team_scav_hunt, :nav_prereqs, except: [:edit, :update, :show]
+  before_action :require_captain, only: [:new, :create, :edit, :update]
 
   def index
     @scav_hunts = @team.team_scav_hunts
