@@ -5,6 +5,7 @@ one:
   enabled: true
   color: MyText
   team: one
+  team_role: one
 
 two:
   name: EnabledTag2

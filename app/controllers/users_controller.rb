@@ -58,7 +58,7 @@ class UsersController < ApplicationController
         virtual: params["virtual"] == "true",
         uchicago: params["uchicago"] == "true"
       )
-      TeamUser.create!(team_id: @team.id, user_id: @user.id, captain: true, approved: true, invited: false)
+      TeamUser.create!(team_id: @team.id, user_id: @user.id, captain: true, approved: true)
     end
     start_new_session_for @user
     redirect_to @team

@@ -5,18 +5,20 @@ one:
   user: one
   captain: false
   approved: true
-  invited: false
+
+one_pending:
+  team: one
+  user: one_pending
+  captain: false
 
 one_captain:
   team: one
   user: one_captain
   captain: true
   approved: true
-  invited: false
 
 two:
   team: two
   user: two
   captain: false
   approved: false
-  invited: false

@@ -1,6 +1,10 @@
 require "test_helper"
 
 class ScavHuntControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    host! Rails.configuration.scavinator_domain
+  end
+
   test "should block unauthenticated" do
     get scav_hunts_url
     assert_response :redirect

@@ -1,4 +1,8 @@
 resources :scav_hunts, module: :team, path: "hunts", param: :slug do
+  resource :discord, controller: :scav_hunts, only: [] do
+    get :edit, action: :edit_discord
+    patch :update, action: :update_discord
+  end
   resources :role_members, module: :scav_hunt
   resources :roles, module: :scav_hunt
   resources :pages, module: :scav_hunt, param: :page_number
@@ -18,7 +22,6 @@ resources :scav_hunts, module: :team, path: "hunts", param: :slug do
 end
 resources :tags, module: :team
 resources :roles, module: :team
-resource :user, path: "users/me", only: [:edit, :update, :show]
 namespace :users, module: :team do
   get 'pending', to: 'users#index_pending', as: :pending
   get 'banned', to: 'users#index_banned', as: :banned

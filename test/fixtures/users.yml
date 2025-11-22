@@ -7,6 +7,12 @@ one:
   discord_id: MyText
   email_address: one@example.com
 
+one_pending:
+  name: one_pending
+  password_digest: <%= BCrypt::Password.create("secret") %>
+  admin: false
+  email_address: one_pending@example.com
+
 one_captain:
   name: one_capt
   password_digest: <%= BCrypt::Password.create("secret") %>

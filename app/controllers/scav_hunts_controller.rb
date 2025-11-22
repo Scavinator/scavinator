@@ -6,7 +6,7 @@ class ScavHuntsController < ApplicationController
   end
 
   def show
-    @scav_hunt = ScavHunt.find(params[:id])
+    @scav_hunt = ScavHunt.find_by!(slug: request.path_parameters[:scav_hunt_slug])
     @teams = @scav_hunt.team_scav_hunts
   end
 
@@ -14,7 +14,7 @@ class ScavHuntsController < ApplicationController
   end
 
   def create
-    ScavHunt.create(params[:scav_hunt].permit(:name, :start, :end, :slug))
+    ScavHunt.create(params.require(:scav_hunt).permit(:name, :start, :end, :slug))
     redirect_to action: :index
   end
 

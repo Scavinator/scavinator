@@ -1,21 +1,29 @@
 class Team::ScavHuntsController < Team::ScavHunt::BaseController
   include Discord
 
-  skip_before_action :set_team_scav_hunt, :nav_prereqs, except: [:edit, :update, :show]
-  before_action :require_captain, only: [:new, :create, :edit, :update]
+  skip_before_action :set_team_scav_hunt, :nav_prereqs, only: [:index, :new, :create]
+  before_action :require_captain, except: [:index, :show]
 
   def index
     @scav_hunts = @team.team_scav_hunts
   end
 
   def edit
+  end
+
+  def update
+    @team_scav_hunt.update(params.require(:team_scav_hunt).permit(:name))
+    redirect_to team_scav_hunt_path(@team_scav_hunt)
+  end
+
+  def edit_discord
     if !@user.discord_id.nil?
       flash[:last_team_prefix] = @team.prefix
       flash[:last_team_path] = edit_team_scav_hunt_path(@team_scav_hunt)
     end
   end
 
-  def update
+  def update_discord
     if @user.discord_id.nil?
       return redirect_to edit_team_scav_hunt_path(@team_scav_hunt)
     end

@@ -56,5 +56,4 @@ Rails.application.configure do
 
   # Stop dropping my test DB :/
   config.active_record.maintain_test_schema = false
-  config.active_record.verify_foreign_keys_for_fixtures = false
 end

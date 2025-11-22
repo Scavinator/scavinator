@@ -27,7 +27,8 @@
           Hunt Setup
           <ul>
             <li><%= link_to "Add Page Captain", new_team_scav_hunt_page_path(@team_scav_hunt) %></li>
-            <li><%= link_to "Configure Discord", edit_team_scav_hunt_path(@team_scav_hunt) %></li>
+            <li><%= link_to "Modify Registration", edit_team_scav_hunt_path(@team_scav_hunt) %></li>
+            <li><%= link_to "Configure Discord", edit_team_scav_hunt_discord_path(@team_scav_hunt) %></li>
           </ul>
         </li>
       <% end %>

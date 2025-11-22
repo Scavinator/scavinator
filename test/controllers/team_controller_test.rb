@@ -35,4 +35,11 @@ class TeamControllerTest < ActionDispatch::IntegrationTest
     post team_create_session_url(team, params: {email_address: user.email_address, password: 'secret'}, domain: team.to_domain, subdomain: false)
     assert_redirected_to team_url(team, domain: team.to_domain, subdomain: false)
   end
+
+  test "should block invalid password" do
+    user = users(:one)
+    team = teams(:one)
+    post team_create_session_url(team, params: {email_address: user.email_address, password: 'wrong_secret'}, domain: team.to_domain, subdomain: false)
+    assert_redirected_to team_create_session_url
+  end
 end

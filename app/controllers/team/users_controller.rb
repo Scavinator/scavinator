@@ -14,7 +14,9 @@ class Team::UsersController < Team::BaseController
   end
 
   def update
-    @team.team_users.find(params[:id]).update(approved: param_bool([:team_user][:approved]))
-    redirect_back fallback_location: :index
+    value = params.require(:team_user).require(:approved)
+    raise ActionController::BadRequest, "Missing valid team_user.approved value" unless %w[true false].include? value
+    @team.team_users.find(request.path_parameters[:id]).update(approved: value == "true")
+    redirect_to team_users_path
   end
 end
