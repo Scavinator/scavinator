@@ -29,12 +29,6 @@ class Team::ScavHuntsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should get edit discord" do
-    assert_captain(@team, -> { get edit_team_scav_hunt_discord_url(@tsh) }) do
-      assert_response :success
-    end
-  end
-
   test "should get edit" do
     assert_captain(@team, -> { get edit_team_scav_hunt_url(@tsh) }) do
       assert_response :success

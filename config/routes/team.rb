@@ -1,8 +1,5 @@
 resources :scav_hunts, module: :team, path: "hunts", param: :slug do
-  resource :discord, controller: :scav_hunts, only: [] do
-    get :edit, action: :edit_discord
-    patch :update, action: :update_discord
-  end
+  resource :discord, module: :scav_hunt, controller: :discord, only: [:edit, :update]
   resources :role_members, module: :scav_hunt
   resources :roles, module: :scav_hunt
   resources :pages, module: :scav_hunt, param: :page_number
