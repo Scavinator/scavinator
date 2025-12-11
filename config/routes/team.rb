@@ -25,6 +25,7 @@ namespace :users, module: :team do
   resources :captains, module: :users
 end
 resources :users, module: :team
+get 'settings'
 get 'login', to: 'team#new_session', as: :new_session
 post 'login', to: 'team#create_session', as: :create_session
 get 'logout', to: 'sessions#destroy', as: :logout

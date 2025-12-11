@@ -1,13 +1,17 @@
 class TeamController < Team::BaseController
   skip_before_action :require_authentication, :set_user_by_cookie, :set_team_user, only: [:new_session, :create_session]
+  before_action :require_captain, only: [:settings]
 
   def show
-    @scav_hunt = @team.team_scav_hunts.first
-    redirect_to team_scav_hunt_path(@scav_hunt) unless @scav_hunt.nil? || @team_user.captain
+    @scav_hunts = @team.team_scav_hunts
+    redirect_to team_scav_hunt_path(@scav_hunts.first) unless @scav_hunts.empty? || @team_user.captain
+  end
+
+  def settings
   end
 
   def new_session
-    render 'login', layout: 'layouts/application'
+    render 'login'
   end
 
   def create_session

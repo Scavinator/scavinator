@@ -107,7 +107,7 @@ module ActiveSupport
       captain_user = team.team_users.find_by(captain: true).user
       # noncaptain_user = team.team_users.find_by(captain: false).user
 
-      assert_scavvie(@team, -> {
+      assert_scavvie(team, -> {
           # The double negative is required because `assert_queries_match` requires
           # at least one query, and it's possible that there will be zero
           assert_no_queries_match(InverseRegex.new(/^SELECT /i)) do

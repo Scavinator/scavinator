@@ -3,7 +3,7 @@ class Team::ScavHunt::BaseController < Team::BaseController
 
   def render(*args, **hargs)
     if @team_scav_hunt
-      super(*args, layout: 'team', **hargs)
+      super(*args, layout: 'team/scav_hunt', **hargs)
     else
       super
     end

@@ -1,7 +1,22 @@
-<% if @scav_hunt.nil? %>
-<p>Your captains haven't registered your team yet!</p>
-<% elsif captain? %>
-  <%= link_to "Go to per-year team pages", team_scav_hunts_path %>
+<% if captain? %>
+  <h2>Captain options</h2>
+  <ul>
+    <li><%= link_to "Configure team settings", team_settings_path %></li>
+  </ul>
+<% end %>
+<% if @scav_hunts.empty? %>
+  <p>
+    Your captains haven't registered your team yet!
+    <% if captain? %>
+      <%= link_to "Register here", new_team_scav_hunt_path %>
+    <% end %>
+  </p>
 <% else %>
-  <%= link_to "Click here? You should never see this.", team_scav_hunt_path(@scav_hunt) %>
+  <h2>Registered Hunts</h2>
+  <ul>
+    <% @scav_hunts.each do |hunt| %>
+      <li><%= link_to hunt.name, team_scav_hunt_path(hunt) %></li>
+    <% end %>
+    <li><%= link_to "+ Register for a new hunt", new_team_scav_hunt_path %></li>
+  </ul>
 <% end %>

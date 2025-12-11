@@ -1,0 +1,13 @@
+<p>
+  <%= link_to "Return to team home", team_path %>
+</p>
+<h2>Team Settings</h2>
+
+<ul>
+  <li><%= link_to "Manage item tags", team_tags_path %></li>
+  <li><%= link_to "Manage team roles", team_roles_path %></li>
+  <li><%= link_to "Approved users", team_users_path %></li>
+  <li><%= link_to "Pending users (#{@team.team_users.where(approved: nil).count})", team_users_pending_path %></li>
+  <li><%= link_to "Banned users", team_users_banned_path %></li>
+  <li><%= link_to "Manage captains", team_users_captains_path %></li>
+</ul>

@@ -19,8 +19,15 @@ class TeamControllerTest < ActionDispatch::IntegrationTest
     user = users(:one_captain)
     create_test_session user
     team = user.teams.first
-    get url_for(controller: :team, action: :show, domain: team.to_domain)
+    get url_for(controller: :team, action: :show, domain: team.to_domain, subdomain: false)
     assert_response :success
+  end
+
+  test "should show settings for captains" do
+    team = users(:one_captain).teams.first
+    assert_captain(team, -> { get url_for(controller: :team, action: :settings, domain: team.to_domain, subdomain: false) }) do
+      assert_response :success
+    end
   end
 
   test "should show login page" do

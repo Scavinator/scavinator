@@ -1,5 +1,11 @@
 <% content_for :inner_layout do %>
-<h1><%= @team_scav_hunt&.name || @team.affiliation %></h1>
+<h2>
+  <%= link_to @team.affiliation, team_path %>
+  <% if captain? %>
+    <small><%= link_to "(⚙ team settings)", team_settings_path %></small>
+  <% end %>
+</h2>
+<h1><%= @team_scav_hunt.name %></h1>
 <nav>
   <ul>
     <% if @team_scav_hunt %>
@@ -32,20 +38,6 @@
           </ul>
         </li>
       <% end %>
-    <% end %>
-    <% if captain? %>
-      <li>
-        Team
-        <ul>
-          <li><%= link_to "Team registration", new_team_scav_hunt_path %></li>
-          <li><%= link_to "Manage item tags", team_tags_path %></li>
-          <li><%= link_to "Manage team roles", team_roles_path %></li>
-          <li><%= link_to "Approved users", team_users_path %></li>
-          <li><%= link_to "Pending users (#{@team.team_users.where(approved: nil).count})", team_users_pending_path %></li>
-          <li><%= link_to "Banned users", team_users_banned_path %></li>
-          <li><%= link_to "Manage captains", team_users_captains_path %></li>
-        </ul>
-      </li>
     <% end %>
   </ul>
 </nav>
