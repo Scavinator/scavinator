@@ -1,5 +1,6 @@
 class Team::ScavHunt::ItemsController < Team::ScavHunt::Item::BaseController
   skip_before_action :set_item, only: [:index, :index_mine, :new, :create, :search]
+  allow_authcode_access only: %i[index show]
 
   def index
     items = @team_scav_hunt.items.order(:list_category_id, 'page_number ASC NULLS FIRST', :number).left_joins(:list_category)

@@ -1,7 +1,7 @@
 class Team::ScavHunt::DiscordController < Team::ScavHunt::BaseController
   include Discord
 
-  before_action :require_captain
+  require_captain
 
   def edit
     if !@user.discord_id.nil?

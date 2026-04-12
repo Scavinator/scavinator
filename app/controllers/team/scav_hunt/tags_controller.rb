@@ -1,5 +1,6 @@
 class Team::ScavHunt::TagsController < Team::ScavHunt::BaseController
   include Team::ScavHuntsHelper
+  allow_authcode_access only: [:show]
 
   def show
     @tag = @team.team_tags.find(params[:id])

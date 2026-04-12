@@ -1,8 +1,9 @@
 class Team::ScavHunt::BaseController < Team::BaseController
-  before_action :set_team_scav_hunt, :nav_prereqs
+  before_action :set_team_scav_hunt
 
   def render(*args, **hargs)
     if @team_scav_hunt
+      nav_prereqs
       super(*args, layout: 'team/scav_hunt', **hargs)
     else
       super
@@ -19,7 +20,9 @@ class Team::ScavHunt::BaseController < Team::BaseController
       item_page_numbers = @team_scav_hunt.items.group(:page_number).select(:page_number).where.not(page_number: nil).map(&:page_number)
       page_captain_page_numbers = @team_scav_hunt.page_captains.group(:page_number).select(:page_number).map(&:page_number)
       @page_numbers = [item_page_numbers, page_captain_page_numbers].flatten.uniq.sort
-      @my_items = @team_scav_hunt.items.joins(:item_users).where(item_users: {user_id: @user.id})
-      @my_roles = @team_scav_hunt.team_role_members.where(user_id: @user.id).map(&:team_role)
+      if helpers.team_user?
+        @my_items = @team_scav_hunt.items.joins(:item_users).where(item_users: {user_id: @user.id})
+        @my_roles = @team_scav_hunt.team_role_members.where(user_id: @user.id).map(&:team_role)
+      end
     end
 end

@@ -5,12 +5,17 @@
     <small><%= link_to "(⚙ team settings)", team_settings_path %></small>
   <% end %>
 </h2>
+<% if captain? %>
+  <%= form_with url: team_authcodes_path do |form| %>
+    <%= form.submit "Create Shareable Link" %>
+  <% end %>
+<% end %>
 <h1><%= @team_scav_hunt.name %></h1>
 <nav>
   <ul>
-    <% if @team_scav_hunt %>
-      <li><%= link_to "Leadership", team_scav_hunt_role_members_path(@team_scav_hunt) %></li>
-      <li><%= link_to "Directory", team_users_path %></li>
+    <li><%= link_to "Leadership", team_scav_hunt_role_members_path(@team_scav_hunt) %></li>
+    <li><%= link_to "Directory", team_users_path %></li>
+    <% if team_user? %>
       <li><%= link_to "My Items (#{@my_items.count})", team_scav_hunt_items_mine_path(@team_scav_hunt) %></li>
       <li>
         My Roles
@@ -20,24 +25,24 @@
           <% end %>
         </ul>
       </li>
+    <% end %>
+    <li>
+      <%= link_to "Full List", team_scav_hunt_items_path(@team_scav_hunt) %>
+      <ul>
+        <% @page_numbers.each do |page_number| %>
+          <li><%= link_to "Page #{page_number}", team_scav_hunt_page_path(@team_scav_hunt, page_number) %></li>
+        <% end %>
+      </ul>
+    </li>
+    <% if captain? %>
       <li>
-        <%= link_to "Full List", team_scav_hunt_items_path(@team_scav_hunt) %>
+        Hunt Setup
         <ul>
-          <% @page_numbers.each do |page_number| %>
-            <li><%= link_to "Page #{page_number}", team_scav_hunt_page_path(@team_scav_hunt, page_number) %></li>
-          <% end %>
+          <li><%= link_to "Add Page Captain", new_team_scav_hunt_page_path(@team_scav_hunt) %></li>
+          <li><%= link_to "Modify Registration", edit_team_scav_hunt_path(@team_scav_hunt) %></li>
+          <li><%= link_to "Configure Discord", edit_team_scav_hunt_discord_path(@team_scav_hunt) %></li>
         </ul>
       </li>
-      <% if captain? %>
-        <li>
-          Hunt Setup
-          <ul>
-            <li><%= link_to "Add Page Captain", new_team_scav_hunt_page_path(@team_scav_hunt) %></li>
-            <li><%= link_to "Modify Registration", edit_team_scav_hunt_path(@team_scav_hunt) %></li>
-            <li><%= link_to "Configure Discord", edit_team_scav_hunt_discord_path(@team_scav_hunt) %></li>
-          </ul>
-        </li>
-      <% end %>
     <% end %>
   </ul>
 </nav>

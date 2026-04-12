@@ -10,7 +10,7 @@ class Team::ScavHunt::ItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get index" do
-    assert_scavvie @team, -> { get team_scav_hunt_items_url(@tsh) } do
+    assert_authcode @team, -> { get team_scav_hunt_items_url(@tsh) } do
       assert_response :success
     end
   end
@@ -45,7 +45,7 @@ class Team::ScavHunt::ItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get show" do
-    assert_scavvie @team, -> { get team_scav_hunt_item_url(@tsh, *@item.for_url) } do
+    assert_authcode @team, -> { get team_scav_hunt_item_url(@tsh, *@item.for_url) } do
       assert_response :success
     end
   end

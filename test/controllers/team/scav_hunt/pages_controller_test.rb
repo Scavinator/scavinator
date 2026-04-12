@@ -8,10 +8,10 @@ class Team::ScavHunt::PagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get show" do
-    assert_scavvie @team, -> { get team_scav_hunt_page_url(@tsh, 68138) } do # invalid page
+    assert_authcode @team, -> { get team_scav_hunt_page_url(@tsh, 68138) } do # invalid page
       assert_response :not_found
     end
-    assert_scavvie @team, -> { get team_scav_hunt_page_url(@tsh, @valid_page_number) } do
+    assert_authcode @team, -> { get team_scav_hunt_page_url(@tsh, @valid_page_number) } do
       assert_response :success
     end
   end

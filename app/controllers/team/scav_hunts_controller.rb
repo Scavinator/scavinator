@@ -1,6 +1,7 @@
 class Team::ScavHuntsController < Team::ScavHunt::BaseController
-  skip_before_action :set_team_scav_hunt, :nav_prereqs, only: [:index, :new, :create]
-  before_action :require_captain, except: [:index, :show]
+  skip_before_action :set_team_scav_hunt, only: [:index, :new, :create]
+  require_captain except: [:index, :show]
+  allow_authcode_access only: :show
 
   def index
     @scav_hunts = @team.team_scav_hunts

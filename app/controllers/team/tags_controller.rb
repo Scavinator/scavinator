@@ -1,5 +1,5 @@
 class Team::TagsController < Team::BaseController
-  before_action :require_captain
+  require_captain
 
   def index
     @tags = @team.team_tags.where(enabled: true)

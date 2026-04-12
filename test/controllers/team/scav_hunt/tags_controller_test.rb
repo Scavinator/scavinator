@@ -7,7 +7,7 @@ class Team::ScavHunt::TagsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get show" do
-    assert_scavvie @team, -> { get team_scav_hunt_tag_url(@tsh, @team.team_tags.first) } do
+    assert_authcode @team, -> { get team_scav_hunt_tag_url(@tsh, @team.team_tags.first) } do
       assert_response :success
     end
   end

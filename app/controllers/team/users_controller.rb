@@ -1,5 +1,5 @@
 class Team::UsersController < Team::BaseController
-  before_action :require_captain, except: :index
+  require_captain except: :index
 
   def index
     @members = @team.team_users.where(approved: true)

@@ -56,4 +56,7 @@ Rails.application.configure do
 
   # Stop dropping my test DB :/
   config.active_record.maintain_test_schema = false
+
+  config.action_dispatch.rescue_responses["HTTP404Exception"] = :not_found
+  config.active_support.parallelize_test_databases = false
 end

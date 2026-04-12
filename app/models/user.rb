@@ -3,6 +3,7 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   has_many :team_users
   has_many :teams, through: :team_users
+  has_many :team_auths, foreign_key: :creator_id, class_name: 'TeamAuth'
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 end

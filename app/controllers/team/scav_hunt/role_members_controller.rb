@@ -1,11 +1,12 @@
 class Team::ScavHunt::RoleMembersController < Team::ScavHunt::BaseController
-  before_action :require_captain, except: %i[index]
+  require_captain except: %i[index]
+  allow_authcode_access only: %i[index]
 
   def index
     @captains = @team.team_users.where(captain: true)
     @team_users = @team.team_users.where(approved: true)
     @page_captains = @team_scav_hunt.page_captains.all
-    if @team_user.captain
+    if helpers.captain?
       @leadership = @team.team_roles.left_joins(:all_team_role_members).where(enabled: true, team_id: @team.id)
     else
       @leadership = TeamRole.joins(:all_team_role_members).where(all_team_role_members: {team_scav_hunt_id: @team_scav_hunt.id}, team_id: @team.id, enabled: true)

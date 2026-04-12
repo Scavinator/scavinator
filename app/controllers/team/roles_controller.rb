@@ -1,5 +1,5 @@
 class Team::RolesController < Team::BaseController
-  before_action :require_captain, except: [:index, :show]
+  require_captain except: [:index, :show]
   before_action :set_role, only: [:show, :edit, :update]
 
   def new

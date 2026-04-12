@@ -1,5 +1,5 @@
 class Team::Users::CaptainsController < Team::BaseController
-  before_action :require_captain
+  require_captain
 
   def index
     @captains = @team.team_users.where(captain: true)

@@ -1,6 +1,7 @@
 class Team::ScavHunt::PagesController < Team::ScavHunt::BaseController
-  before_action :require_captain, except: [:show, :edit, :update]
+  require_captain except: [:show, :edit, :update]
   before_action :require_page_owner, only: [:edit, :update, :destroy]
+  allow_authcode_access only: [:show]
 
   def show
     @page_number = params[:page_number]

@@ -1,0 +1,2 @@
+module Team::AuthCodeHelper
+end

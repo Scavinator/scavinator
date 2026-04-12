@@ -21,6 +21,14 @@ module ActiveSupport
       end
     end
 
+    parallelize_setup do |i|
+      env_name = ActiveRecord::ConnectionHandling::DEFAULT_ENV.call
+      ActiveRecord::Base.configurations.configs_for(env_name: env_name, include_hidden: true).each do |db_config|
+        db_config._database = "#{db_config.database}_#{i}"
+      end
+      ActiveRecord::Base.establish_connection
+    end
+
     # Setup all fixtures in test/fixtures/*.yml for all tests in order (default is alphabetical)
     # find test/fixtures/ -maxdepth 1 -mindepth 1 -name "*.yml" | sed 's/.*\/\(.*\)\.yml$/\1/'
     fixture_names = %w[
@@ -38,6 +46,7 @@ module ActiveSupport
       item_tags
       team_roles
       team_role_members
+      team_auths
     ]
     self.fixture_table_names = fixture_names
     setup_fixture_accessors fixture_names
@@ -59,9 +68,31 @@ module ActiveSupport
       assert_redirected_to team_url
     end
 
-    def assert_scavvie(team, request, scavvie_assert: nil, public_assert: -> { assert_redirected_to team_new_session_url, "Expected public request to #{@request.url} to hit the login wall but returned a #{@response.status}" }, &block)
+    def assert_authcode(team, request, authcode_assert: nil, public_assert: -> { assert_redirected_to team_new_session_url, "Expected public request to #{@request.url} to hit the login wall but returned a #{@response.status}" }, captain_assert: nil, &block)
+      authcode_assert ||= block || -> { assert_response :success }
+      raise ArgumentError, "Missing authcode assertion" if authcode_assert.nil?
+
+      reset!
+
+      # Test that public access is login-walled
+      host! [team.prefix, Rails.configuration.scavinator_domain].join(".")
+      # This wrapper prevents the assert_no_queries from catching lazy queries from evaluating ActiveRecord
+      # objects in the url_for call
+      # In real world use, it could query once if a session cookie is present
+      NoQueriesRequestWrap.instance_exec { request.call }
+      public_assert.call
+
+      get team_url, params: {authcode: team.team_auths.first.key}
+      request.call
+      authcode_assert.call
+
+      # If it's accessible with authcode, it should also be accessible to scavvies
+      assert_scavvie(team, request, scavvie_assert: authcode_assert, public_assert: public_assert, captain_assert: captain_assert, allow_authcode: true)
+    end
+
+    def assert_scavvie(team, request, scavvie_assert: nil, public_assert: -> { assert_redirected_to team_new_session_url, "Expected public request to #{@request.url} to hit the login wall but returned a #{@response.status}" }, captain_assert: nil, allow_authcode: false, &block)
       scavvie_assert ||= block
-      raise ArgumentError "Missing scavvie assertion" if scavvie_assert.nil?
+      raise ArgumentError, "Missing scavvie assertion" if scavvie_assert.nil?
 
       noncaptain_user = team.team_users.find_by(captain: false).user
 
@@ -75,9 +106,25 @@ module ActiveSupport
       NoQueriesRequestWrap.instance_exec { request.call }
       public_assert.call
 
+      if !allow_authcode
+        get team_url, params: {authcode: team.team_auths.first.key}
+        NoQueriesRequestWrap.instance_exec { request.call }
+        public_assert.call
+      end
+
+      reset!
+      host! [team.prefix, Rails.configuration.scavinator_domain].join(".")
+
       create_team_test_session team, noncaptain_user
       request.call
       scavvie_assert.call
+
+      if captain_assert
+        captain_user = team.team_users.find_by(captain: true).user
+        create_team_test_session team, captain_user
+        request.call
+        captain_assert.call
+      end
     end
 
     module NoQueriesRequestWrap
@@ -100,37 +147,30 @@ module ActiveSupport
       end
     end
 
-    def assert_captain(team, request, captain_assert: nil, scavvie_assert: -> { assert_response :not_found, "Expected scavvie request to return a 404 returned a #{@response.status}" }, &block)
+    def assert_captain(team, request, captain_assert: nil, public_assert: -> { assert_response :not_found, "Expected public request to return a 404 returned a #{@response.status}" }, scavvie_assert: nil, &block)
       captain_assert ||= block
-      raise ArgumentError "Missing captain assertion" if captain_assert.nil?
+      scavvie_assert ||= public_assert
+      raise ArgumentError, "Missing captain assertion" if captain_assert.nil?
 
       captain_user = team.team_users.find_by(captain: true).user
-      # noncaptain_user = team.team_users.find_by(captain: false).user
 
-      assert_scavvie(team, -> {
-          # The double negative is required because `assert_queries_match` requires
-          # at least one query, and it's possible that there will be zero
-          assert_no_queries_match(InverseRegex.new(/^SELECT /i)) do
-            request.call
-          end
-        },
-        scavvie_assert: scavvie_assert)
+      # The assert_scavvie implicitly also asserts that public access is blocked
+      # if that is skipped, we need to assert that here instead
+      if !scavvie_assert.nil?
+        assert_scavvie(team, -> {
+            # The double negative is required because `assert_queries_match` requires
+            # at least one query, and it's possible that there will be zero
+            assert_no_queries_match(InverseRegex.new(/^SELECT /i)) do
+              request.call
+            end
+          },
+          scavvie_assert: scavvie_assert,
+          public_assert: public_assert
+        )
+      end
 
       reset!
-
-      # # Test that public access is login-walled
-      # host! [team.prefix, Rails.configuration.scavinator_domain].join(".")
-      # # This wrapper prevents the assert_no_queries from catching lazy queries from evaluating ActiveRecord
-      # # objects in the url_for call
-      # # In real world use, it could query once if a session cookie is present
-      # NoQueriesRequestWrap.instance_exec { request.call }
-      # assert_redirected_to team_new_session_url
-
-      # create_team_test_session team, noncaptain_user
-      # assert_queries_match(/^SELECT /i) do
-      #   request.call
-      # end
-      # scavvie_assert.call
+      host! [team.prefix, Rails.configuration.scavinator_domain].join(".")
 
       create_team_test_session team, captain_user
       request.call

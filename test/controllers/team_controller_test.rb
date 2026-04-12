@@ -3,29 +3,19 @@ require "test_helper"
 class TeamControllerTest < ActionDispatch::IntegrationTest
   test "should redirect for logged out users" do
     team = teams(:one)
-    get team_scav_hunt_url(team, domain: team.to_domain, subdomain: false)
+    get team_scav_hunt_url(team.team_scav_hunts.first, domain: team.to_domain, subdomain: false)
     assert_redirected_to team_new_session_url(domain: team.to_domain, subdomain: false)
   end
 
-  test "should redirect for normal scavvies" do
-    user = users(:one)
-    create_test_session user
-    team = user.teams.first
-    get url_for(controller: :team, action: :show, domain: team.to_domain)
-    assert_redirected_to team_scav_hunt_url(team.team_scav_hunts.first, domain: team.to_domain, subdomain: false)
-  end
-
-  test "should show dashboard for captains" do
-    user = users(:one_captain)
-    create_test_session user
-    team = user.teams.first
-    get url_for(controller: :team, action: :show, domain: team.to_domain, subdomain: false)
-    assert_response :success
+  test "should redirect for normal scavvies and show for captain" do
+    team = teams(:one)
+    assert_authcode team, -> { get team_url }, captain_assert: -> { assert_response :success } do
+      assert_redirected_to team_scav_hunt_url(team.team_scav_hunts.first, domain: team.to_domain, subdomain: false)
+    end
   end
 
   test "should show settings for captains" do
-    team = users(:one_captain).teams.first
-    assert_captain(team, -> { get url_for(controller: :team, action: :settings, domain: team.to_domain, subdomain: false) }) do
+    assert_captain(teams(:one), -> { get url_for(controller: :team, action: :settings) }) do
       assert_response :success
     end
   end

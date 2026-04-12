@@ -7,9 +7,9 @@ class Team::ScavHunt::RoleMembersControllerTest < ActionDispatch::IntegrationTes
   end
 
   test "should get index" do
-    assert_captain(@team, -> { get team_scav_hunt_role_members_url(@tsh) },
-      captain_assert: -> { assert_response :success },
-      scavvie_assert: -> { assert_response :success })
+    assert_authcode(@team, -> { get team_scav_hunt_role_members_url(@tsh) }, captain_assert: -> { assert_response :success }) do
+      assert_response :success
+    end
   end
 
   test "should create" do
