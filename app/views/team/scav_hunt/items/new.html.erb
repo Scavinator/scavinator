@@ -8,10 +8,27 @@
   <p>
     <%= form.select :list_category_id, [["N/A", nil], *@list_categories.map { |lc| [lc.name, lc.id] }], default: nil %>
   </p>
+  <fieldset>
+    <legend>Points</legend>
+    <%= form.label :points_text %>
+    <small>Transcribe as exactly as possible the points text form the list</small>
+    <%= form.text_field :points_text, placeholder: "40 points. 3D printed maps will receive 3D points, where D = 0", required: true %>
+    <%= form.label :points_value %>
+    <small>Numerical point value of this item. If it's not immediately obvious what to put, leave this field blank.</small>
+    <%= form.number_field :points_value, placeholder: "40" %>
+  </fieldset>
   <%= form.label :tags %>
   <p>
     <%= form.select :tags, @tags.map { |tag| [tag.name, tag.id] }, default: nil, multiple: true, include_hidden: false %>
   </p>
+  <%= form.label :timed_calendar, "Timed Item Date" %>
+  <p><small>Date and time for timed item. Must be input in Central Time. Leave blank for non-timed items.</small></p>
+  <%= form.datetime_local_field :timed_calendar %>
+  <%= form.label :digital_submission %>
+  <%= form.checkbox :digital_submission %>
+  <%= form.label :special_formatting %>
+  <p><small>If there's anything about this item that looks weird and isn't fully captured in your transcription, check this box to instruct future scavvies to check the list for the exact item text.</small></p>
+  <%= form.checkbox :special_formatting %>
   <%= form.label :content %>
   <%= form.text_field :content, required: true, placeholder: "Item text" %>
   <%= form.submit "Create" %>

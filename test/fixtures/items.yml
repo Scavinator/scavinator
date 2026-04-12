@@ -5,17 +5,23 @@ one:
   number: 1
   page_number: 1
   content: MyText
+  digital_submission: false
+  special_formatting: true
 
 two:
   team_scav_hunt: one
   page_number: 1
   number: 2
   content: MyText
+  digital_submission: true
+  special_formatting: false
 
 three:
   team_scav_hunt: one
   page_number: 1
   number: 3
+  digital_submission: false
+  special_formatting: false
 
 four:
   team_scav_hunt: two
@@ -23,3 +29,5 @@ four:
   page_number: 1
   number: 1
   content: MyText
+  digital_submission: true
+  special_formatting: true

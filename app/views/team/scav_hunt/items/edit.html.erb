@@ -6,6 +6,23 @@
   <%= form.number_field :number, required: true, placeholder: "Item Number" %>
   <%= form.label :content %>
   <%= form.text_field :content, required: !@item.content.present?, placeholder: "Item text" %>
+  <fieldset>
+    <legend>Points</legend>
+    <%= form.label :points_text %>
+    <small>Transcribe as exactly as possible the points text form the list</small>
+    <%= form.text_field :points_text, placeholder: "40 points. 3D printed maps will receive 3D points, where D = 0", required: true %>
+    <%= form.label :points_value %>
+    <small>Numerical point value of this item. If it's not immediately obvious what to put, leave this field blank.</small>
+    <%= form.number_field :points_value, placeholder: "40" %>
+  </fieldset>
+  <%= form.label :timed_calendar, "Timed Item Date" %>
+  <p><small>Date and time for timed item. Must be input in Central Time. Leave blank for non-timed items.</small></p>
+  <%= form.datetime_local_field :timed_calendar, value: @item.item_events.first&.date %>
+  <%= form.label :digital_submission %>
+  <%= form.checkbox :digital_submission %>
+  <%= form.label :special_formatting %>
+  <p><small>If there's anything about this item that looks weird and isn't fully captured in your transcription, check this box to instruct future scavvies to check the list for the exact item text.</small></p>
+  <%= form.checkbox :special_formatting %>
   <% if captain? %>
     <%= form.label :discord_thread_id %>
     <%= form.text_field :discord_thread_id, placeholder: "Discord Thread ID" %>

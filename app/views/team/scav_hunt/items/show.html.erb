@@ -3,7 +3,16 @@
 <% if team_user? %>
   <p><%= link_to "(edit)", edit_team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url) %></p>
 <% end %>
-<p><b>Item <%= @item.number %>:</b> <%= @item.content %></p>
+<p><b>Item <%= @item.number %><%= @item.digital_submission ? " 💾" : "" %>:</b> <%= @item.content %> [<%= @item.points_text %>]</p>
+<% if !@item.points_value.nil? %>
+  <p>Point value: <%= @item.points_value %></p>
+<% end %>
+<% if @item.special_formatting %>
+  <p><i><b>WARNING:</b> This transcription may not exactly match the list. Check the actual list to confirm before working on this item.</i></p>
+<% end %>
+<% if !@events.empty? %>
+  <h4>Timed event: in <%= @events.map { |e| t = e.date.change(zone: "America/Chicago"); "#{distance_of_time_in_words Time.current, t} (#{t})" }.join(", ") %></h4>
+<% end %>
 <h3>Assignees</h3>
 <ul>
   <% if team_user? %>

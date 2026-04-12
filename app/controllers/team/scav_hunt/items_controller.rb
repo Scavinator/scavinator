@@ -17,9 +17,16 @@ class Team::ScavHunt::ItemsController < Team::ScavHunt::Item::BaseController
   end
 
   def create
-    item_params = params.require(:item).permit(:number, :page_number, :content, :list_category_id, tags: [])
+    item_fields = [*base_item_fields, :list_category_id]
+    item_params = params.require(:item).permit(*item_fields, :timed_calendar, tags: [])
     item = Item.transaction do
-      item = @team_scav_hunt.items.create(item_params.slice(:number, :page_number, :content, :list_category_id))
+      item = @team_scav_hunt.items.create(**item_params.slice(*item_fields),
+        digital_submission: item_params[:digital_submission] == "1",
+        special_formatting: item_params[:special_formatting] == "1"
+      )
+      if item_params[:timed_calendar]
+        item.item_events.create(date: item_params[:timed_calendar])
+      end
       if item_params[:tags]
         tags = @team.team_tags.where(id: item_params[:tags], enabled: true)
         not_found_ids = item_params[:tags].to_set - tags.map(&:id).map(&:to_s).to_set
@@ -38,20 +45,32 @@ class Team::ScavHunt::ItemsController < Team::ScavHunt::Item::BaseController
 
   def update
     if @team_user.captain
-      item_params = params.require(:item).permit(:number, :page_number, :content, :discord_thread_id)
+      item_params = params.require(:item).permit(*base_item_fields, :timed_calendar, :discord_thread_id)
     else
-      item_params = params.require(:item).permit(:number, :page_number, :content)
+      item_params = params.require(:item).permit(*base_item_fields, :timed_calendar)
     end
-    @item.update(item_params)
+    @item.update(**item_params.slice(*base_item_fields),
+      digital_submission: item_params[:digital_submission] == "1",
+      special_formatting: item_params[:special_formatting] == "1"
+    )
+    if item_params[:timed_calendar].present?
+      @item.item_events.first.update(date: item_params[:timed_calendar])
+    end
     redirect_to team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url)
   end
 
   def show
     @tags = @team.team_tags.where(enabled: true).all
     @team_users = @team.team_users.where(approved: true).all
+    @events = @item.item_events.all
   end
 
   def search
     # TODO: implement
   end
+
+  private
+    def base_item_fields
+      %i[number page_number content points_text points_value digital_submission special_formatting]
+    end
 end
