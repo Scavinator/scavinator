@@ -13,10 +13,23 @@ class Team::ScavHunt::ItemsController < Team::ScavHunt::Item::BaseController
 
   def new
     @list_categories = ListCategory.where(team_id: [nil, @team.id])
+    @tags = @team.team_tags.where(enabled: true)
   end
 
   def create
-    item = @team_scav_hunt.items.create(params.require(:item).permit(:number, :page_number, :content, :list_category_id))
+    item_params = params.require(:item).permit(:number, :page_number, :content, :list_category_id, tags: [])
+    item = Item.transaction do
+      item = @team_scav_hunt.items.create(item_params.slice(:number, :page_number, :content, :list_category_id))
+      if item_params[:tags]
+        tags = @team.team_tags.where(id: item_params[:tags], enabled: true)
+        not_found_ids = item_params[:tags].to_set - tags.map(&:id).map(&:to_s).to_set
+        if not_found_ids.size != 0
+          raise ActiveRecord::RecordNotFound, "TeamTags not found with ids: #{not_found_ids}"
+        end
+        item.item_tags.create(tags.map { |tag| {item_id: item.id, team_tag_id: tag.id}})
+      end
+      item
+    end
     redirect_to team_scav_hunt_item_path(@team_scav_hunt, *item.for_url)
   end
 
