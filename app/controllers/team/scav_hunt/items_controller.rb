@@ -60,6 +60,7 @@ class Team::ScavHunt::ItemsController < Team::ScavHunt::Item::BaseController
   end
 
   def show
+    @files = ItemFile.where(item: @item).or(ItemFile.where(item_submission_id: @item.item_submission)).order(item_id: :desc)
     @tags = @team.team_tags.where(enabled: true).all
     @team_users = @team.team_users.where(approved: true).all
     @events = @item.item_events.all

@@ -15,6 +15,12 @@ resources :scav_hunts, module: :team, path: "hunts", param: :slug do
       patch ':item_tag_id/approve', to: 'tags#approve', as: :approve
     end
     resources :users, module: :item
+    resources :files, module: :item
+    resource :submission, controller: :submission, module: :item
+    namespace :file, as: 'submission_file', path: 'submission/file', controller: :submission, module: :item do
+      post '', action: :attach_file, as: :attach
+      delete ':id', action: :detach_file, as: :detach
+    end
   end
 end
 resources :tags, module: :team

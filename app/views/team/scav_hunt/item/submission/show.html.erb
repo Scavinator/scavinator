@@ -1,0 +1,35 @@
+<p><%= link_to "Item Page", team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url) %></p>
+<h2>Item <%= @item.number %> Submission</h2>
+
+<p>Item <%= @item.number %>: <%= @item.content %></p>
+
+<p><%= @submission.instructions %></p>
+
+<ul>
+  <% @files.each do |f| %>
+    <li>
+      <%= link_to f.file.metadata['filename'], team_scav_hunt_item_file_path(@team_scav_hunt, *@item.for_url, f.id) %>
+      <%= form_for f, method: :delete, url: team_scav_hunt_item_file_path(@team_scav_hunt, *@item.for_url, f) do |form| %>
+        <%= form.submit "Delete" %>
+      <% end %>
+      <%= form_for f, method: :delete, url: team_scav_hunt_item_submission_file_detach_path(@team_scav_hunt, *@item.for_url, f) do |form| %>
+        <%= form.submit "Detach" %>
+      <% end %>
+    </li>
+  <% end %>
+  <li>
+    <%= form_for @submission.item_files.new, url: team_scav_hunt_item_submission_file_attach_path(@team_scav_hunt, *@item.for_url), method: :post do |f| %>
+      <%= f.label :files, "Attach Files" %>
+      <%= f.file_field :files, multiple: true, include_hidden: false %>
+      <% @item.item_files.each do |item_file| %>
+        <%= label_tag "item_file[import_files][]", item_file.file.metadata["filename"] %>
+        <%= checkbox_tag "item_file[import_files][]", value: item_file.id %>
+      <% end %>
+      <%= f.submit %>
+    <% end %>
+  </li>
+</ul>
+
+<%= form_with method: :delete, url: team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url) do |form| %>
+  <%= form.submit "Unsubmit Item" %>
+<% end %>

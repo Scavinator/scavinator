@@ -1,4 +1,9 @@
 <p>Page: <%= @item.page_number %>
+<% if @item.item_submission %>
+  <p>✅ Item has been submitted! See submission <%= link_to "here", team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url) %></p>
+<% else %>
+  <p><%= link_to "Submit completion", new_team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url) %></p>
+<% end %>
 <p><small><%= link_to "(permalink)", team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url) %></small></p>
 <% if team_user? %>
   <p><%= link_to "(edit)", edit_team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url) %></p>
@@ -58,3 +63,27 @@
     </li>
   <% end %>
 </ul>
+
+<h3>Draft Files</h3>
+
+<% if @files %>
+<ul>
+  <% @files.each do |f| %>
+    <li>
+      <% if f.item_submission.nil? %>
+        [DRAFT]
+      <% end %>
+      <%= link_to f.file.metadata['filename'], team_scav_hunt_item_file_path(@team_scav_hunt, *@item.for_url, f.id) %>
+      <%= form_for f, method: :delete, url: team_scav_hunt_item_file_path(@team_scav_hunt, *@item.for_url, f) do |form| %>
+        <%= form.submit "Delete" %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+<% end %>
+
+<%= form_for @item.item_files.new, url: team_scav_hunt_item_files_path(@team_scav_hunt, *@item.for_url), method: :post do |f| %>
+  <%= f.label :file, "Attach Files" %>
+  <%= f.file_field :file, multiple: true, include_hidden: false, required: true %>
+  <%= f.submit %>
+<% end %>

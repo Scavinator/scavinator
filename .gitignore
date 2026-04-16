@@ -35,6 +35,7 @@
 
 /config/database.yml
 /config/credentials.yml.enc
+/config/storage.yml
 
 # Ignore local simplecov configuration and outputs
 /coverage

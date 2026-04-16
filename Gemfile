@@ -41,6 +41,11 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 gem "httparty"
+gem "shrine", "~> 3.3"
+
+group :production do
+  gem "aws-sdk-s3", "~> 1.219"
+end
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

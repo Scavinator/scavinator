@@ -1,0 +1,10 @@
+<h2>Edit Submission for Item <%= @item.number %></h2>
+
+<p>Item <%= @item.number %>: <%= @item.content %></p>
+
+<%= form_for @item.item_submission, url: team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url), method: :patch do |f| %>
+  <%= f.label :instructions, "Item Presenter Instructions" %>
+  <p>If your item is physical, this should include where/how to find your it and what it is. It also should include any special instructions around presenting your item if you have them.</p>
+  <%= f.text_field :instructions, required: true %>
+  <%= f.submit %>
+<% end %>

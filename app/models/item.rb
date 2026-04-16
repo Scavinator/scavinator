@@ -5,6 +5,8 @@ class Item < ApplicationRecord
   has_many :item_users
   has_many :users, through: :item_users
   has_many :item_events
+  has_one :item_submission
+  has_many :item_files
   belongs_to :list_category, optional: true
 
   def for_url

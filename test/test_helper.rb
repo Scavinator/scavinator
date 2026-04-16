@@ -1,8 +1,35 @@
+# frozen_string_literal: true
 ENV["RAILS_ENV"] ||= "test"
 require "simplecov" if ENV["COVERAGE"]
 require_relative "../config/environment"
 require "rails/test_help"
 # ActiveRecord::Base.logger = Logger.new(STDOUT)
+
+# https://shrinerb.com/docs/testing#test-data
+module TestShrine
+  module_function
+
+  def image_data
+    attacher = Shrine::Attacher.new
+    attacher.set(uploaded_image)
+    attacher.data
+  end
+
+  def uploaded_image
+    file = StringIO.new('foobarbaz.txt'.dup, File::RDWR)
+    file.write "This is the contents of a test file!"
+
+    # for performance we skip metadata extraction and assign test metadata
+    uploaded_file = Shrine.upload(file, :store)
+    # uploaded_file.metadata.merge!(
+    #   "size"      => file.size,
+    #   "mime_type" => "text/plain",
+    #   "filename"  => "foobarbaz.txt",
+    # )
+
+    uploaded_file
+  end
+end
 
 module ActiveSupport
   class TestCase
@@ -47,6 +74,8 @@ module ActiveSupport
       team_roles
       team_role_members
       team_auths
+      item_submissions
+      item_files
     ]
     self.fixture_table_names = fixture_names
     setup_fixture_accessors fixture_names

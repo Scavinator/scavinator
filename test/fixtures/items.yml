@@ -23,6 +23,13 @@ three:
   digital_submission: false
   special_formatting: false
 
+submitted:
+  team_scav_hunt: one
+  page_number: 7
+  number: 5
+  digital_submission: false
+  special_formatting: false
+
 four:
   team_scav_hunt: two
   number: MyText
