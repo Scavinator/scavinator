@@ -17,6 +17,12 @@ one_captain:
   captain: true
   approved: true
 
+one_captain_discord:
+  team: one
+  user: one_captain_discord
+  captain: true
+  approved: true
+
 two:
   team: two
   user: two

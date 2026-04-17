@@ -119,11 +119,11 @@ module ActiveSupport
       assert_scavvie(team, request, scavvie_assert: authcode_assert, public_assert: public_assert, captain_assert: captain_assert, allow_authcode: true)
     end
 
-    def assert_scavvie(team, request, scavvie_assert: nil, public_assert: -> { assert_redirected_to team_new_session_url, "Expected public request to #{@request.url} to hit the login wall but returned a #{@response.status}" }, captain_assert: nil, allow_authcode: false, &block)
+    def assert_scavvie(team, request, scavvie_assert: nil, public_assert: -> { assert_redirected_to team_new_session_url, "Expected public request to #{@request.url} to hit the login wall but returned a #{@response.status}" }, captain_assert: nil, allow_authcode: false, scavvie_user: nil, &block)
       scavvie_assert ||= block
       raise ArgumentError, "Missing scavvie assertion" if scavvie_assert.nil?
 
-      noncaptain_user = team.team_users.find_by(captain: false).user
+      noncaptain_user = scavvie_user || team.team_users.find_by(captain: false).user
 
       reset!
 
@@ -176,12 +176,12 @@ module ActiveSupport
       end
     end
 
-    def assert_captain(team, request, captain_assert: nil, public_assert: -> { assert_response :not_found, "Expected public request to return a 404 returned a #{@response.status}" }, scavvie_assert: nil, &block)
+    def assert_captain(team, request, captain_assert: nil, public_assert: -> { assert_response :not_found, "Expected public request to return a 404 returned a #{@response.status}" }, scavvie_assert: nil, captain_user: nil, &block)
       captain_assert ||= block
       scavvie_assert ||= public_assert
       raise ArgumentError, "Missing captain assertion" if captain_assert.nil?
 
-      captain_user = team.team_users.find_by(captain: true).user
+      captain_user ||= team.team_users.find_by(captain: true).user
 
       # The assert_scavvie implicitly also asserts that public access is blocked
       # if that is skipped, we need to assert that here instead

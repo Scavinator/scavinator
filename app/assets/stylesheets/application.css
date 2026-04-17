@@ -139,3 +139,7 @@ nav {
     }
   }
 }
+
+header .user-link {
+  float: right;
+}

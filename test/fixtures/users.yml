@@ -17,8 +17,14 @@ one_captain:
   name: one_capt
   password_digest: <%= BCrypt::Password.create("secret") %>
   admin: false
-  discord_id: MyText
   email_address: one_captain@example.com
+
+one_captain_discord:
+  name: one_capt_two
+  password_digest: <%= BCrypt::Password.create("secret") %>
+  admin: false
+  discord_id: MyText
+  email_address: one_captain_two@example.com
 
 two:
   name: MyText

@@ -2,8 +2,9 @@
 <p>Discord Account Linking:
   <% if @user.discord_id %>
     Discord account is currently linked!
+    <br>
+    <%= link_to "Click here to re-link or update your discord account", discord_connect_account_uri(user: @user, path: edit_user_path) %>
   <% else %>
-    <%= link_to "Click here to link your discord account", "https://discord.com/oauth2/authorize?response_type=code&client_id=#{Rails.application.credentials.discord_client_id!}&scope=identify&redirect_uri=#{Rails.configuration.scavinator_uri}/users/me/discord" %>
+    <%= link_to "Click here to link your discord account", discord_connect_account_uri(user: @user, path: edit_user_path) %>
   <% end %>
 </p>
-    <%= link_to "Click here to link your discord account", discord_oauth_uri %>

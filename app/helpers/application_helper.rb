@@ -1,9 +1,20 @@
 module ApplicationHelper
-  def discord_oauth_uri
-    "https://discord.com/oauth2/authorize?response_type=code&client_id=#{Rails.application.credentials.discord_client_id!}&scope=identify&redirect_uri=#{discord_redirect_uri}"
+  def discord_connect_account_uri(team: nil, user:, path: nil)
+    state = {user_id: user.id}
+    state[:path] = path if path
+    state[:prefix] = team.prefix if team
+    discord_oauth_uri(link_discord_url(domain: Rails.configuration.scavinator_domain), qs: {state: Rails.application.message_verifier(:discord_state).generate(state)}).to_s
   end
 
-  def discord_redirect_uri
-    "#{Rails.configuration.scavinator_uri}/users/me/discord"
+  def discord_oauth_uri(redirect_uri, qs: {})
+    base = URI("https://discord.com/oauth2/authorize")
+    base.query = URI.encode_www_form(
+      response_type: 'code',
+      client_id: Rails.application.credentials.discord_client_id!,
+      scope: 'identify',
+      redirect_uri: redirect_uri,
+      **qs
+    )
+    return base
   end
 end

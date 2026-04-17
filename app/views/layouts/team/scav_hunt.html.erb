@@ -1,16 +1,23 @@
 <% content_for :inner_layout do %>
-<h2>
-  <%= link_to @team.affiliation, team_path %>
+<header>
+  <% if team_user? %>
+    <div class="user-link">
+      <%= link_to @team_user.user.name, edit_user_url(@team_user.user) %>
+    </div>
+  <% end %>
+  <h2>
+    <%= link_to @team.affiliation, team_path %>
+    <% if captain? %>
+      <small><%= link_to "(⚙ team settings)", team_settings_path %></small>
+    <% end %>
+  </h2>
   <% if captain? %>
-    <small><%= link_to "(⚙ team settings)", team_settings_path %></small>
+    <%= form_with url: team_authcodes_path do |form| %>
+      <%= form.submit "Create Shareable Link" %>
+    <% end %>
   <% end %>
-</h2>
-<% if captain? %>
-  <%= form_with url: team_authcodes_path do |form| %>
-    <%= form.submit "Create Shareable Link" %>
-  <% end %>
-<% end %>
-<h1><%= @team_scav_hunt.name %></h1>
+  <h1><%= @team_scav_hunt.name %></h1>
+</header>
 <nav>
   <ul>
     <li><%= link_to "Leadership", team_scav_hunt_role_members_path(@team_scav_hunt) %></li>

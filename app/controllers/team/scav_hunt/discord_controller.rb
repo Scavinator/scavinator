@@ -4,10 +4,6 @@ class Team::ScavHunt::DiscordController < Team::ScavHunt::BaseController
   require_captain
 
   def edit
-    if !@user.discord_id.nil?
-      flash[:last_team_prefix] = @team.prefix
-      flash[:last_team_path] = edit_team_scav_hunt_path(@team_scav_hunt)
-    end
   end
 
   def update

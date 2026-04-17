@@ -11,5 +11,7 @@
     <%= form.submit "Sign in" %>
   <% end %>
 
+  <p>Or <%= link_to "log in with discord", discord_oauth_uri(new_discord_session_url).to_s %></p>
+
   <%#= link_to "Forgot password?", new_password_path %>
 </main>

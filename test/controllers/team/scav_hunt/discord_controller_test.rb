@@ -7,8 +7,12 @@ class Team::ScavHunt::DiscordControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get edit" do
-    assert_captain(@team, -> { get edit_team_scav_hunt_discord_url(@tsh) }) do
-      assert_response :success
+    [users(:one_captain), users(:one_captain_discord)].each do |u|
+      tsh = u.teams.first.team_scav_hunts.first
+      team = tsh.team
+      assert_captain(team, -> { get edit_team_scav_hunt_discord_url(tsh) }, captain_user: u) do
+        assert_response :success
+      end
     end
   end
 
