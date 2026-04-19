@@ -7,7 +7,7 @@ class Team::Users::CaptainsController < Team::BaseController
   end
 
   def create
-    @team.team_users.find(params.require(:team_user).require(:user_id)).update(captain: true)
+    @team.team_users.find(params.require(:team_user).require(:id)).update(captain: true)
     redirect_to team_users_captains_url(@team)
   end
 

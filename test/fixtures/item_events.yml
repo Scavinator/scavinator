@@ -4,8 +4,12 @@
 # model remove the "{}" from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
+one:
+  item: one
+  date: <%= DateTime.new %>
 # column: value
 #
-two: {}
+two:
+  item: two
+  date: <%= DateTime.new %>
 # column: value

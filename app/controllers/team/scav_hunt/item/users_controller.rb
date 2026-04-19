@@ -1,7 +1,7 @@
 class Team::ScavHunt::Item::UsersController < Team::ScavHunt::Item::BaseController
   def create # assign
     # TODO: can be done by cap, page cap, or self
-    user = @team.team_users.where(approved: true).find(params.require(:item_user).require(:user_id)).user
+    user = @team.team_users.where(approved: true).find_by!(user_id: params.require(:item_user).require(:user_id)).user
     @item.item_users.create(user_id: user.id)
     redirect_to team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url)
   end

@@ -8,7 +8,11 @@ class Team::ScavHunt::Item::UsersControllerTest < ActionDispatch::IntegrationTes
   end
 
   test "should assign user" do
-    post team_scav_hunt_item_users_url(@tsh, *@item.for_url), params: {item_user: {user_id: @tsh.team.team_users.first.id}}
+    get team_scav_hunt_item_url(@tsh, *@item.for_url)
+    assert_response :success
+    uid = @tsh.team.team_users.where.not(user_id: @item.item_users.map(&:user_id)).find_by(approved: true).user_id
+    assert_select_has_value "item_user[user_id]", uid
+    post team_scav_hunt_item_users_url(@tsh, *@item.for_url), params: {item_user: {user_id: uid}}
     assert_redirected_to team_scav_hunt_item_url(@tsh, *@item.for_url)
   end
 

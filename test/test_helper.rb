@@ -3,6 +3,8 @@ ENV["RAILS_ENV"] ||= "test"
 require "simplecov" if ENV["COVERAGE"]
 require_relative "../config/environment"
 require "rails/test_help"
+require "test_helpers/role_assertions"
+require "test_helpers/form_assertions"
 # ActiveRecord::Base.logger = Logger.new(STDOUT)
 
 # https://shrinerb.com/docs/testing#test-data
@@ -28,6 +30,81 @@ module TestShrine
     # )
 
     uploaded_file
+  end
+end
+
+module ActiveRecord
+  module ConnectionAdapters # :nodoc:
+    module DatabaseStatements
+      # Altered from:
+      # https://github.com/rails/rails/blob/b0c813bc7b61c71dd21ee3a6c6210f6d14030f71/activerecord/lib/active_record/connection_adapters/abstract/database_statements.rb#L486
+      # To reverse deletion order and skip the disabling of referential integrity
+      def insert_fixtures_set(fixture_set, tables_to_delete = [])
+        fixture_inserts = build_fixture_statements(fixture_set)
+        table_deletes = tables_to_delete.map { |table| "DELETE FROM #{quote_table_name(table)}" }.reverse
+        statements = table_deletes + fixture_inserts
+
+        transaction(requires_new: true) do
+          execute_batch(statements, "Fixtures Load")
+        end
+      end
+    end
+  end
+end
+
+module ActiveRecord
+  class FixtureSet
+    class TableRow # :nodoc:
+      def generate_primary_key
+        pk = model_metadata.primary_key_name
+
+        unless column_defined?(pk)
+          # Use model class as the ID in test cases to make sure we get FK errors if we pass the wrong ID
+          # type to a certain class
+          @row[pk] = ActiveRecord::FixtureSet.identify("#{model_class}-#{@label}", model_metadata.column_type(pk))
+        end
+      end
+
+      private
+        def resolve_sti_reflections
+          # If STI is used, find the correct subclass for association reflection
+          reflection_class._reflections.each_value do |association|
+            case association.macro
+            when :belongs_to
+              # Do not replace association name with association foreign key if they are named the same
+              fk_name = association.join_foreign_key
+
+              if association.name.to_s != fk_name && value = @row.delete(association.name.to_s)
+                if association.polymorphic?
+                  if value.sub!(/\s*\(([^)]*)\)\s*$/, "")
+                    # support polymorphic belongs_to as "label (Type)"
+                    @row[association.join_foreign_type] = $1
+                  end
+                elsif association.join_primary_key != association.klass.primary_key
+                  raise PrimaryKeyError.new(@label, association, value)
+                end
+
+                if fk_name.is_a?(Array)
+                  composite_key = ActiveRecord::FixtureSet.composite_identify(value, fk_name)
+                  composite_key.each do |column, value|
+                    next if column_defined?(column)
+
+                    @row[column] = value
+                  end
+                else
+                  fk_type = reflection_class.type_for_attribute(fk_name).type
+                  # Logger.new(STDOUT).info "#{reflection_class} #{fk_name} #{association.class_name} #{association.inspect}"
+                  @row[fk_name] = ActiveRecord::FixtureSet.identify("#{association.class_name}-#{value}", fk_type)
+                end
+              end
+            when :has_many
+              if association.options[:through]
+                add_join_records(HasManyThroughProxy.new(association))
+              end
+            end
+          end
+        end
+    end
   end
 end
 
@@ -68,10 +145,10 @@ module ActiveSupport
       pages
       items
       item_users
-      team_tags
       page_captains
-      item_tags
       team_roles
+      team_tags
+      item_tags
       team_role_members
       team_auths
       item_submissions
@@ -79,7 +156,7 @@ module ActiveSupport
     ]
     self.fixture_table_names = fixture_names
     setup_fixture_accessors fixture_names
-
+    # fixtures :all
 
     # Add more helper methods to be used by all tests here...
     def logger
@@ -97,117 +174,13 @@ module ActiveSupport
       assert_redirected_to team_url
     end
 
-    def assert_authcode(team, request, authcode_assert: nil, public_assert: -> { assert_redirected_to team_new_session_url, "Expected public request to #{@request.url} to hit the login wall but returned a #{@response.status}" }, captain_assert: nil, &block)
-      authcode_assert ||= block || -> { assert_response :success }
-      raise ArgumentError, "Missing authcode assertion" if authcode_assert.nil?
-
-      reset!
-
-      # Test that public access is login-walled
-      host! [team.prefix, Rails.configuration.scavinator_domain].join(".")
-      # This wrapper prevents the assert_no_queries from catching lazy queries from evaluating ActiveRecord
-      # objects in the url_for call
-      # In real world use, it could query once if a session cookie is present
-      NoQueriesRequestWrap.instance_exec { request.call }
-      public_assert.call
-
-      get team_url, params: {authcode: team.team_auths.first.key}
-      request.call
-      authcode_assert.call
-
-      # If it's accessible with authcode, it should also be accessible to scavvies
-      assert_scavvie(team, request, scavvie_assert: authcode_assert, public_assert: public_assert, captain_assert: captain_assert, allow_authcode: true)
-    end
-
-    def assert_scavvie(team, request, scavvie_assert: nil, public_assert: -> { assert_redirected_to team_new_session_url, "Expected public request to #{@request.url} to hit the login wall but returned a #{@response.status}" }, captain_assert: nil, allow_authcode: false, scavvie_user: nil, &block)
-      scavvie_assert ||= block
-      raise ArgumentError, "Missing scavvie assertion" if scavvie_assert.nil?
-
-      noncaptain_user = scavvie_user || team.team_users.find_by(captain: false).user
-
-      reset!
-
-      # Test that public access is login-walled
-      host! [team.prefix, Rails.configuration.scavinator_domain].join(".")
-      # This wrapper prevents the assert_no_queries from catching lazy queries from evaluating ActiveRecord
-      # objects in the url_for call
-      # In real world use, it could query once if a session cookie is present
-      NoQueriesRequestWrap.instance_exec { request.call }
-      public_assert.call
-
-      if !allow_authcode
-        get team_url, params: {authcode: team.team_auths.first.key}
-        NoQueriesRequestWrap.instance_exec { request.call }
-        public_assert.call
-      end
-
-      reset!
-      host! [team.prefix, Rails.configuration.scavinator_domain].join(".")
-
-      create_team_test_session team, noncaptain_user
-      request.call
-      scavvie_assert.call
-
-      if captain_assert
-        captain_user = team.team_users.find_by(captain: true).user
-        create_team_test_session team, captain_user
-        request.call
-        captain_assert.call
-      end
-    end
-
-    module NoQueriesRequestWrap
-      %i[get post put patch delete].each do |method|
-        define_method(method) do |path, **args|
-          assert_no_queries do
-            process(method, path, **args)
-          end
-        end
-      end
-    end
-
-    class InverseRegex
-      def initialize(regex)
-        @regex = regex
-      end
-
-      def ===(v)
-        !(@regex === v)
-      end
-    end
-
-    def assert_captain(team, request, captain_assert: nil, public_assert: -> { assert_response :not_found, "Expected public request to return a 404 returned a #{@response.status}" }, scavvie_assert: nil, captain_user: nil, &block)
-      captain_assert ||= block
-      scavvie_assert ||= public_assert
-      raise ArgumentError, "Missing captain assertion" if captain_assert.nil?
-
-      captain_user ||= team.team_users.find_by(captain: true).user
-
-      # The assert_scavvie implicitly also asserts that public access is blocked
-      # if that is skipped, we need to assert that here instead
-      if !scavvie_assert.nil?
-        assert_scavvie(team, -> {
-            # The double negative is required because `assert_queries_match` requires
-            # at least one query, and it's possible that there will be zero
-            assert_no_queries_match(InverseRegex.new(/^SELECT /i)) do
-              request.call
-            end
-          },
-          scavvie_assert: scavvie_assert,
-          public_assert: public_assert
-        )
-      end
-
-      reset!
-      host! [team.prefix, Rails.configuration.scavinator_domain].join(".")
-
-      create_team_test_session team, captain_user
-      request.call
-      captain_assert.call
-    end
-
     def assert_400_error
       assert @response.response_code != 404 && @response.response_code >= 400 && @response.response_code < 500, "Expected request to #{@request.url} return a 4XX error, returned a #{@response.status}"
     end
   end
+end
+
+class ActionDispatch::IntegrationTest
+  include RoleAssertions
+  include FormAssertions
 end
