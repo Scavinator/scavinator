@@ -13,7 +13,7 @@ class Team::ScavHunt::Item::FilesController < Team::ScavHunt::Item::BaseControll
 
   def destroy
     @file.destroy
-    redirect_to team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url)
+    redirect_back_or_to team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url)
   end
 
   def create

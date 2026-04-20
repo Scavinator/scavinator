@@ -17,16 +17,20 @@ body {
   box-sizing: border-box;
 }
 
+.subtitle {
+  color: grey;
+  font-weight: normal;
+}
+
 main {
-  padding: 2em;
+  padding: 1em;
   padding-top: 0;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 1200px;
   h1 {
     font-size: 4em;
     margin-bottom: 0;
-  }
-  h2 {
-    color: grey;
-    font-weight: normal;
   }
   nav {
     margin-top:2em;
@@ -89,6 +93,8 @@ nav {
     display: inline-block;
     padding-inline-start: 0;
     list-style-type: none;
+    background-color: white;
+    min-width: 10em;
   }
   li {
     min-width: 10em;
@@ -101,6 +107,7 @@ nav {
     display: inline-block;
     &:not(:last-child) {
       border-right: 1px solid lightgrey;
+      margin-right: -1px;
     }
   }
   /* Dropdowns */
@@ -111,20 +118,25 @@ nav {
     li {
       width: 100%;
       padding: 0.3em;
+      &:not(:last-child) {
+        border-bottom: 1px solid lightgrey;
+      }
     }
   }
   ul li ul {
     padding-top: 0.5em;
     transition: transform 0.2s, opacity 0.2s;
-    transform: scaleY(0) translateY(-50%);
+    transform: translateY(-50%) scaleY(0);
     visibility: hidden;
     display: block;
     opacity: 0;
+    border: 1px solid lightgrey;
+    border-top: 0;
   }
   ul li:hover ul {
     opacity: 1;
     visibility: visible;
-    transform: scaleY(1) translateY(0);
+    transform: translateY(0%) scaleY(1) ;
   }
   li:has(ul) {
     &:before {
@@ -137,6 +149,266 @@ nav {
     &:hover:before {
       transform: scaleY(-1) translateY(-0.55em);
     }
+  }
+}
+
+.submit-button {
+  text-decoration: none;
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+  &:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+  }
+  border: 1px solid transparent;
+  padding: 0.5em;
+  border-radius: 0.25em;
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+  display: inline-block;
+}
+
+.item-submission-text {
+  border: 1px solid grey;
+  background-color: lightgrey;
+  border-radius: 0.25em;
+  padding: 0.8em;
+  font-size: 0.8em;
+}
+
+ul.inline-list {
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding-inline-start: 0;
+  display: inline;
+}
+
+ul.comma-list {
+  li {
+    display: inline;
+    &:not(:last-child):after {
+      content: ", ";
+    }
+  }
+}
+
+form.inline-form {
+  display: inline;
+  input {
+    display: inline;
+  }
+}
+
+.item-tag {
+  background-color: var(--tag-color);
+  border-radius: 0.5em;
+  font-size: 0.9em;
+  padding: 0.1em;
+  color: rgba(40, 40, 40, 1);
+  padding-left: 0.4em;
+  padding-right: 0.4em;
+  display: inline-block;
+}
+
+.inline-button {
+  /* transition: background-color 0.2s; */
+  background-color: unset;
+  border: none;
+  outline: none;
+  display: inline;
+  cursor: pointer;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-inline: 0;
+}
+
+#item-page {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  section:first-child {
+    flex-grow: 1;
+  }
+}
+
+.assignee-list {
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding-inline-start: 0;
+  list-style: none;
+  li {
+    white-space: nowrap;
+  }
+}
+
+.item-text {
+  font-family: inherit;
+  margin-block: 0;
+  display: inline;
+  white-space: pre-wrap;
+}
+
+blockquote {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 0;
+  padding-left: 15px;
+  border-left: 3px solid #ccc;
+}
+
+textarea {
+  font-family: inherit;
+}
+
+.item-list {
+  border-collapse: collapse;
+  min-width: 100%;
+  th:not(:first-child) {
+    text-align: left;
+  }
+  td, th {
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+    border: 1px solid black;
+  }
+  td:first-child {
+    white-space: nowrap;
+  }
+  td:not(:first-child) {
+    width: 100%;
+  }
+  .submitted {
+    background-color: #d9ead3;
+  }
+  .assigned {
+    background-color: #cfe2f3;
+  }
+}
+
+#item-form-wrap {
+  display: flex;
+  gap: 1em;
+  flex-direction: row;
+  max-width: 100%;
+}
+
+#page-wrap {
+  min-width: 0;
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  > a {
+    align-self: flex-end;
+  }
+}
+
+.item-preview {
+  width: 100%;
+  border: 1px solid black;
+  button {
+    float: right;
+  }
+  div {
+    display: inline-block;
+    margin-right: 1em;
+  }
+  .item-preview-edit {
+    float: right;
+  }
+}
+
+/* Wish there was a better way to look disabled but still submit */
+input[readonly] {
+  color: GrayText;
+  background-color: -moz-DisabledField;
+  outline: none;
+  pointer-events: none;
+}
+
+input[disabled] ~ label, label:has(+ input[readonly]) {
+  color: GrayText;
+  background-color: -moz-DisabledField;
+}
+
+.item-form {
+  min-width: max-content;
+  input {
+    margin-bottom: 0.25em;
+    margin-top: 0.25em;
+  }
+}
+
+.item-content {
+  width: 100%;
+  font-family: sans-serif;
+  border-radius: 3px;
+  border-width: 1px;
+  font-size: 0.9em;
+}
+
+input.small-number {
+  width: 5em;
+  margin-right: 1em;
+}
+
+input.wide-text {
+  width: 25em;
+}
+
+.form-inline > * {
+  display: inline-block;
+}
+
+form sup {
+  line-height: 0;
+}
+
+.form-field-small-label {
+  margin-top: 0.2em;
+  > label  {
+    font-size: 0.7em;
+    margin-bottom: 0px;
+  }
+  input {
+    margin-top: 0px;
+  }
+}
+
+.form-radio-bar-clear {
+  display: inline-block;
+  input[type="radio"] {
+    display: none;
+  }
+  label {
+    color: grey;
+  }
+}
+
+.form-radio-bar {
+  display: inline-block;
+  font-size: 0.9em;
+  input[type="radio"] {
+    display: none;
+  }
+  input[type="radio"]:checked + label {
+    background-color: var(--radio-bg-color, orange);
+  }
+  label {
+    transition: background-color 0.1s;
+    border: 1px solid grey;
+    border-radius: 0.2em;
+    &:not(:last-of-type) {
+      border-right: none;
+      border-top-right-radius: unset;
+      border-bottom-right-radius: unset;
+    }
+    &:not(:first-of-type) {
+      border-top-left-radius: unset;
+      border-bottom-left-radius: unset;
+    }
+    display: inline-block;
+    padding: 0.25em;
   }
 }
 

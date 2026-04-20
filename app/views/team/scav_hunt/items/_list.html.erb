@@ -1,4 +1,4 @@
-<table>
+<table class="item-list">
   <thead>
     <tr>
       <th>#</th>
@@ -10,9 +10,21 @@
   </thead>
   <tbody>
     <% items.each do |item| %>
-      <tr>
-        <td><%= link_to item.number, team_scav_hunt_item_path(@team_scav_hunt, *item.for_url) %></td>
-        <td><%= item.content %></td>
+      <tr class="<%= item.submitted ? "submitted" : item.assigned ? "assigned" : "" %>">
+        <td><%= link_to (item.page_number ? "#{item.page_number}-#{item.number}" : item.number), team_scav_hunt_item_path(@team_scav_hunt, *item.for_url) %> <%= item_type_icons(item) %></td>
+        <td>
+          <%= item_status_icons(item) %>
+          <pre class="item-text"><%= item.content %></pre>
+          <% if item.points_text.present? %>
+            [<%= item.points_text %>]
+          <% end %>
+          <% if item.item_tags.length > 0 %>
+            <br>
+            <% item.item_tags.each do |item_tag| %>
+              <span class="item-tag" style="--tag-color: <%= item_tag.team_tag.color %>"><%= item_tag.team_tag.name %></span>
+            <% end %>
+          <% end %>
+        </td>
         <%= yield item %>
       </tr>
     <% end %>

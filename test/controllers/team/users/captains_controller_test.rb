@@ -17,8 +17,9 @@ class Team::Users::CaptainsControllerTest < ActionDispatch::IntegrationTest
     create_team_test_session @team, @captain_teamuser.user
     get team_users_captains_url(@team)
     assert_response :success
-    assert_select_has_value "team_user[id]", @noncaptain_teamuser.id
-    post team_users_captains_url(@team), params: {team_user: {id: @noncaptain_teamuser.id}}
+    params = {team_user: {id: @noncaptain_teamuser.id}}
+    assert_form_params params
+    post team_users_captains_url(@team), params: params
     assert_redirected_to team_users_captains_url(@team)
   end
 

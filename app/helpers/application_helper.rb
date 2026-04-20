@@ -17,4 +17,19 @@ module ApplicationHelper
     )
     return base
   end
+
+  def item_type_icons(item)
+    icons = []
+    icons.push("💾") if item.digital_submission
+    icons.push("⌚") if item.timed
+    return icons.join('')
+  end
+
+  def item_status_icons(item)
+    if item.submitted
+      "✅ "
+    elsif item.assigned
+      "👷"
+    end
+  end
 end

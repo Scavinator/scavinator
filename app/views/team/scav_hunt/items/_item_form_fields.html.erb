@@ -1,0 +1,40 @@
+<fieldset>
+  <legend>List Section</legend>
+  <div class="form-field">
+    <%#= form.label :list_category_id %>
+    <div class="form-radio-bar">
+      <%= form.collection_radio_buttons :list_category_id, list_categories, :id, :name, include_hidden: false do |b| %><%= b.radio_button %><%= b.label style: b.object.color ? "--radio-bg-color: #{b.object.color}" : '' %><% end %>
+    </div>
+    <div class="form-radio-bar-clear">
+      <%= form.radio_button :list_category_id, "" %>
+      <%= form.label :list_category_id_, "(clear)", class: 'radio-bar-clear' %>
+    </div>
+  </div>
+  <div class="form-inline">
+    <div class="form-field form-field-small-label">
+      <%= form.label :page_number %>
+      <%= form.number_field :page_number, class: 'small-number' %>
+    </div>
+    <div class="form-field form-field-small-label">
+      <%= form.label :number, "Item number" %>
+      <%= form.number_field :number, required: true, class: 'small-number' %>
+    </div>
+  </div>
+</fieldset>
+<fieldset>
+  <legend>Item text</legend>
+  <%= form.textarea :content, required: item.new_record? || item.content.present?, class: 'item-content', rows: 3 %>
+</fieldset>
+<fieldset>
+  <legend>Points</legend>
+  <div class="form-inline">
+    <%= form.label :points_text %>
+    <sup title="Transcribe as exactly as possible the points text form the list">ⓘ</sup>
+    <%= form.text_field :points_text, placeholder: "40 points. 3D printed maps will receive 3D points, where D = 0", class: 'wide-text' %>
+  </div>
+  <div class="form-inline">
+    <%= form.label :points_value %>
+    <sup title="Numerical point value of this item. If it's not immediately obvious what to put, leave this field blank.">ⓘ</sup>
+    <%= form.number_field :points_value, placeholder: "40", class: 'small-number' %>
+  </div>
+</fieldset>

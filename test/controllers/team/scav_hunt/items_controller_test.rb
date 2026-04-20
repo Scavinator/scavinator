@@ -28,26 +28,52 @@ class Team::ScavHunt::ItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create with no tags" do
+    params = {item: {number: 123, page_number: 456, content: "Itemium!"}}
+    assert_scavvie_params @team, -> { get new_team_scav_hunt_item_url(@tsh) }, params
     assert_difference -> { Item.count } do
-      assert_scavvie @team, -> { post team_scav_hunt_items_url(@tsh), params: {item: {number: 123, page_number: 456, content: "Itemium!"}} } do
+      assert_scavvie @team, -> { post team_scav_hunt_items_url(@tsh), params: params } do
         assert_redirected_to team_scav_hunt_item_url(@tsh, *Item.all.order(:created_at).last.for_url)
       end
     end
   end
 
-  test "should create with enabled tags" do
+  test "should create in list category" do
+    params = {item: {number: 123, page_number: 456, content: "Itemium!", list_category_id: ListCategory.where(team_id: nil).last.id}}
+    assert_scavvie_params @team, -> { get new_team_scav_hunt_item_url(@tsh) }, params
     assert_difference -> { Item.count } do
-      assert_scavvie @team, -> { post team_scav_hunt_items_url(@tsh), params: {item: {number: 124, page_number: 456, content: "Itemium!", tags: @tsh.team.team_tags.where(enabled: true).first(2).map(&:id).map(&:to_s)}} } do
+      assert_scavvie @team, -> { post team_scav_hunt_items_url(@tsh), params: params } do
+        assert_redirected_to team_scav_hunt_item_url(@tsh, *Item.all.order(:created_at).last.for_url)
+      end
+    end
+  end
+
+  test "should create with timed event" do
+    params = {item: {number: 124, page_number: 456, content: "Itemium!", timed_calendar: "2062-07-13T15:07"}}
+    assert_scavvie_params @team, -> { get new_team_scav_hunt_item_url(@tsh) }, params
+    assert_difference [-> { Item.count }, -> { ItemEvent.count }] do
+      assert_scavvie @team, -> { post team_scav_hunt_items_url(@tsh), params: params } do
         new_item = Item.all.order(:created_at).last
+        assert_equal new_item.item_events.count, 1
         assert_redirected_to team_scav_hunt_item_url(@tsh, *new_item.for_url)
-        assert_equal new_item.item_tags.length, 2
+      end
+    end
+  end
+
+  test "should create with enabled tags" do
+    params = {item: {number: 124, page_number: 456, content: "Itemium!", team_tags: @tsh.team.team_tags.where(enabled: true).first(2).map(&:id).map(&:to_s)}}
+    assert_scavvie_params @team, -> { get new_team_scav_hunt_item_url(@tsh) }, params
+    assert_difference({-> { Item.count } => 1, -> { ItemTag.count } => 2}) do
+      assert_scavvie @team, -> { post team_scav_hunt_items_url(@tsh), params: params } do
+        new_item = Item.all.order(:created_at).last
+        assert_equal new_item.item_tags.count, 2
+        assert_redirected_to team_scav_hunt_item_url(@tsh, *new_item.for_url)
       end
     end
   end
 
   test "should fail create with disabled tags" do
     assert_no_difference -> { Item.count } do
-      assert_scavvie @team, -> { post team_scav_hunt_items_url(@tsh), params: {item: {number: 124, page_number: 456, content: "Itemium!", tags: @tsh.team.team_tags.where.not(enabled: true).map(&:id).map(&:to_s)}} } do
+      assert_scavvie @team, -> { post team_scav_hunt_items_url(@tsh), params: {item: {number: 124, page_number: 456, content: "Itemium!", team_tags: @tsh.team.team_tags.where.not(enabled: true).map(&:id).map(&:to_s)}} } do
         assert_response :not_found
       end
     end

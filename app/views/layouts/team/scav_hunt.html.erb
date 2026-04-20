@@ -3,51 +3,50 @@
   <% if team_user? %>
     <div class="user-link">
       <%= link_to @team_user.user.name, edit_user_url(@team_user.user) %>
+      <br>
+      <% if captain? %>
+        <%= form_with url: team_authcodes_path do |form| %>
+          <%= form.submit "Create Shareable Link" %>
+        <% end %>
+      <% end %>
+      <%= link_to "Log Out", logout_path %>
     </div>
   <% end %>
-  <h2>
-    <%= link_to @team.affiliation, team_path %>
-    <% if captain? %>
-      <small><%= link_to "(⚙ team settings)", team_settings_path %></small>
-    <% end %>
-  </h2>
-  <% if captain? %>
-    <%= form_with url: team_authcodes_path do |form| %>
-      <%= form.submit "Create Shareable Link" %>
-    <% end %>
-  <% end %>
-  <h1><%= @team_scav_hunt.name %></h1>
+  <h1><%= link_to @team_scav_hunt.name, team_scav_hunt_path(@team_scav_hunt) %></h1>
 </header>
 <nav>
   <ul>
-    <li><%= link_to "Leadership", team_scav_hunt_role_members_path(@team_scav_hunt) %></li>
-    <li><%= link_to "Directory", team_users_path %></li>
-    <% if team_user? %>
-      <li><%= link_to "My Items (#{@my_items.count})", team_scav_hunt_items_mine_path(@team_scav_hunt) %></li>
-      <li>
-        My Roles
-        <ul>
-          <% @my_roles.each do |team_role| %>
-            <li><%= link_to team_role.name, team_scav_hunt_role_path(@team_scav_hunt, team_role) %></li>
-          <% end %>
-        </ul>
-      </li>
-    <% end %>
-    <li>
+    <li><%= link_to "Leadership", team_scav_hunt_role_members_path(@team_scav_hunt) %></li><%#
+    %><li><%= link_to "Directory", team_users_path %></li><%#
+    %><% if team_user? %><%#
+      %><li><%= link_to "My Items (#{@my_items.count})", team_scav_hunt_items_mine_path(@team_scav_hunt) %></li><%#
+      %><% if !@my_roles.empty? %><%#
+        %><li>
+          My Roles
+          <ul>
+            <% @my_roles.each do |team_role| %>
+              <li><%= link_to team_role.name, team_scav_hunt_role_path(@team_scav_hunt, team_role) %></li>
+            <% end %>
+          </ul>
+        </li><%#
+      %><% end %><%#
+    %><% end %><%#
+    %><li>
       <%= link_to "Full List", team_scav_hunt_items_path(@team_scav_hunt) %>
       <ul>
         <% @page_numbers.each do |page_number| %>
           <li><%= link_to "Page #{page_number}", team_scav_hunt_page_path(@team_scav_hunt, page_number) %></li>
         <% end %>
       </ul>
-    </li>
-    <% if captain? %>
-      <li>
+    </li><%#
+    %><% if captain? %><%#
+      %><li>
         Hunt Setup
         <ul>
           <li><%= link_to "Add Page Captain", new_team_scav_hunt_page_path(@team_scav_hunt) %></li>
           <li><%= link_to "Modify Registration", edit_team_scav_hunt_path(@team_scav_hunt) %></li>
           <li><%= link_to "Configure Discord", edit_team_scav_hunt_discord_path(@team_scav_hunt) %></li>
+          <li><%= link_to "⚙ Global Settings", team_settings_path %></li>
         </ul>
       </li>
     <% end %>

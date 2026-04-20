@@ -1,35 +1,43 @@
-<h1>Create Item</h1>
-<%= form_with model: @team_scav_hunt.items.new, url: team_scav_hunt_items_path(@team_scav_hunt) do |form| %>
-  <%= form.label :page_number %>
-  <%= form.number_field :page_number, required: true, placeholder: "Page Number" %>
-  <%= form.label :number %>
-  <%= form.number_field :number, required: true, placeholder: "Item Number" %>
-  <%= form.label :list_category_id %>
-  <p>
-    <%= form.select :list_category_id, [["N/A", nil], *@list_categories.map { |lc| [lc.name, lc.id] }], default: nil %>
-  </p>
-  <fieldset>
-    <legend>Points</legend>
-    <%= form.label :points_text %>
-    <small>Transcribe as exactly as possible the points text form the list</small>
-    <%= form.text_field :points_text, placeholder: "40 points. 3D printed maps will receive 3D points, where D = 0", required: true %>
-    <%= form.label :points_value %>
-    <small>Numerical point value of this item. If it's not immediately obvious what to put, leave this field blank.</small>
-    <%= form.number_field :points_value, placeholder: "40" %>
-  </fieldset>
-  <%= form.label :tags %>
-  <p>
-    <%= form.select :tags, @tags.map { |tag| [tag.name, tag.id] }, default: nil, multiple: true, include_hidden: false %>
-  </p>
-  <%= form.label :timed_calendar, "Timed Item Date" %>
-  <p><small>Date and time for timed item. Must be input in Central Time. Leave blank for non-timed items.</small></p>
-  <%= form.datetime_local_field :timed_calendar %>
-  <%= form.label :digital_submission %>
-  <%= form.checkbox :digital_submission %>
-  <%= form.label :special_formatting %>
-  <p><small>If there's anything about this item that looks weird and isn't fully captured in your transcription, check this box to instruct future scavvies to check the list for the exact item text.</small></p>
-  <%= form.checkbox :special_formatting %>
-  <%= form.label :content %>
-  <%= form.text_field :content, required: true, placeholder: "Item text" %>
-  <%= form.submit "Create" %>
-<% end %>
+<main>
+  <h2>Create Item</h2>
+  <div id="item-form-wrap">
+    <%= form_with model: @team_scav_hunt.items.new, url: team_scav_hunt_items_path(@team_scav_hunt), class: 'item-form' do |form| %>
+      <%= render "item_form_fields", form: form, item: @team_scav_hunt.items.new, list_categories: @list_categories %>
+      <fieldset>
+        <legend>Annotations</legend>
+        <div class="form-field">
+          <div class="form-inline">
+            <%= form.label :timed_calendar, "Timed Item Date" %>
+            <sup title="Date and time for timed item. Must be input in Central Time. Leave blank for non-timed items.">ⓘ</sup>
+          </div>
+          <%= form.datetime_local_field :timed_calendar %>
+        </div>
+        <div class="form-inline">
+          <%= form.checkbox :digital_submission %>
+          <%= form.label :digital_submission, "💾 Digital Submission" %>
+        </div>
+        <%#= form.label :tags %>
+        <div class="form-inline">
+          <%= form.checkbox :special_formatting %>
+          <%= form.label :special_formatting %>
+          <sup title="If there's anything about this item that looks weird and isn't fully captured in your transcription, check this box to instruct future scavvies to check the list for the exact item text.">ⓘ</sup>
+        </div>
+        <%= form.collection_check_boxes :team_tags, @tags, :id, :name, include_hidden: false do |b| %>
+          <div class="form-inline">
+            <%= b.checkbox %>
+            <%= b.label style: "color:#{b.object.color}" %>
+          </div>
+        <% end %>
+        <%#= form.select :tags, @tags.map { |tag| [tag.name, tag.id] }, default: nil, multiple: true, include_hidden: false %>
+      </fieldset>
+      <div class="item-submit-row form-inline">
+        <%= form.submit "Create" %>
+      </div>
+    <% end %>
+
+    <div id="page-wrap">
+    </div>
+  </div>
+</main>
+
+<%= javascript_import_module_tag "controllers/item_create" %>

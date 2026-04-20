@@ -20,4 +20,19 @@ class Item < ApplicationRecord
   def to_param
     raise "Attempted to generate an item url. This is not possible. Use *item.url_for instead"
   end
+
+  # Note: We use #length for the associations because in the case of eager loading, it
+  # won't cause any additional queries. #exist? and #.count > 0 both cause additional
+  # queries
+  def timed
+    self.item_events.length > 0
+  end
+
+  def assigned
+    self.item_users.length > 0
+  end
+
+  def submitted
+    !self.item_submission.nil?
+  end
 end

@@ -9,3 +9,11 @@ two:
   name: MyText
   team: two
   slug: MyTextTwo
+
+three:
+  name: MyText
+  slug: MyTextThree
+
+four:
+  name: MyText
+  slug: MyTextFour

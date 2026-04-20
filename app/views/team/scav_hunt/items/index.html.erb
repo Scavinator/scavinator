@@ -1,17 +1,33 @@
-<h1>The List</h1>
-<i>As transcribed by <%= @team_scav_hunt.name %></i>
-<p><%= link_to "+ Create Item", new_team_scav_hunt_item_path(@team_scav_hunt) %></p>
-<% @items_by_category_by_page.each.with_index do |(category_name, pages), idx| %>
-  <% if category_name != :nil %>
-    <h3><%= category_name %></h3>
-  <% end %>
-  <% pages.each do |page_number, items| %>
-    <% if page_number != :nil %>
-      <h4>Page <%= page_number %></h4>
+<main>
+  <section id="the-list">
+    <% if !@skip_header %>
+      <h2>The List</h2>
+      <p><%= link_to "+ Create Item", new_team_scav_hunt_item_path(@team_scav_hunt) %></p>
+      <p>Search: <input type="text" id="item-search"></p>
     <% end %>
-    <%= render "list", items: items %>
-  <% end %>
-  <% if idx < @items_by_category_by_page.length - 1 %>
-    <hr>
-  <% end %>
-<% end %>
+    <% @items_by_category_by_page.each.with_index do |(category, pages), idx| %>
+      <section>
+        <% if category != :nil %>
+          <h3><%= link_to category.name, team_scav_hunt_category_path(@team_scav_hunt, category) %></h3>
+        <% end %>
+        <% pages.each do |page_number, items| %>
+          <section>
+            <% if page_number != :nil %>
+              <% if category != :nil %>
+                <h4>Page <%= page_number %></h4>
+              <% else %>
+                <h4><%= link_to "Page #{page_number}", team_scav_hunt_page_path(@team_scav_hunt, page_number) %></h4>
+              <% end %>
+            <% end %>
+            <%= render "list", items: items %>
+          </section>
+        <% end %>
+      </section>
+      <% if idx < @items_by_category_by_page.length - 1 %>
+        <hr>
+      <% end %>
+    <% end %>
+  </section>
+</main>
+
+<%= javascript_import_module_tag "controllers/item_search" %>

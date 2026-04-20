@@ -19,7 +19,7 @@ class Team::TagsController < Team::BaseController
   end
 
   def create
-    @team.team_tags.create(params[:team_tag].permit(:name, :color))
+    @team.team_tags.create(**params[:team_tag].permit(:name, :color), enabled: true)
     redirect_to action: :index
   end
 end

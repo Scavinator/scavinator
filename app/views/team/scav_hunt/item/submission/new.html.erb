@@ -1,21 +1,27 @@
-<h2>Submit Item <%= @item.number %></h2>
+<main>
+  <h2>Submit Item</h2>
 
-<p>Item <%= @item.number %>: <%= @item.content %></p>
+  <p class="item-submission-text">Item <%= @item.number %>: <%= @item.content %></p>
 
-<% if @item.digital_submission %>
-  <p>This item is digital submission! Please make sure to upload it to the team google drive folder</p>
-<% else %>
-  <%= form_for (@item.item_submission || @item.build_item_submission), url: team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url), method: :post do |f| %>
-    <%= f.label :instructions, "Item Presenter Instructions" %>
-    <p>If your item is physical, this should include where/how to find your it and what it is. It also should include any special instructions around presenting your item if you have them.</p>
-    <%= f.text_field :instructions, required: true %>
-    <%= f.label :item_files, "Attach Files" %>
-    <%= f.file_field :item_files, multiple: true, include_hidden: false %>
-    <p>Attach draft files:</p>
-    <% @item.item_files.each do |item_file| %>
-      <%= label_tag "item_submission[import_files][]", item_file.file.metadata["filename"] %>
-      <%= checkbox_tag "item_submission[import_files][]", value: item_file.id %>
+  <% if @item.digital_submission %>
+    <p>This item is digital submission! Please make sure to upload it to the team google drive folder.</p>
+  <% else %>
+    <%= form_for (@item.item_submission || @item.build_item_submission), url: team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url), method: :post do |f| %>
+      <%= f.label :instructions, "Item Presenter Instructions" %><br>
+      <small>If your item is physical, this should include where/how to find your it and what it is. It also should include any special instructions around presenting your item if you have them.</small>
+      <p>
+      <%= f.textarea :instructions, required: true, cols: 80, rows: 10 %>
+      </p>
+      <%= f.label :item_files, "📎 Attach Files" %>
+      <%= f.file_field :item_files, multiple: true, include_hidden: false %>
+      <% if !@item.item_files.empty? %>
+        <p>Attach draft files:</p>
+        <% @item.item_files.each do |item_file| %>
+          <%= label_tag "item_submission[import_files][]", item_file.file.metadata["filename"] %>
+          <%= checkbox_tag "item_submission[import_files][]", value: item_file.id %>
+        <% end %>
+      <% end %>
+      <%= f.submit "Submit Item" %>
     <% end %>
-    <%= f.submit %>
   <% end %>
-<% end %>
+</main>
