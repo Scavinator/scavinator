@@ -1,8 +1,8 @@
 <main>
   <h2>Create Item</h2>
   <div id="item-form-wrap">
-    <%= form_with model: @team_scav_hunt.items.new, url: team_scav_hunt_items_path(@team_scav_hunt), class: 'item-form' do |form| %>
-      <%= render "item_form_fields", form: form, item: @team_scav_hunt.items.new, list_categories: @list_categories %>
+    <%= form_with model: @item, url: team_scav_hunt_items_path(@team_scav_hunt), class: 'item-form' do |form| %>
+      <%= render "item_form_fields", form: form, item: @item, list_categories: @list_categories %>
       <fieldset>
         <legend>Annotations</legend>
         <div class="form-field">

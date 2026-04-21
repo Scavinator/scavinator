@@ -20,13 +20,14 @@ class Team::ScavHunt::ItemsController < Team::ScavHunt::Item::BaseController
   def new
     @list_categories = ListCategory.where(team_id: [nil, @team.id]).order(:id)
     @tags = @team.team_tags.where(enabled: true)
+    @item = @team_scav_hunt.items.new
   end
 
   def create
     item_fields = [*base_item_fields]
     item_params = params.require(:item).permit(*item_fields, :timed_calendar, team_tags: [])
     item = Item.transaction do
-      item = @team_scav_hunt.items.create(**item_params.slice(*item_fields),
+      item = @team_scav_hunt.items.create!(**item_params.slice(*item_fields),
         digital_submission: item_params[:digital_submission] == "1",
         special_formatting: item_params[:special_formatting] == "1"
       )
@@ -43,6 +44,19 @@ class Team::ScavHunt::ItemsController < Team::ScavHunt::Item::BaseController
       end
       item
     end
+  rescue ActiveRecord::RecordInvalid => r
+    if r.record.is_a? Item
+      new
+      @item = r.record
+      if params[:format] == "json"
+        render json: @item.errors.full_messages, status: :unprocessable_entity
+      else
+        render :new, status: :unprocessable_entity
+      end
+    else
+      raise
+    end
+  else
     if params[:format] == "json"
       render json: item_wizard_json(item)
     else

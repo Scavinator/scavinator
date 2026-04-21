@@ -1,5 +1,8 @@
-<fieldset>
+<fieldset id="list-section-fieldset">
   <legend>List Section</legend>
+  <% if !item.errors.where(:list_section).empty? %>
+    <div class="form-error" id="list-section-error">Error: <%= item.errors.where(:list_section).first.full_message %></div>
+  <% end %>
   <div class="form-field">
     <%#= form.label :list_category_id %>
     <div class="form-radio-bar">

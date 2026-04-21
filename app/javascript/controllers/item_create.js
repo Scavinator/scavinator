@@ -39,7 +39,7 @@ function listSectionChangeListener() {
 async function updatePreview() {
   const list_category_id = form.elements.namedItem('item[list_category_id]').value
   const page_number = form.elements.namedItem('item[page_number]').value
-  const req = new FetchRequest('get', 'wizard', {query: {list_category_id, page_number}, responseKind: 'json'});
+  const req = new FetchRequest('get', `${form.action}/wizard`, {query: {list_category_id, page_number}, responseKind: 'json'});
   const resp = await req.perform()
   const items = await resp.response.json();
   if (items.length === 0) return;
@@ -99,10 +99,11 @@ function buildItemTable() {
 
 const previewPane = document.getElementById('page-wrap');
 
-const submitAndNextBtn = document.createElement('button');
-submitAndNextBtn.textContent = "Next Item";
-submitAndNextBtn.type = "button";
-form.getElementsByClassName('item-submit-row')[0].appendChild(submitAndNextBtn);
+const submitAndNextBtn = document.createElement('input');
+submitAndNextBtn.value = "Next Item";
+submitAndNextBtn.type = "submit";
+const submitRow = form.getElementsByClassName('item-submit-row')[0];
+submitRow.appendChild(submitAndNextBtn);
 
 let formLocked = false;
 function lockFields() {
@@ -130,12 +131,39 @@ function addItemToPane(item) {
   previewPane.getElementsByClassName('item-list')[0].tBodies[0].appendChild(buildItemRow(item));
 }
 
-submitAndNextBtn.addEventListener("click", async () => {
+let listSectionError = document.getElementById("list-section-error");
+// https://stackoverflow.com/a/925353
+// When the user presses enter, the event looks like it's coming from the first submit button in the list.
+// To avoid that, we create an invisible first submit button to get implicit submissions
+const implicitSubmitButton = document.createElement('input')
+implicitSubmitButton.type = "submit"
+implicitSubmitButton.style.display = "none";
+submitRow.prepend(implicitSubmitButton);
+
+submitAndNextBtn.addEventListener("click", async (e) => await handleSubmitAndNext(e));
+implicitSubmitButton.addEventListener("click", async (e) => await handleSubmitAndNext(e));
+
+async function handleSubmitAndNext(e) {
   if (!form.reportValidity()) { return; }
+  e.preventDefault();
   const data = new FormData(form);
-  // TODO: Need to report errors somehow
   const req = new FetchRequest('post', `${form.action}.json`, {body: data, responseKind: 'json'});
   const resp = await req.perform();
+  if (resp.response.status !== 200) {
+    if (listSectionError === null) {
+      listSectionError = document.createElement('div');
+      listSectionError.id = "list-section-error";
+      listSectionError.classList.add('form-error');
+      document.getElementById('list-section-fieldset').prepend(listSectionError);
+    }
+    listSectionError.textContent = `Error: ${(await resp.response.json()).join(", ")}`;
+    return
+  } else {
+    if (listSectionError !== null) {
+      listSectionError.remove();
+      listSectionError = null;
+    }
+  }
   const item = await resp.response.json();
   clearTimeout(previewRefreshTimer); // Prevent the running timer from overwriting the previewPane
   if (previewPane.childElementCount === 0) {
@@ -151,4 +179,4 @@ submitAndNextBtn.addEventListener("click", async () => {
   form.reset();
   form.elements.namedItem('item[content]').focus();
   addItemToPane(item);
-})
+}

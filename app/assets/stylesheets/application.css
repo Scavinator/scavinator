@@ -260,6 +260,14 @@ textarea {
   font-family: inherit;
 }
 
+.form-error {
+  border-radius: 0.5em;
+  border: 1px solid red;
+  background-color: rgb(255, 150, 150);
+  padding: 0.4em;
+  margin-bottom: 0.6em;
+}
+
 .item-list {
   border-collapse: collapse;
   min-width: 100%;

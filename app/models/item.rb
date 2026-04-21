@@ -21,6 +21,19 @@ class Item < ApplicationRecord
     raise "Attempted to generate an item url. This is not possible. Use *item.url_for instead"
   end
 
+  around_create :list_section_unique_validation
+
+  def list_section_unique_validation
+    yield
+  rescue ActiveRecord::RecordNotUnique => e
+    if e.message.split("\n").first == %{PG::UniqueViolation: ERROR:  duplicate key value violates unique constraint "team_scav_hunt_list_category_item_number_unique"}
+      errors.add(:list_section, "already exists")
+      raise ActiveRecord::RecordInvalid, self
+    else
+      raise
+    end
+  end
+
   # Note: We use #length for the associations because in the case of eager loading, it
   # won't cause any additional queries. #exist? and #.count > 0 both cause additional
   # queries
