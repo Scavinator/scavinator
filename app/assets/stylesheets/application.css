@@ -423,3 +423,21 @@ form sup {
 header .user-link {
   float: right;
 }
+
+.user-list {
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding-inline: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15em, 1fr));
+  li {
+    margin-top: -1px;
+    margin-right: -1px;
+    padding: 0.7em;
+    border: 1px solid black;
+  }
+  li span {
+    display: block;
+  }
+}

@@ -1,37 +1,52 @@
-<h1>Team Leadership of <%= @team_scav_hunt.name %> (<%= @team.affiliation %>)</h1>
-<h3>Captains</h3>
-<ul>
-  <% @captains.each do |user| %>
-    <li><%= user.user.name %></li>
-  <% end %>
-</ul>
-
-<% @leadership.each do |role| %>
-  <h3><%= role.name %></h3>
-  <% if captain? %>
-    <%= form_with model: TeamRoleMember.new(team_role: role, team_scav_hunt: @team_scav_hunt), url: team_scav_hunt_role_members_path(@team_scav_hunt), html: {autocomplete: 'off'} do |form| %>
-      <%= form.hidden_field :team_role_id %>
-      <%= form.select :user_id, [["N/A", nil], *@team_users.map { |tu| [tu.user.name, tu.user.id] }] %>
-      <%= form.submit "Add" %>
+<main>
+  <h2>Team Leadership of <%= @team_scav_hunt.name %> (<%= @team.affiliation %>)</h2>
+  <h3>Captains</h3>
+  <ul class="user-list">
+    <% @captains.each do |user| %>
+      <li>
+        <span><%= user.user.name %></span>
+        <span>Captain</span>
+      </li>
     <% end %>
-  <% end %>
+  </ul>
+
+  <h3>Con Heads</h3>
+  <ul class="user-list">
+    <% @leadership.each do |role| %>
+      <% TeamRoleMember.where(team_role: role, team_scav_hunt: @team_scav_hunt).all.each do |member| %>
+        <li>
+          <span><%= member.user.name %></span>
+          <span><%= role.name %></span>
+          <% if captain? %>
+            <%= form_with model: member, method: :DELETE, url: team_scav_hunt_role_member_path(@team_scav_hunt, member) do |form| %>
+              <%= form.submit "Delete" %>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+
+  <h3>Page Captains</h3>
   <ul>
-    <% TeamRoleMember.where(team_role: role, team_scav_hunt: @team_scav_hunt).all.each do |member| %>
+    <% @page_captains.each do |page_captain| %>
+      <li>Page <%= page_captain.page_number %>: <%= page_captain.user.name %></li>
+    <% end %>
+  </ul>
+
+  <hr>
+  <h3>Everyone else</h3>
+  <ul class="user-list">
+    <% @team_users.each do |member| %>
       <li>
         <%= member.user.name %>
         <% if captain? %>
-          <%= form_with model: member, method: :DELETE, url: team_scav_hunt_role_member_path(@team_scav_hunt, member) do |form| %>
-            <%= form.submit "Delete" %>
+          <%= form_with model: member, url: manage_team_user_path(member) do |form| %>
+            <%= form.hidden_field :approved, value: false %>
+            <%= form.submit "Ban" %>
           <% end %>
         <% end %>
       </li>
     <% end %>
   </ul>
-<% end %>
-
-<h3>Page Captains</h3>
-<ul>
-  <% @page_captains.each do |page_captain| %>
-    <li>Page <%= page_captain.page_number %>: <%= page_captain.user.name %></li>
-  <% end %>
-</ul>
+</main>

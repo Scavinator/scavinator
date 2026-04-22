@@ -23,8 +23,7 @@
 <nav>
   <ul>
     <li><%= link_to "Leadership", team_scav_hunt_role_members_path(@team_scav_hunt) %></li><%#
-    %><li><%= link_to "Directory", team_users_path %></li><%#
-    %><li><%= link_to "Calendar", team_scav_hunt_events_path %></li><%#
+    %><li><%= link_to "Calendar", team_scav_hunt_events_path(@team_scav_hunt) %></li><%#
     %><% if team_user? %><%#
       %><li><%= link_to "My Items (#{@my_items.count})", team_scav_hunt_items_mine_path(@team_scav_hunt) %></li><%#
       %><% if !@my_roles.empty? %><%#
