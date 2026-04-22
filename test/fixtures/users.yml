@@ -26,6 +26,13 @@ one_captain_discord:
   discord_id: MyText
   email_address: one_captain_two@example.com
 
+one_banned:
+  name: one_banned
+  password_digest: <%= BCrypt::Password.create("secret") %>
+  admin: false
+  discord_id: MyText
+  email_address: one_banned@example.com
+
 two:
   name: MyText
   password_digest: <%= BCrypt::Password.create("secret") %>

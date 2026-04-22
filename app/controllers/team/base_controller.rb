@@ -2,7 +2,7 @@ class Team::BaseController < ApplicationController
   skip_before_action :require_authentication
   before_action :set_team_by_prefix, :persist_authcode, :handle_auth # :require_team_user, :require_authentication_or_authcode
 
-  ACCESS_TYPES = [:public, :authcode, :team_user, :captain]
+  ACCESS_TYPES = [:public, :authcode, :team_user, :captain, :pending_team_user]
 
   def self.allow_authcode_access(**options)
     # skip_before_action :require_team_user, **options
@@ -25,13 +25,21 @@ class Team::BaseController < ApplicationController
     end
   end
 
+  def self.allow_pending_user(**options)
+    prepend_before_action(**options) do
+      @__access_type = :pending_team_user
+    end
+  end
+
   private
     def handle_auth
       @__access_type = :team_user if @__access_type.nil?
       throw "Invalid access type #{@__access_type}" unless ACCESS_TYPES.include? @__access_type
+      try_set_team_user
       return if @__access_type == :public
-      return if @__access_type == :authcode && @team.team_auths.find_by(key: cookies.signed[:scavinator_authcode])
-      if !try_set_team_user
+      return if @__access_type == :pending_team_user && (@team_user || @pending_team_user)
+      return if @__access_type == :authcode && has_authcode?
+      if !@team_user
         if @__access_type == :captain
           raise HTTP404Exception
         else
@@ -41,6 +49,10 @@ class Team::BaseController < ApplicationController
       if @__access_type == :captain && !@team_user.captain
         raise HTTP404Exception
       end
+    end
+
+    def has_authcode?
+      @team.team_auths.find_by(key: cookies.signed[:scavinator_authcode]) || @pending_team_user
     end
 
     def set_team_by_prefix
@@ -54,7 +66,17 @@ class Team::BaseController < ApplicationController
     end
 
     def try_set_team_user
-      find_session_by_cookie && (@user = find_session_by_cookie.user) && (@team_user = TeamUser.find_by(team_id: @team.id, user_id: @user.id, approved: true))
+      if find_session_by_cookie && (@user = find_session_by_cookie.user)
+        if team_user = TeamUser.find_by(team_id: @team.id, user_id: @user.id, approved: [nil, true])
+          if team_user.approved
+            logger.info "Adding team user to req"
+            @team_user = team_user
+          else
+            logger.info "Adding pending team user to req"
+            @pending_team_user = team_user
+          end
+        end
+      end
     end
 
     # We need to separate this like it is because it MUST go before nav_prereqs in

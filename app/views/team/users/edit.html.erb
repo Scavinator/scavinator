@@ -1,0 +1,13 @@
+<h1>Edit User</h1>
+
+<% flash.each do |name, msg| -%>
+  <%= content_tag :div, msg, class: name %>
+<% end -%>
+
+<% if @pending_team_user %>
+  <%= form_with model: @pending_team_user, url: team_user_path(@pending_team_user.user), method: :patch do |f| %>
+    <%= f.label :team_auth_password, "Auto-approval code:" %>
+    <%= f.text_field :team_auth_password %>
+    <%= f.submit "Submit auto approval code" %>
+  <% end %>
+<% end %>

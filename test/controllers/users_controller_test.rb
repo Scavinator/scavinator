@@ -14,7 +14,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     [users(:one_captain), users(:one_captain_discord)].each do |u|
       reset!
       create_team_test_session u.teams.first, u
-      get edit_user_url(user, domain: Rails.configuration.scavinator_domain)
+      get edit_user_url(u, domain: Rails.configuration.scavinator_domain)
       assert_response :success
     end
   end

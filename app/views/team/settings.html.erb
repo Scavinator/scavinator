@@ -10,4 +10,5 @@
   <li><%= link_to "Pending users (#{@team.team_users.where(approved: nil).count})", team_users_pending_path %></li>
   <li><%= link_to "Banned users", team_users_banned_path %></li>
   <li><%= link_to "Manage captains", team_users_captains_path %></li>
+  <li><%= link_to "Manage access links", team_authcodes_path %></li>
 </ul>

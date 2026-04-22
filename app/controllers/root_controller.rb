@@ -3,6 +3,8 @@ class RootController < ApplicationController
   before_action :set_user_by_cookie, except: :index
 
   def index
+    @user = find_session_by_cookie&.user
+    @teams = @user&.teams
   end
 
   def dash

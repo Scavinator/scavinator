@@ -1,0 +1,10 @@
+<%= form_with model: @team.team_auths.new, url: team_authcodes_path do |f| %>
+  <%= f.label :ui_password, "Can be used as a team password to get read-only access?" %>
+  <%= f.checkbox :ui_password %>
+  <%= f.label :create_account, "Can be used to bypass the approval process when creating an account?" %>
+  <%= f.checkbox :create_account %>
+  <%= f.label :key, "Password:" %>
+  <small>Leave blank for a randomly generated password</small>
+  <%= f.text_field :key %>
+  <%= f.submit "Create" %>
+<% end %>

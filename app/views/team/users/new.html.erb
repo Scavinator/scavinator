@@ -1,0 +1,33 @@
+<main>
+  <h2>Join <%= @team.affiliation %></h2>
+  <p>
+    We'll need some details from you, all of which will be visible to your team (aside from your password of course).
+    <br>
+    You can also update any of them aside from your username at any time.
+  </p>
+  <% flash.each do |name, msg| -%>
+    <%= content_tag :div, msg, class: name %>
+  <% end -%>
+  <%= form_with url: team_users_path do |form| %>
+    <h3>Your account</h3>
+    <%= form.text_field :user_name, required: true, placeholder: "Name" %>
+    <%= form.email_field :email_address, required: true, placeholder: "Email address" %>
+    <%= form.password_field :password, required: true, placeholder: "Password" %>
+    <%= form.password_field :password_again, required: true, placeholder: "Password again..." %>
+    <% if !current_authcode&.create_account %>
+      <%= form.label :team_auth_password do %>
+        Your account will be need to be manually approved unless you have a code from your captains.
+        <br>
+        If you have a code, enter it below:
+      <% end %>
+      <details>
+        <summary>Team Code</summary>
+        <%= form.password_field :team_auth_password %>
+      </details>
+    <% end %>
+    <%= form.submit "Sign Up" %>
+    <% if current_authcode&.create_account %>
+      <p>Your account will be auto-approved!</p>
+    <% end %>
+  <% end %>
+</main>

@@ -32,8 +32,16 @@ namespace :users, module: :team do
   get 'banned', to: 'users#index_banned', as: :banned
   resources :captains, module: :users
 end
-resources :users, module: :team
-resources :authcodes, module: :team
+resources :users, module: :team do
+  member do
+    patch 'manage', to: 'users#manage', as: :manage
+  end
+end
+namespace :authcode, controller: :authcodes do
+  post "from_current", to: "authcodes#create_from_path"
+end
+resources :authcodes, module: :team do
+end
 get 'settings'
 get 'login', to: 'team#new_session', as: :new_session
 post 'login', to: 'team#create_session', as: :create_session

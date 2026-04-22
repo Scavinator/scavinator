@@ -166,7 +166,7 @@ module ActiveSupport
 
     def create_test_session(user)
       post url_for(controller: :sessions, action: :create, domain: Rails.configuration.scavinator_domain, subdomain: false), params: {email_address: user.email_address, password: 'secret'}
-      assert_redirected_to root_dash_url
+      assert_redirected_to root_root_url
     end
 
     def create_team_test_session(team, user)

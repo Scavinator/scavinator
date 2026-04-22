@@ -18,16 +18,16 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test "should allow login" do
     post session_url(params: {email_address: @user.email_address, password: 'secret'})
-    assert_redirected_to root_dash_url
+    assert_redirected_to root_root_url
   end
 
   test "should get destroy" do
     post session_url(params: {email_address: @user.email_address, password: 'secret'})
-    assert_redirected_to root_dash_url
+    assert_redirected_to root_root_url
     get root_dash_url
     assert_response :success
     delete session_url
-    assert_redirected_to new_session_url
+    assert_redirected_to root_root_url
     get root_dash_url
     assert_redirected_to new_session_url
   end

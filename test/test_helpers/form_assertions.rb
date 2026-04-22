@@ -19,6 +19,16 @@ module FormAssertions
     end
   end
 
+  def assert_form(action:, method: nil)
+    if method.nil?
+      assert_dom %{form[action="#{action}"]}
+    elsif %w[get post].include? method.to_s
+      assert_dom %{form[action="#{action}"][method="#{method.to_s}"]}
+    else
+      assert_dom %{form[action="#{action}"][method="post"] input[type="hidden"][name="_method"][value="#{method.to_s}"]}
+    end
+  end
+
   def assert_scavvie_params(team, req, params, scavvie_user: nil)
     noncaptain_user = scavvie_user || team.team_users.find_by(captain: false).user
     reset!

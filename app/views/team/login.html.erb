@@ -7,4 +7,5 @@
     <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Password" %>
     <%= form.submit "Sign in" %>
   <% end %>
+  <p>Or <%= link_to "create an account", new_team_user_url %></p>
 </main>

@@ -18,6 +18,10 @@ module ApplicationHelper
     return base
   end
 
+  def current_authcode
+    @team.team_auths.find_by(key: cookies.signed[:scavinator_authcode])
+  end
+
   def item_type_icons(item)
     icons = []
     icons.push("💾") if item.digital_submission

@@ -19,7 +19,7 @@ class TeamController < Team::BaseController
     user = User.authenticate_by(email_address: params[:email_address], password: params[:password])
     if user
       start_new_session_for user
-      redirect_to team_path
+      redirect_to after_authentication_url || team_path
     else
       redirect_to team_new_session_path, alert: "Try another email address or password."
     end

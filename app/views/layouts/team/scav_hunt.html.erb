@@ -1,17 +1,21 @@
 <% content_for :inner_layout do %>
 <header>
-  <% if team_user? %>
-    <div class="user-link">
+  <div class="user-link">
+    <% if team_user? %>
       <%= link_to @team_user.user.name, edit_user_url(@team_user.user) %>
       <br>
       <% if captain? %>
-        <%= form_with url: team_authcodes_path do |form| %>
+        <%= form_with url: team_authcode_from_current_path do |form| %>
           <%= form.submit "Create Shareable Link" %>
         <% end %>
       <% end %>
       <%= link_to "Log Out", logout_path %>
-    </div>
-  <% end %>
+    <% elsif @pending_team_user %>
+      <%= link_to @pending_team_user.user.name, edit_team_user_url(@pending_team_user.user) %> [PENDING APPROVAL]
+    <% else %>
+      <%= link_to "Create Account", new_team_user_path %>
+    <% end %>
+  </div>
   <h1><%= link_to @team_scav_hunt.name, team_scav_hunt_path(@team_scav_hunt) %></h1>
 </header>
 <nav>

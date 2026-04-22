@@ -23,6 +23,12 @@ one_captain_discord:
   captain: true
   approved: true
 
+one_banned:
+  team: one
+  user: one_banned
+  captain: false
+  approved: false
+
 two:
   team: two
   user: two

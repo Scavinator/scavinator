@@ -1,0 +1,19 @@
+<%= link_to "Create code", new_team_authcode_path %>
+<ul>
+  <% @codes.each do |code| %>
+    <li>
+      <%= code.key %>
+      <% if code.ui_password %>
+        (team password only)
+      <% else %>
+        (magic link only)
+      <% end %>
+      <% if code.create_account %>
+        (allows account creation)
+      <% end %>
+      <%= form_with model: code, url: team_authcode_path(code), method: :delete do |f| %>
+        <%= f.submit "Delete" %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

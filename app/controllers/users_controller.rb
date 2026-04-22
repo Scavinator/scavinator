@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
   include Discord
 
-  allow_unauthenticated_access except: [:edit]
-  before_action :set_user_by_cookie, only: [:edit]
+  allow_unauthenticated_access except: [:edit, :update]
+  before_action :set_user_by_cookie, :require_user_matches, only: [:edit, :update]
 
   def new
     @teams = Team.all
@@ -10,6 +10,9 @@ class UsersController < ApplicationController
   end
 
   def edit
+  end
+
+  def update
   end
 
   def link_discord
@@ -60,4 +63,10 @@ class UsersController < ApplicationController
     start_new_session_for @user
     redirect_to @team
   end
+
+  private
+    def require_user_matches
+      path_user = User.find(request.path_parameters[:id])
+      request_authentication unless @user.id == path_user.id
+    end
 end

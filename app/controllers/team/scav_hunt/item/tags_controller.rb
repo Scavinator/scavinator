@@ -1,4 +1,6 @@
 class Team::ScavHunt::Item::TagsController < Team::ScavHunt::Item::BaseController
+  include Team::ScavHuntsHelper
+
   def create
     tag = @team.team_tags.where(enabled: true).find(params.require(:item_tag).require(:tag_id))
     @item.item_tags.create(team_tag_id: tag.id)
