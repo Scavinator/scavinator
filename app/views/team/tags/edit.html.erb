@@ -6,6 +6,8 @@
   <%= form.color_field :color, required: true %>
   <%= form.label :enabled %>
   <%= form.checkbox :enabled %>
+  <%= form.label :requires_approval, "Do items with this tag need to be approved first?" %>
+  <%= form.checkbox :requires_approval %>
   <%= form.label :team_role_id %>
   <%= form.select :team_role_id, [["N/A", nil], *@roles.map { |role| [role.name, role.id] }] %>
   <%= form.submit "Update" %>

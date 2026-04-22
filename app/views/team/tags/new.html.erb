@@ -4,5 +4,7 @@
   <%= form.text_field :name, required: true, placeholder: "Name" %>
   <%= form.label :color %>
   <%= form.color_field :color, required: true %>
+  <%= form.label :requires_approval, "Do items with this tag need to be approved first?" %>
+  <%= form.checkbox :requires_approval %>
   <%= form.submit "Create" %>
 <% end %>
