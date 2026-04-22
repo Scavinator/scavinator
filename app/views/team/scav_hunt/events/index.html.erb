@@ -1,0 +1,14 @@
+<% s = @team_scav_hunt.scav_hunt.start %>
+<div class="calendar">
+  <% while s <= @team_scav_hunt.scav_hunt.end %>
+    <div>
+      <h3><%= %w[Sunday Monday Tuesday Wednesday Thursday Friday Saturday][s.wday] %></h3>
+      <ul>
+        <% @events.where("date >= ? AND date < ?", s, s + 1.days).each do |e| %>
+          <li style="color: <%= urgency_css_class e %>"><%= e.date.strftime("%l:%M %p") %>: <%= link_to "Item #{e.item.number}", team_scav_hunt_item_path(@team_scav_hunt, *e.item.for_url) %> (<%= e.item.content %>)</li>
+        <% end %>
+      </ul>
+    </div>
+    <% s += 1.days %>
+  <% end %>
+</div>

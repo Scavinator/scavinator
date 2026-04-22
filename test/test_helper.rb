@@ -153,6 +153,7 @@ module ActiveSupport
       team_auths
       item_submissions
       item_files
+      item_events
     ]
     self.fixture_table_names = fixture_names
     setup_fixture_accessors fixture_names

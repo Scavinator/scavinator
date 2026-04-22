@@ -1,10 +1,13 @@
 class Team::AuthcodesController < Team::BaseController
   require_captain
+  before_action :set_code, only: [:show, :destroy]
 
   def new
   end
 
   def show
+    @url = URI(@code.created_for_url)
+    @url.query = URI.encode_www_form([*URI.decode_www_form(@url.query || ""), ["authcode", @code.key]])
   end
 
   def create
@@ -30,8 +33,12 @@ class Team::AuthcodesController < Team::BaseController
   end
 
   def destroy
-    @code = @team.team_auths.find_by!(id: params[:id])
     @code.delete
     redirect_to team_authcodes_path
   end
+
+  private
+    def set_code
+      @code = @team.team_auths.find_by!(id: params[:id])
+    end
 end

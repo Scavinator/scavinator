@@ -9,6 +9,7 @@ resources :scav_hunts, module: :team, path: "hunts", param: :slug do
     get 'mine', to: 'items#index_mine', as: :mine
     get 'wizard', to: 'items#item_wizard_page'
   end
+  resources :events, module: :scav_hunt, only: [:index]
   resources :items, module: :scav_hunt, param: :number, only: [:index, :create, :new]
   resources :items, module: :scav_hunt, param: :number, only: [:show, :edit, :update, :destroy], path: "items/(:list_category_slug)" do
     resources :tags, module: :item, param: :item_tag_id do
@@ -23,6 +24,7 @@ resources :scav_hunts, module: :team, path: "hunts", param: :slug do
       post '', action: :attach_file, as: :attach
       delete ':id', action: :detach_file, as: :detach
     end
+    resources :events, only: [:create, :destroy]
   end
 end
 resources :tags, module: :team
@@ -37,8 +39,8 @@ resources :users, module: :team do
     patch 'manage', to: 'users#manage', as: :manage
   end
 end
-namespace :authcode, controller: :authcodes do
-  post "from_current", to: "authcodes#create_from_path"
+namespace :authcode, controller: :authcodes, module: :team do
+  post "from_current", to: "authcodes#create_from_url"
 end
 resources :authcodes, module: :team do
 end

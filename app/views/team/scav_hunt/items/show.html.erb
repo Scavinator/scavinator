@@ -6,7 +6,8 @@
     <% if @item.special_formatting %>
       <p><i><b>WARNING:</b> This transcription may not exactly match the list. Check the actual list to confirm before working on this item.</i></p>
     <% end %>
-    <% if @item.content&.include? "\n" %>
+    <% if !@events.empty? %>
+      <h4>Next timed event: <%= e = @events.first; t = e.date.change(zone: "America/Chicago"); "#{Time.current > t ? '' : 'in '}#{distance_of_time_in_words Time.current, t}#{Time.current > t ? ' ago' : ''} (#{t})" %></h4>
     <% end %>
     <b><% if @item.page_number %>Page <%= @item.page_number %>,<% end %> Item <%= @item.number %><%= @item.digital_submission ? " 💾" : "" %>:</b>
     <blockquote>
@@ -21,28 +22,27 @@
     <% if !@item.points_value.nil? %>
       <p>Point value: <%= @item.points_value %></p>
     <% end %>
-    <ul class="inline-list">
-      Tags:
-      <% @item.item_tags.all.each do |item_tag| %>
-        <li class="item-tag" style="--tag-color:<%= item_tag.team_tag.color %>">
-          <%= link_to item_tag.team_tag.name, team_scav_hunt_tag_path(@team_scav_hunt, item_tag.team_tag) %>
-          <% if team_user? %>
-            <%= form_with model: item_tag, method: :delete, url: team_scav_hunt_item_tag_path(@team_scav_hunt, *@item.for_url, item_tag), class: 'inline-form' do |form| %>
-              <%= form.submit "❌", class: 'inline-button' %>
+    <% if team_user? || @item.item_tags.length > 0 %>
+      <ul class="inline-list">
+        Tags:
+        <% @item.item_tags.all.each do |item_tag| %>
+          <li class="item-tag" style="--tag-color:<%= item_tag.team_tag.color %>">
+            <%= link_to item_tag.team_tag.name, team_scav_hunt_tag_path(@team_scav_hunt, item_tag.team_tag) %>
+            <% if team_user? %>
+              <%= form_with model: item_tag, method: :delete, url: team_scav_hunt_item_tag_path(@team_scav_hunt, *@item.for_url, item_tag), class: 'inline-form' do |form| %>
+                <%= form.submit "❌", class: 'inline-button' %>
+              <% end %>
             <% end %>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
     <% if team_user? %>
       <%= form_with model: @item.item_tags.new, url: team_scav_hunt_item_tags_path(@team_scav_hunt, *@item.for_url), class: 'inline-form' do |form| %>
         <%#= form.label :tag_id, "Add tag:" %>
         <%= form.select :tag_id, [["N/A", nil], *@tags.map { |tag| [tag.name, tag.id] }] %>
         <%= form.submit "Add" %>
       <% end %>
-    <% end %>
-    <% if !@events.empty? %>
-      <h4>Timed event: <%= @events.map { |e| t = e.date.change(zone: "America/Chicago"); "#{Time.current > t ? '' : 'in '}#{distance_of_time_in_words Time.current, t}#{Time.current > t ? ' ago' : ''} (#{t})" }.join(", ") %></h4>
     <% end %>
 
     <% if !@item.item_submission %>
@@ -51,13 +51,12 @@
   </section>
   <section>
     <h3>Assignees</h3>
-    <ul class="assignee-list">
+    <ul class="item-sidebar-list">
       <% @item.item_users.all.each do |item_user| %>
         <li>
           <%= item_user.user.name %>
           <% if team_user? %>
             <%= form_with model: item_user, method: :delete, url: team_scav_hunt_item_user_path(@team_scav_hunt, *@item.for_url, item_user), class: 'inline-form' do |form| %>
-              <%= form.hidden_field :id %>
               <%= form.submit "❌", class: 'inline-button' %>
             <% end %>
           <% end %>
@@ -83,18 +82,47 @@
               [DRAFT]
             <% end %>
             <%= link_to f.file.metadata['filename'], team_scav_hunt_item_file_path(@team_scav_hunt, *@item.for_url, f.id) %>
-            <%= form_for f, method: :delete, url: team_scav_hunt_item_file_path(@team_scav_hunt, *@item.for_url, f) do |form| %>
-              <%= form.submit "Delete" %>
+            <% if team_user? %>
+              <%= form_for f, method: :delete, url: team_scav_hunt_item_file_path(@team_scav_hunt, *@item.for_url, f) do |form| %>
+                <%= form.submit "Delete" %>
+              <% end %>
             <% end %>
           </li>
         <% end %>
       </ul>
       <% end %>
 
-      <%= form_for @item.item_files.new, url: team_scav_hunt_item_files_path(@team_scav_hunt, *@item.for_url), method: :post do |f| %>
-        <%#= f.label :file, "Attach Files" %>
-        <%= f.file_field :file, multiple: true, include_hidden: false, required: true %>
-        <%= f.submit "Attach WIP file" %>
+      <% if team_user? %>
+        <%= form_for @item.item_files.new, url: team_scav_hunt_item_files_path(@team_scav_hunt, *@item.for_url), method: :post do |f| %>
+          <%#= f.label :file, "Attach Files" %>
+          <%= f.file_field :file, multiple: true, include_hidden: false, required: true %>
+          <%= f.submit "Attach WIP file" %>
+        <% end %>
+      <% end %>
+    </details>
+    <details>
+      <summary>Timed Info (<%= @events.count %>)</summary>
+      <ul class="item-sidebar-list">
+        <% @events.each do |e| %>
+          <li>
+            <% t = e.date.change(zone: "America/Chicago") %>
+            <% if Time.current < t %>in<% end %>
+            <%= distance_of_time_in_words Time.current, t %>
+            <% if Time.current > t %>ago<% end %>
+            (<%= t %>)
+            <% if team_user? %>
+              <%= form_with model: e, url: team_scav_hunt_item_event_path(@team_scav_hunt, *@item.for_url, e), method: :delete, class: 'inline-form' do |form| %>
+                <%= form.submit "❌", class: 'inline-button' %>
+              <% end %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+      <% if team_user? %>
+        <%= form_with model: @events.new, url: team_scav_hunt_item_events_path(@team_scav_hunt, *@item.for_url) do |f| %>
+          <%= f.datetime_local_field :date, required: true %>
+          <%= f.submit "Add Timed Event" %>
+        <% end %>
       <% end %>
     </details>
   </section>

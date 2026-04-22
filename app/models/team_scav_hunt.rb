@@ -4,6 +4,7 @@ class TeamScavHunt < ApplicationRecord
   has_many :team_role_members
   has_many :items
   has_many :page_captains
+  has_many :item_events, through: :items
 
   def to_param
     self.scav_hunt.to_param

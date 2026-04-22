@@ -14,6 +14,8 @@
       <%= link_to @pending_team_user.user.name, edit_team_user_url(@pending_team_user.user) %> [PENDING APPROVAL]
     <% else %>
       <%= link_to "Create Account", new_team_user_path %>
+      <br>
+      <%= link_to "Exit", logout_path %>
     <% end %>
   </div>
   <h1><%= link_to @team_scav_hunt.name, team_scav_hunt_path(@team_scav_hunt) %></h1>
@@ -22,6 +24,7 @@
   <ul>
     <li><%= link_to "Leadership", team_scav_hunt_role_members_path(@team_scav_hunt) %></li><%#
     %><li><%= link_to "Directory", team_users_path %></li><%#
+    %><li><%= link_to "Calendar", team_scav_hunt_events_path %></li><%#
     %><% if team_user? %><%#
       %><li><%= link_to "My Items (#{@my_items.count})", team_scav_hunt_items_mine_path(@team_scav_hunt) %></li><%#
       %><% if !@my_roles.empty? %><%#
