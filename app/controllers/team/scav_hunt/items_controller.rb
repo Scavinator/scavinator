@@ -93,6 +93,7 @@ class Team::ScavHunt::ItemsController < Team::ScavHunt::Item::BaseController
     @tags = @team.team_tags.where(enabled: true).all
     @team_users = @team.team_users.where(approved: true).all
     @events = @item.item_events.all.order(:date)
+    @next_event = @events.select { |e| e.date > Time.current }.first || @events.last
   end
 
   def search

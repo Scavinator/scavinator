@@ -7,7 +7,15 @@
       <p><i><b>WARNING:</b> This transcription may not exactly match the list. Check the actual list to confirm before working on this item.</i></p>
     <% end %>
     <% if !@events.empty? %>
-      <h4>Next timed event: <%= e = @events.first; t = e.date.change(zone: "America/Chicago"); "#{Time.current > t ? '' : 'in '}#{distance_of_time_in_words Time.current, t}#{Time.current > t ? ' ago' : ''} (#{t})" %></h4>
+      <h4>
+        <% if @events.length > 1 %>
+          Next timed event:
+        <% else %>
+          Timed event:
+        <% end %>
+        <span style="color: <%= urgency_css_class @next_event %>;">
+          <%= "#{Time.current > @next_event.date ? '' : 'in '}#{distance_of_time_in_words Time.current, @next_event.date}#{Time.current > @next_event.date ? ' ago' : ''} (#{@next_event.date.strftime "%a %H:%M %P"})" %></h4>
+        </span>
     <% end %>
     <b><% if @item.page_number %>Page <%= @item.page_number %>,<% end %> Item <%= @item.number %><%= @item.digital_submission ? " 💾" : "" %>:</b>
     <blockquote>
@@ -109,7 +117,7 @@
             <% if Time.current < t %>in<% end %>
             <%= distance_of_time_in_words Time.current, t %>
             <% if Time.current > t %>ago<% end %>
-            (<%= t %>)
+            (<%= t.strftime "%D %r" %>)
             <% if team_user? %>
               <%= form_with model: e, url: team_scav_hunt_item_event_path(@team_scav_hunt, *@item.for_url, e), method: :delete, class: 'inline-form' do |form| %>
                 <%= form.submit "❌", class: 'inline-button' %>
