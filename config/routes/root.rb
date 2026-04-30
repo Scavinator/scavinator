@@ -3,7 +3,11 @@ scope "", as: :root, controller: :root do
   get "dash"
 end
 get 'users/me/discord', to: 'users#link_discord', as: :link_discord
-resources :users, only: [:new, :create, :edit, :update]
+resources :users, only: [:new, :create, :edit, :update] do
+  member do
+    get :avatar
+  end
+end
 resource :session do
   get 'new/discord', to: 'create_discord'
 end

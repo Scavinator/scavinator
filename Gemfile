@@ -44,6 +44,7 @@ gem "bootsnap", require: false
 
 gem "httparty"
 gem "shrine", "~> 3.3"
+gem "image_processing", "~> 1.8"
 
 group :production do
   gem "aws-sdk-s3", "~> 1.219"

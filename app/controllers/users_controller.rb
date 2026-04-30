@@ -1,8 +1,9 @@
 class UsersController < ApplicationController
   include Discord
 
-  allow_unauthenticated_access except: [:edit, :update]
-  before_action :set_user_by_cookie, :require_user_matches, only: [:edit, :update]
+  allow_unauthenticated_access except: [:edit, :update, :avatar]
+  before_action :set_user_by_cookie, only: [:avatar, :edit, :update]
+  before_action :require_user_matches, only: [:edit, :update]
 
   def new
     @teams = Team.all
@@ -13,6 +14,10 @@ class UsersController < ApplicationController
   end
 
   def update
+    @user.assign_attributes(params.expect(user: %i[pronouns about_me team_contact emergency_contact avatar]))
+    @user.avatar_derivatives! if @user.avatar_changed?
+    @user.save
+    redirect_to edit_user_path(@user)
   end
 
   def link_discord
@@ -42,6 +47,13 @@ class UsersController < ApplicationController
     else
       render body: "Can't connect discord when not logged in"
     end
+  end
+
+  def avatar
+    (status, headers, body) = @user.avatar(:large).to_rack_response(disposition: "attachment")
+    self.status = status
+    self.headers.merge!(headers)
+    self.response_body = body
   end
 
   def create

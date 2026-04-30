@@ -8,3 +8,19 @@
     <%= link_to "Click here to link your discord account", discord_connect_account_uri(user: @user, path: edit_user_path) %>
   <% end %>
 </p>
+
+<%= form_with model: @user, url: user_path(@user), method: :patch do |f| %>
+  <%= f.label :pronouns %>
+  <%= f.text_field :pronouns %>
+  <%= f.label :about_me %>
+  <br>
+  <%= f.textarea :about_me %>
+  <br>
+  <%= f.label :team_contact, "Contact method (will be shown to all members of your team)" %>
+  <%= f.text_field :team_contact %>
+  <%= f.label :emergency_contact, "Emergency Contact method (will be shown to your captains)" %>
+  <%= f.text_field :emergency_contact %>
+  <%= f.label :avatar %>
+  <%= f.file_field :avatar %>
+  <%= f.submit "Update" %>
+<% end %>

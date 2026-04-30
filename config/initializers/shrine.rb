@@ -37,3 +37,4 @@ end
 
 Shrine.plugin :activerecord           # loads Active Record integration
 Shrine.plugin :rack_response
+Shrine.plugin :derivatives

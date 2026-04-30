@@ -2,8 +2,8 @@ class Team::UsersController < Team::BaseController
   require_captain except: %i[index new create edit update]
   allow_public_access only: %i[new create]
 
-  allow_pending_user only: %i[edit update]
-  before_action :require_user_matches, only: %i[edit update]
+  allow_pending_user only: %i[edit_pending update_pending]
+  before_action :require_user_matches, only: %i[edit update edit_pending update_pending update_password]
 
   def new
   end
@@ -12,6 +12,32 @@ class Team::UsersController < Team::BaseController
   end
 
   def update
+    @user.assign_attributes(params.expect(user: %i[pronouns about_me team_contact emergency_contact avatar]))
+    @user.avatar_derivatives! if @user.avatar_changed?
+    @user.save
+    redirect_to edit_team_user_path(@user)
+  end
+
+  def update_password
+    logger.info params.expect(user: :old_password)
+    new_pw = params.expect(user: [:password, :password_confirmation])
+    if new_pw[:password] != new_pw[:password_confirmation]
+      flash[:danger] = "Passwords don't match"
+      redirect_to edit_team_user_path(@user)
+    elsif @user.authenticate(params.expect(user: [:old_password])[:old_password])
+      @user.update(new_pw)
+      redirect_to edit_team_user_path(@user)
+    else
+      flash[:danger] = "Incorrect old password"
+      redirect_to edit_team_user_path(@user)
+    end
+  end
+
+  def edit_pending
+    redirect_to edit_team_user_path(@team_user) if @team_user && !@pending_team_user
+  end
+
+  def update_pending
     if @team.team_auths.find_by(key: params.require(:team_user).require(:team_auth_password), create_account: true, ui_password: true)
       @pending_team_user.update(approved: true)
       flash[:success] = "Account approved!"

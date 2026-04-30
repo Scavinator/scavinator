@@ -37,6 +37,9 @@ end
 resources :users, module: :team do
   member do
     patch 'manage', to: 'users#manage', as: :manage
+    get :edit_pending
+    patch :update_pending
+    patch :update_password
   end
 end
 namespace :authcode, controller: :authcodes, module: :team do

@@ -1,13 +1,46 @@
-<h1>Edit User</h1>
-
 <% flash.each do |name, msg| -%>
   <%= content_tag :div, msg, class: name %>
 <% end -%>
 
-<% if @pending_team_user %>
-  <%= form_with model: @pending_team_user, url: team_user_path(@pending_team_user.user), method: :patch do |f| %>
-    <%= f.label :team_auth_password, "Auto-approval code:" %>
-    <%= f.text_field :team_auth_password %>
-    <%= f.submit "Submit auto approval code" %>
+<h1>Configure Account</h1>
+<p>Discord Account Linking:
+  <% if @user.discord_id %>
+    Discord account is currently linked!
+    <br>
+    <%= link_to "Click here to re-link or update your discord account", discord_connect_account_uri(user: @user, path: edit_user_path) %>
+  <% else %>
+    <%= link_to "Click here to link your discord account", discord_connect_account_uri(user: @user, path: edit_user_path) %>
   <% end %>
+</p>
+
+<h2>Account Information</h2>
+<%= form_with model: @user, url: team_user_path(@user), method: :patch do |f| %>
+  <%= f.label :pronouns %>
+  <%= f.text_field :pronouns %>
+  <%= f.label :about_me %>
+  <br>
+  <%= f.textarea :about_me %>
+  <br>
+  <%= f.label :team_contact, "Contact method (will be shown to all members of your team)" %>
+  <%= f.text_field :team_contact %>
+  <%= f.label :emergency_contact, "Emergency Contact method (will be shown to your captains)" %>
+  <%= f.text_field :emergency_contact %>
+  <% if @user.avatar %>
+    <%= image_tag avatar_user_url(@user) %>
+    <br>
+  <% end %>
+  <%= f.label :avatar %>
+  <%= f.file_field :avatar %>
+  <%= f.submit "Update" %>
+<% end %>
+
+<h2>Change Password</h2>
+<%= form_with model: @user, url: update_password_team_user_path(@user), method: :patch do |f| %>
+  <%= f.label :old_password, "Old password" %>
+  <%= f.password_field :old_password, required: true %>
+  <%= f.label :password, "New password" %>
+  <%= f.password_field :password, required: true %>
+  <%= f.label :password_confirmation, "New password again" %>
+  <%= f.password_field :password_confirmation, required: true %>
+  <%= f.submit "Update" %>
 <% end %>

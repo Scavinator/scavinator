@@ -7,4 +7,6 @@ class User < ApplicationRecord
   has_many :item_submissions, foreign_key: :submitter_id
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+
+  include AvatarUploader::Attachment(:avatar)
 end
