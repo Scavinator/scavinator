@@ -1,10 +1,5 @@
 class Team::ScavHunt::Item::SubmissionController < Team::ScavHunt::Item::BaseController
-  allow_authcode_access only: %i[show]
   before_action :set_submission, except: %i[new create]
-
-  def show
-    @files = @submission.item_files
-  end
 
   def destroy
     @submission.destroy
@@ -20,7 +15,7 @@ class Team::ScavHunt::Item::SubmissionController < Team::ScavHunt::Item::BaseCon
       submission = @item.create_item_submission!(**submission_params.slice(:instructions), item_files_attributes: submission_params[:item_files]&.map { |file| { file: file } } || [], submitter_id: @user.id)
       @item.item_files.where(id: submission_params[:import_files]).update_all(item_id: nil, item_submission_id: submission.id)
     end
-    redirect_to team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url)
+    redirect_to team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url)
   end
 
   def edit
@@ -28,7 +23,7 @@ class Team::ScavHunt::Item::SubmissionController < Team::ScavHunt::Item::BaseCon
 
   def update
     @submission.update(params.require(:item_submission).permit(:instructions))
-    redirect_to team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url)
+    redirect_to team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url)
   end
 
   def attach_file
@@ -37,12 +32,12 @@ class Team::ScavHunt::Item::SubmissionController < Team::ScavHunt::Item::BaseCon
       @submission.item_files.create(file_params[:files].map { |file| { file: file } }) if !file_params[:files].nil? && file_params[:files].length > 0
       @item.item_files.where(id: file_params[:import_files]).update_all(item_id: nil, item_submission_id: @submission.id) if file_params[:import_files]
     end
-    redirect_to team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url)
+    redirect_to team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url)
   end
 
   def detach_file
     @submission.item_files.find(params[:id]).update(item: @submission.item, item_submission: nil)
-    redirect_to team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url)
+    redirect_to team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url)
   end
 
   private
