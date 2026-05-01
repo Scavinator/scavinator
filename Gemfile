@@ -48,6 +48,7 @@ gem "image_processing", "~> 1.8"
 
 group :production do
   gem "aws-sdk-s3", "~> 1.219"
+  gem "sqlite3" # Required for various internal rails nonsense
 end
 
 group :development, :test do
