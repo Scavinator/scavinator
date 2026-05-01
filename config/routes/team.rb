@@ -3,6 +3,9 @@ resources :scav_hunts, module: :team, path: "hunts", param: :slug do
   resources :role_members, module: :scav_hunt
   resources :roles, module: :scav_hunt
   resources :pages, module: :scav_hunt, param: :page_number
+  namespace :page, module: :scav_hunt do
+    get ':page_number/presenter', to: 'pages#show_presenter', as: :presenter
+  end
   get 'category/:category_slug', to: "scav_hunt/items#by_category", as: :category
   resources :tags, module: :scav_hunt
   namespace :items, module: :scav_hunt do

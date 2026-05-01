@@ -1,7 +1,7 @@
 class Team::ScavHunt::PagesController < Team::ScavHunt::BaseController
-  require_captain except: [:show, :edit, :update]
+  require_captain except: [:show, :edit, :update, :show_presenter]
   before_action :require_page_owner, only: [:edit, :update, :destroy]
-  allow_authcode_access only: [:show]
+  allow_authcode_access only: [:show, :show_presenter]
 
   def show
     @page_number = params[:page_number]
@@ -9,6 +9,10 @@ class Team::ScavHunt::PagesController < Team::ScavHunt::BaseController
     @page_captains = @team_scav_hunt.page_captains.where(page_number: @page_number)
     raise ActiveRecord::RecordNotFound, "No such page" if @page_captains.empty? && @items.empty?
     @team_users = @team.team_users.where(approved: true)
+  end
+
+  def show_presenter
+    show
   end
 
   def new

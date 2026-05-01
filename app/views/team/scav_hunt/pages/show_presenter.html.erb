@@ -1,0 +1,31 @@
+<main>
+  <h2>Page <%= @page_number %>: Presenter View</h3>
+  <p><%= link_to "(normal view)", team_scav_hunt_page_path(@team_scav_hunt, @page_number) %></p>
+  Jump to items:
+  <% @items.each do |item| %>
+    <%= link_to "Item #{item.number}", "##{item.number}" %>
+  <% end %>
+  <% @items.each do |item| %>
+    <h4 id="<%= item.number %>">
+      <% if item.item_submission %>
+        ✅
+      <% else %>
+        ❌
+      <% end %>
+      <%= link_to "Item #{item.number}", team_scav_hunt_item_path(@team_scav_hunt, *item.for_url) %>
+    </h4>
+    <% if item.item_submission %>
+      <p><%= item.item_submission.instructions %></p>
+      <ul>
+        <% item.item_submission.item_files.each do |file| %>
+          <li>
+            <% if file.file.mime_type.split("/").first == "image" %>
+              <%= image_tag team_scav_hunt_item_file_path(@team_scav_hunt, *item.for_url, file.id), class: 'item-file' %>
+            <% end %>
+            <%= link_to file.file.metadata['filename'], team_scav_hunt_item_file_path(@team_scav_hunt, *item.for_url, file.id) %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+</main>

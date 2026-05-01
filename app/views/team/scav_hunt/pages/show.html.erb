@@ -1,5 +1,6 @@
 <main>
   <h2>Page <%= @page_number %></h2>
+  <p><%= link_to "(presenter view)", team_scav_hunt_page_presenter_path(@team_scav_hunt, @page_number) %></p>
   <h3>Page Captains</h3>
   <ul>
     <% @page_captains.each do |page_captain| %>

@@ -449,3 +449,7 @@ header .user-link {
   border-radius: 0.5em;
   margin: 1em;
 }
+
+.item-file {
+  max-width: 100%;
+}
