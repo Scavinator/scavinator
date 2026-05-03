@@ -168,3 +168,21 @@
     </details>
   </section>
 </main>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js@11.1.0/public/assets/styles/choices.min.css" integrity="sha256-g0uAHC+YSeiS2X/1GuQ3OMQkSR0wd82xvcbPtWlOG5I=" crossorigin="anonymous" />
+<script src="https://cdn.jsdelivr.net/npm/choices.js@11.1.0/public/assets/scripts/choices.min.js" integrity="sha256-Jwkjv8zq8sOAYeThyn53LDCkpRdB3yETR+U7aVqzV98=" crossorigin="anonymous"></script>
+<script>new Choices('#item_user_user_id', {itemSelectText: null})</script>
+<style>
+.choices[data-type*="select-one"] .choices__input, .choices__list--dropdown .choices__item {
+  padding: 0.3em !important;
+}
+.choices__inner {
+  padding-left: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  min-height: unset !important;
+}
+.choices {
+  margin-bottom: 0 !important;
+}
+</style>
