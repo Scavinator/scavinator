@@ -18,6 +18,9 @@
       <%= link_to "Exit", logout_path %>
     <% end %>
   </div>
+  <div class="global-buttons">
+    <%= link_to "+ Input Item", new_team_scav_hunt_item_path(@team_scav_hunt) %>
+  </div>
   <h1><%= link_to @team_scav_hunt.name, team_scav_hunt_path(@team_scav_hunt) %></h1>
 </header>
 <nav>
