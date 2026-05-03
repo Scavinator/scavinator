@@ -53,7 +53,11 @@ async function updatePreview() {
 function buildItemRow(item) {
   const e = document.createElement('tr');
   const num = document.createElement('td');
-  num.textContent = item.page_number ? `${item.page_number}-${item.number}` : item.number;
+  let numText = item.page_number ? `${item.page_number}-${item.number}` : item.number;
+  if (item.icons?.length > 0) {
+    numText = `${numText} ${item.icons}`
+  }
+  num.textContent = numText;
   e.appendChild(num);
   const cts = document.createElement('td');
   if (item.points_text) {

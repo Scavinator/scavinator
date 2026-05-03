@@ -121,7 +121,8 @@ class Team::ScavHunt::ItemsController < Team::ScavHunt::Item::BaseController
         **item.slice(:page_number, :number, :content, :points_text, :points_value),
         path: team_scav_hunt_item_path(@team_scav_hunt, *item.for_url),
         finish_path: finish_path,
-        team_tags: item.team_tags.map { |t| t.slice(:name, :color) }
+        team_tags: item.team_tags.map { |t| t.slice(:name, :color) },
+        icons: helpers.item_type_icons(item)
       }
     end
 end

@@ -21,7 +21,7 @@
           <% if item.item_tags.length > 0 %>
             <br>
             <% item.item_tags.each do |item_tag| %>
-              <span class="item-tag" style="--tag-color: <%= item_tag.team_tag.color %>"><%= item_tag.team_tag.name %></span>
+              <%= link_to item_tag.team_tag.name, team_scav_hunt_tag_path(@team_scav_hunt, item_tag.team_tag), style: "--tag-color: #{item_tag.team_tag.color}", class: 'item-tag' %>
             <% end %>
           <% end %>
         </td>

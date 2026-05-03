@@ -18,9 +18,11 @@
       <%= link_to "Exit", logout_path %>
     <% end %>
   </div>
-  <div class="global-buttons">
-    <%= link_to "+ Input Item", new_team_scav_hunt_item_path(@team_scav_hunt) %>
-  </div>
+  <% if team_user? %>
+    <div class="global-buttons">
+      <%= link_to "+ Input Item", new_team_scav_hunt_item_path(@team_scav_hunt) %>
+    </div>
+  <% end %>
   <h1><%= link_to @team_scav_hunt.name, team_scav_hunt_path(@team_scav_hunt) %></h1>
 </header>
 <nav>
@@ -43,7 +45,10 @@
     %><li>
       <%= link_to "Full List", team_scav_hunt_items_path(@team_scav_hunt) %>
       <ul>
-        <% @page_numbers.each do |page_number| %>
+        <% @nav_list_categories.each do |category| %>
+          <li><%= link_to category.name, team_scav_hunt_category_path(@team_scav_hunt, category) %></li>
+        <% end %>
+        <% @nav_page_numbers.each do |page_number| %>
           <li><%= link_to "Page #{page_number}", team_scav_hunt_page_path(@team_scav_hunt, page_number) %></li>
         <% end %>
       </ul>
