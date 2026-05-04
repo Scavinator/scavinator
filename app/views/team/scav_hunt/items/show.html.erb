@@ -61,7 +61,7 @@
       <p><%= link_to "(edit)", edit_team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url) %></p>
     <% end %>
     <% if !@item.points_value.nil? %>
-      <p>Point value: <%= @item.points_value %></p>
+      <p>Point value: <%= @item.points_value_pretty %></p>
     <% end %>
     <% if team_user? || @item.item_tags.length > 0 %>
       <ul class="inline-list">

@@ -10,6 +10,7 @@ resources :scav_hunts, module: :team, path: "hunts", param: :slug do
   resources :tags, module: :scav_hunt
   namespace :items, module: :scav_hunt do
     get 'mine', to: 'items#index_mine', as: :mine
+    get 'points', to: 'items#index_points', as: :points
     get 'wizard', to: 'items#item_wizard_page'
   end
   resources :events, module: :scav_hunt, only: [:index]

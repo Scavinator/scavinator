@@ -21,6 +21,11 @@ class Item < ApplicationRecord
     raise "Attempted to generate an item url. This is not possible. Use *item.url_for instead"
   end
 
+  def points_value_pretty
+    return nil if self.points_value.nil?
+    self.points_value % 1 == 0 ? self.points_value.to_i : self.points_value
+  end
+
   around_create :list_section_unique_validation
 
   def list_section_unique_validation

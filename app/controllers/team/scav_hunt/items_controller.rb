@@ -1,5 +1,5 @@
 class Team::ScavHunt::ItemsController < Team::ScavHunt::Item::BaseController
-  skip_before_action :set_item, only: [:index, :index_mine, :new, :create, :search, :by_category, :item_wizard_page]
+  skip_before_action :set_item, only: [:index, :index_mine, :index_points, :new, :create, :search, :by_category, :item_wizard_page]
   allow_authcode_access only: %i[index show]
 
   def index
@@ -15,6 +15,10 @@ class Team::ScavHunt::ItemsController < Team::ScavHunt::Item::BaseController
 
   def index_mine
     @items = @team_scav_hunt.items.joins(:item_users).where(item_users: {user_id: @user.id}).order(:number)
+  end
+
+  def index_points
+    @items = @team_scav_hunt.items.where.not(points_value: nil).order(points_value: :desc)
   end
 
   def new

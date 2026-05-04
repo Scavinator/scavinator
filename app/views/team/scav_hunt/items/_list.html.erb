@@ -10,7 +10,7 @@
   </thead>
   <tbody>
     <% items.each do |item| %>
-      <tr class="<%= item.submitted ? "submitted" : item.assigned ? "assigned" : "" %>">
+      <tr class="<%= item.submitted ? "submitted" : item.assigned ? "assigned" : "" %> <% if item.digital_submission %>digital-submission<% end %> <% if item.item_events.length > 0 %>timed<% end %>">
         <td><%= link_to (item.page_number ? "#{item.page_number}-#{item.number}" : item.number), team_scav_hunt_item_path(@team_scav_hunt, *item.for_url) %> <%= item_type_icons(item) %></td>
         <td>
           <%= item_status_icons(item) %>

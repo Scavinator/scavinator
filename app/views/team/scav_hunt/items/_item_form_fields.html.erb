@@ -38,6 +38,6 @@
   <div class="form-inline">
     <%= form.label :points_value %>
     <sup title="Numerical point value of this item. If it's not immediately obvious what to put, leave this field blank.">ⓘ</sup>
-    <%= form.number_field :points_value, placeholder: "40", class: 'small-number' %>
+    <%= form.number_field :points_value, value: item.points_value_pretty, placeholder: "40", step: 'any', class: 'small-number' %>
   </div>
 </fieldset>
