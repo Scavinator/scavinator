@@ -1,0 +1,8 @@
+<main>
+  <h2>Submit Completion</h2>
+  <%= render 'team/scav_hunt/items/search' %>
+  <br>
+  <%= render "team/scav_hunt/items/list", items: @items, item_headers: [''] do |i| %>
+    <td><small><%= link_to "Submit", new_team_scav_hunt_item_submission_path(@team_scav_hunt, *i.for_url), class: 'button button-success' %></small></td>
+  <% end %>
+</main>

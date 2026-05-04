@@ -463,20 +463,32 @@ header .user-link {
   }
 }
 
-.global-buttons {
-  float: right;
-  margin-right: 2em;
-  a {
-    border-radius: 5px;
+.button {
+  border-radius: 5px;
+  padding: 0.4em;
+  padding-left: 0.6em;
+  padding-right: 0.6em;
+  text-decoration: none;
+  color: white;
+  transition: background-color 0.15s;
+  margin: 0.2em;
+  display: inline-block;
+  &.button-primary {
     background-color: #007bff;
-    padding: 0.4em;
-    padding-left: 0.6em;
-    padding-right: 0.6em;
-    text-decoration: none;
-    color: white;
-    transition: background-color 0.15s;
     &:hover {
       background-color: #0069d9;
     }
   }
+
+  &.button-success {
+    background-color: #28a745;
+    &:hover {
+      background-color: #218838;
+    }
+  }
+}
+
+.global-buttons {
+  float: right;
+  margin-right: 2em;
 }

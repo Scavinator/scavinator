@@ -20,7 +20,9 @@
   </div>
   <% if team_user? %>
     <div class="global-buttons">
-      <%= link_to "+ Input Item", new_team_scav_hunt_item_path(@team_scav_hunt) %>
+      <%= link_to "+ Submit Completion", team_scav_hunt_submit_path(@team_scav_hunt), class: 'button button-success' %>
+      <br>
+      <%= link_to "+ Input Item", new_team_scav_hunt_item_path(@team_scav_hunt), class: 'button button-primary' %>
     </div>
   <% end %>
   <h1><%= link_to @team_scav_hunt.name, team_scav_hunt_path(@team_scav_hunt) %></h1>

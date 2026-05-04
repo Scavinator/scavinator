@@ -1,4 +1,5 @@
 resources :scav_hunts, module: :team, path: "hunts", param: :slug do
+  get 'submit', to: 'scav_hunt/item/submission#item_select', as: :submit
   resource :discord, module: :scav_hunt, controller: :discord, only: [:edit, :update]
   resources :role_members, module: :scav_hunt
   resources :roles, module: :scav_hunt

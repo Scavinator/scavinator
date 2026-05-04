@@ -1,0 +1,26 @@
+<%= javascript_import_module_tag "controllers/item_search" %>
+<p>
+  Search:
+  <input type="text" id="item-search">
+</p>
+<div class="form-field">
+  <div class="form-radio-bar">
+   <input id="assigned-assigned" type="radio" value="assigned" name="assigned"><%#
+    %><label for="assigned-assigned">Assigned</label><%#
+    %><input id="assigned-unassigned" type="radio" value="false" name="assigned"><%#
+    %><label for="assigned-unassigned">Unassigned</label><%#
+    %><input id="assigned-submitted" type="radio" value="submitted" name="assigned"><%#
+    %><label for="assigned-submitted">Done</label>
+  </div>
+  <div class="form-radio-bar-clear">
+    <input id="assigned-none" type="radio" value="" name="assigned">
+    <label for="assigned-none" class="radio-bar-clear">(clear)</label>
+  </div>
+</div>
+<div style="margin-top: 0.6em;">
+  <input type="checkbox" name="timed" id="timed">
+  <label for="timed">Timed?</label>
+  <br>
+  <input type="checkbox" name="digital-submission" id="digital-submission">
+  <label for="digital-submission">Digital Submission?</label>
+</div>

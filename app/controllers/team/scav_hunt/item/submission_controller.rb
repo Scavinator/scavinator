@@ -1,9 +1,14 @@
 class Team::ScavHunt::Item::SubmissionController < Team::ScavHunt::Item::BaseController
-  before_action :set_submission, except: %i[new create]
+  before_action :set_submission, except: %i[new create item_select]
+  skip_before_action :set_item, only: %i[item_select]
 
   def destroy
     @submission.destroy
     redirect_to team_scav_hunt_item_path(@team_scav_hunt, *@item.for_url)
+  end
+
+  def item_select
+    @items = @team_scav_hunt.items.left_joins(:item_submission).where(item_submission: {id: nil}).order(:list_category_id, 'page_number ASC NULLS FIRST', :number).eager_load(:list_category, :item_users, :item_events, :item_submission).preload(:team_tags)
   end
 
   def new
