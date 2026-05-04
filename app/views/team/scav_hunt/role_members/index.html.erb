@@ -39,7 +39,7 @@
   <ul class="user-list">
     <% @team_users.each do |member| %>
       <li>
-        <%= member.user.name %>
+        <%= link_to member.user.name, team_scav_hunt_user_path(@team_scav_hunt, member.user) %>
         <% if captain? %>
           <%= form_with model: member, url: manage_team_user_path(member) do |form| %>
             <%= form.hidden_field :approved, value: false %>

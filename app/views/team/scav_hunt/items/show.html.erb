@@ -95,7 +95,7 @@
     <ul class="item-sidebar-list">
       <% @item.item_users.all.each do |item_user| %>
         <li>
-          <%= item_user.user.name %>
+          <%= link_to item_user.user.name, team_scav_hunt_user_path(@team_scav_hunt, item_user.user) %>
           <% if team_user? %>
             <%= form_with model: item_user, method: :delete, url: team_scav_hunt_item_user_path(@team_scav_hunt, *@item.for_url, item_user), class: 'inline-form' do |form| %>
               <%= form.submit "❌", class: 'inline-button' %>

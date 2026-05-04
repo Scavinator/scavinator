@@ -1,0 +1,14 @@
+<main>
+  <h2><%= @user.name %></h2>
+  <p><small><%= @user.pronouns %></small></p>
+  <p>About: <%= @user.about_me %></p>
+  <p>Contact: <%= @user.team_contact %></p>
+  <% if Current.user.id == @user.id %>
+    <%= link_to "(edit)", edit_user_path(@user) %>
+  <% end %>
+
+  <% if @items.length > 0 %>
+    <h2>Assigned Items</h2>
+    <%= render "team/scav_hunt/items/list", items: @items %>
+  <% end %>
+</main>

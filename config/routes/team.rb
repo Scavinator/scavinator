@@ -2,6 +2,7 @@ resources :scav_hunts, module: :team, path: "hunts", param: :slug do
   resource :discord, module: :scav_hunt, controller: :discord, only: [:edit, :update]
   resources :role_members, module: :scav_hunt
   resources :roles, module: :scav_hunt
+  resources :users, module: :scav_hunt
   resources :pages, module: :scav_hunt, param: :page_number
   namespace :page, module: :scav_hunt do
     get ':page_number/presenter', to: 'pages#show_presenter', as: :presenter

@@ -1,0 +1,6 @@
+<main>
+  <h2>By Point Value</h2>
+  <%= render "list", items: @items, item_headers: ['Points'] do |i| %>
+    <td><%= i.points_value_pretty %></td>
+  <% end %>
+</main>
