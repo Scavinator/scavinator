@@ -21,6 +21,7 @@ class Team::ScavHunt::BaseController < Team::BaseController
       page_captain_page_numbers = @team_scav_hunt.page_captains.group(:page_number).select(:page_number).map(&:page_number)
       @nav_page_numbers = [item_page_numbers, page_captain_page_numbers].flatten.uniq.sort
       @nav_list_categories = @team_scav_hunt.items.where.not(list_category: nil).select(:list_category_id).distinct.map(&:list_category)
+      @nav_tags = @team.team_tags.where(enabled: true)
       if helpers.team_user?
         @my_items = @team_scav_hunt.items.joins(:item_users).where(item_users: {user_id: @user.id})
         @my_roles = @team_scav_hunt.team_role_members.where(user_id: @user.id).map(&:team_role)

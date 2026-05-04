@@ -53,6 +53,14 @@
         <% end %>
       </ul>
     </li><%#
+    %><li>
+      Tags
+      <ul>
+        <% @nav_tags.each do |tag| %>
+          <li><%= link_to tag.name, team_scav_hunt_tag_path(@team_scav_hunt, tag) %></li>
+        <% end %>
+      </ul>
+    </li><%#
     %><% if captain? %><%#
       %><li>
         Hunt Setup
