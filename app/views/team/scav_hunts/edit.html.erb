@@ -2,5 +2,7 @@
 <%= form_with model: @team_scav_hunt do |form| %>
   <%= form.label :name, "Name:" %>
   <%= form.text_field :name %>
+  <%= form.label :name, "Digital Submission Link:" %>
+  <%= form.text_field :digital_submission_link %>
   <%= form.submit "Update" %>
 <% end %>

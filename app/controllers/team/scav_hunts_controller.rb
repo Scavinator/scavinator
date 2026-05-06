@@ -11,7 +11,7 @@ class Team::ScavHuntsController < Team::ScavHunt::BaseController
   end
 
   def update
-    @team_scav_hunt.update(params.require(:team_scav_hunt).permit(:name))
+    @team_scav_hunt.update(params.expect(team_scav_hunt: [:name, :digital_submission_link]))
     redirect_to team_scav_hunt_path(@team_scav_hunt)
   end
 

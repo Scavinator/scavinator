@@ -4,7 +4,11 @@
   <p class="item-submission-text">Item <%= @item.number %>: <%= @item.content %></p>
 
   <% if @item.digital_submission %>
-    <p>This item is digital submission! Please make sure to upload it to the team google drive folder.</p>
+    <% if @team_scav_hunt.digital_submission_link %>
+      <p>This item is digital submission! Please make sure to upload it to the <%= link_to "team google drive folder", @team_scav_hunt.digital_submission_link, target: "_blank" %>.</p>
+    <% else %>
+      <p>This item is digital submission! Please make sure to upload it to the team google drive folder.</p>
+    <% end %>
   <% else %>
     <%= checkbox_tag :empty_submission %>
     <%= label_tag :empty_submission, "Check this box if there's nothing to submit or archive (i.e. events)" %>
