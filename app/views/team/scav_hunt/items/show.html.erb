@@ -163,6 +163,9 @@
         <% end %>
       <% end %>
     </details>
+    <% if @discord_integration %>
+      <div><%= link_to "Jump to discord thread", "https://discord.com/channels/#{@team_scav_hunt.discord_guild_id}/#{@discord_integration.integration_data['thread_id']}" %></div>
+    <% end %>
   </section>
 </main>
 

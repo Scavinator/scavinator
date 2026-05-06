@@ -8,6 +8,7 @@ class Item < ApplicationRecord
   has_one :item_submission
   has_many :item_files
   belongs_to :list_category, optional: true
+  has_many :item_integrations
 
   def for_url
     if category_slug = list_category&.slug
