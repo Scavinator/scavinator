@@ -11,7 +11,7 @@ class Team::TagsController < Team::BaseController
   end
 
   def update
-    @team.team_tags.find(params[:id]).update(params[:team_tag].permit(:name, :color, :enabled, :team_role_id, :requires_approval))
+    @team.team_tags.find(params[:id]).update(params[:team_tag].permit(:name, :color, :enabled, :team_role_id, :requires_approval, :pinned))
     redirect_to action: :index
   end
 

@@ -85,7 +85,7 @@
         <%= form.submit "Add" %>
       <% end %>
     <% end %>
-
+    
     <% if !@item.item_submission %>
       <p><%= link_to "Submit completion", new_team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url), class: 'submit-button' %></p>
     <% end %>

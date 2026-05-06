@@ -9,6 +9,9 @@
   <%= form.label :requires_approval, "Do items with this tag need to be approved first?" %>
   <%= form.checkbox :requires_approval %>
   <%= form.label :team_role_id %>
+  <%= form.label :pinned %>
+  <small>This is the pin priority. The lowest is HQ visit, anything higher is just setting the order</small>
+  <%= form.number_field :pinned %>
   <%= form.select :team_role_id, [["N/A", nil], *@roles.map { |role| [role.name, role.id] }] %>
   <%= form.submit "Update" %>
 <% end %>

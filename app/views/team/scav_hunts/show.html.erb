@@ -1,1 +1,30 @@
-<i>I don't know what to put here anymore</i>
+<div id="home">
+  <section id="hq-visit">
+    <h3><%= @hq_pin&.first&.name %></h3>
+    <ul class="inline-list">
+      <% @hq_pin&.last&.each do |item| %>
+        <li><%= link_to item.number, team_scav_hunt_item_path(@team_scav_hunt, *item.for_url) %>. <%= item_status_icons(item) %> <%= item.content %></li>
+      <% end %>
+    </ul>
+  </section>
+  <section id="pins">
+    <% @pins.each do |tag, items| %>
+      <div>
+        <h3><%= tag.name %></h3>
+        <ul class="inline-list">
+          <% items.each do |item| %>
+            <li><%= link_to item.number, team_scav_hunt_item_path(@team_scav_hunt, *item.for_url) %>. <%= item_status_icons(item) %> <%= item.content %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </section>
+  <section id="events">
+    <h3>Upcoming Events</h3>
+    <ul class="inline-list">
+      <% @events.each do |event| %>
+        <li><%= event.date.strftime("%A %l:%M %p") %> <%= link_to "Item #{event.item.number}", team_scav_hunt_item_path(@team_scav_hunt, *event.item.for_url) %>: <%= event.item.content %></li>
+      <% end %>
+    </ul>
+  </section>
+</div>
