@@ -22,7 +22,7 @@ class Team::ScavHunt::DiscordController < Team::ScavHunt::BaseController
   private
     def update_team
       @team_scav_hunt.update(discord_params)
-      redirect_to action: :show
+      redirect_to action: :edit
     end
 
     def discord_params
