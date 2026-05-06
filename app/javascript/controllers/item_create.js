@@ -104,10 +104,14 @@ function buildItemTable() {
 const previewPane = document.getElementById('page-wrap');
 
 const submitAndNextBtn = document.createElement('input');
-submitAndNextBtn.value = "Next Item";
+submitAndNextBtn.classList.add('button');
+submitAndNextBtn.classList.add('button-primary');
+submitAndNextBtn.value = "Continue Page";
 submitAndNextBtn.type = "submit";
 const submitRow = form.getElementsByClassName('item-submit-row')[0];
 submitRow.appendChild(submitAndNextBtn);
+
+submitRow.firstElementChild.value = "Create & Finish";
 
 let formLocked = false;
 function lockFields() {
@@ -125,7 +129,9 @@ function createPreviewPane(item) {
     const finishPageWrap = document.createElement('a');
     finishPageWrap.href = item.finish_path;
     const finishPageBtn = document.createElement('button');
-    finishPageBtn.textContent = "Finish Page!"
+    finishPageBtn.classList.add('button');
+    finishPageBtn.classList.add('button-primary');
+    finishPageBtn.textContent = "Save & View Page"
     finishPageWrap.appendChild(finishPageBtn);
     previewPane.appendChild(finishPageWrap);
   }

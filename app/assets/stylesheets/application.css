@@ -346,6 +346,11 @@ input[disabled] ~ label, label:has(+ input[readonly]) {
     margin-bottom: 0.25em;
     margin-top: 0.25em;
   }
+  .item-submit-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
 
 .item-content {
@@ -470,11 +475,11 @@ header .user-link {
   padding-left: 0.6em;
   padding-right: 0.6em;
   text-decoration: none;
-  color: white;
   transition: background-color 0.15s;
   margin: 0.2em;
   display: inline-block;
   &.button-primary {
+    color: white;
     background-color: #007bff;
     &:hover {
       background-color: #0069d9;
@@ -482,6 +487,7 @@ header .user-link {
   }
 
   &.button-success {
+    color: white;
     background-color: #28a745;
     &:hover {
       background-color: #218838;

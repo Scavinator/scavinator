@@ -31,7 +31,7 @@
         <%#= form.select :tags, @tags.map { |tag| [tag.name, tag.id] }, default: nil, multiple: true, include_hidden: false %>
       </fieldset>
       <div class="item-submit-row form-inline">
-        <%= form.submit "Create" %>
+        <%= form.submit "Create Item", class: "button button-success" %>
       </div>
     <% end %>
 
