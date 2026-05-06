@@ -30,14 +30,20 @@ class Item < ApplicationRecord
   around_create :list_section_unique_validation
 
   def list_section_unique_validation
+    self.list_category # Kick the cache so that it can show up in the error message. If the item creation transaction fails, we can't run additional queries in it.
     yield
   rescue ActiveRecord::RecordNotUnique => e
     if e.message.split("\n").first == %{PG::UniqueViolation: ERROR:  duplicate key value violates unique constraint "team_scav_hunt_list_category_item_number_unique"}
-      errors.add(:list_section, "already exists")
+      errors.add(:list_section, "#{self.list_section_pretty} already exists")
       raise ActiveRecord::RecordInvalid, self
     else
       raise
     end
+  end
+
+  def list_section_pretty
+    list_category_name = self.class.current_transaction.open? && !self.association_cached?(:list_category) ? "LC##{self.list_category_id}" : self.list_category&.name
+    [list_category_name, self.page_number && "Page #{self.page_number}", "Item #{self.number}"].reject(&:nil?).join(", ")
   end
 
   # Note: We use #length for the associations because in the case of eager loading, it

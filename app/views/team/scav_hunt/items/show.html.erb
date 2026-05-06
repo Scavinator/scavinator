@@ -50,7 +50,7 @@
           <%= "#{Time.current > @next_event.date ? '' : 'in '}#{distance_of_time_in_words Time.current, @next_event.date}#{Time.current > @next_event.date ? ' ago' : ''} (#{@next_event.date.strftime "%a %H:%M %P"})" %></h4>
         </span>
     <% end %>
-    <b><%= [@item.list_category&.name, @item.page_number && "Page #{@item.page_number}", "Item #{@item.number}"].reject(&:nil?).join(", ") %><%= @item.digital_submission ? " 💾" : "" %>:</b>
+    <b><%= @item.list_section_pretty %><%= @item.digital_submission ? " 💾" : "" %>:</b>
     <blockquote>
       <pre class="item-text"><%= @item.content %></pre>
       <% if @item.points_text.present? %>
