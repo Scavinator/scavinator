@@ -4,7 +4,7 @@ const search_input = document.getElementById('item-search')
 
 function handleSection(section) {
   const value = search_input.value;
-  const assignee_value = document.querySelector("input[type='radio'][name='assigned']:checked").value;
+  const assignee_value = document.querySelector("input[type='radio'][name='assigned']:checked")?.value;
   const tables = [];
   const subsections = [];
   for (const t of section.children) {
@@ -15,7 +15,7 @@ function handleSection(section) {
         let matches = false;
         if (value !== null) {
           matches = row.textContent.toLowerCase().includes(value.toLowerCase());
-          if (assignee_value !== '') {
+          if (assignee_value !== '' && assignee_value !== undefined) {
             if (assignee_value === 'false') {
               matches = matches && (!row.classList.contains('assigned') && !row.classList.contains('submitted'));
             } else {
