@@ -26,8 +26,8 @@
       <% end %>
       <%= f.submit "Submit Item" %>
     <% end %>
-    <%= form_with model: (@item.item_submission || @item.build_item_submission), url: team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url), method: :post, id: :mark_as_done do |f| %>
-      <%= f.submit "Mark as done" %>
-    <% end %>
+  <% end %>
+  <%= form_with model: (@item.item_submission || @item.build_item_submission), url: team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url), method: :post, id: :mark_as_done do |f| %>
+    <%= f.submit "Mark as done" %>
   <% end %>
 </main>
