@@ -15,7 +15,11 @@ class Team::ScavHunt::Item::SubmissionController < Team::ScavHunt::Item::BaseCon
   end
 
   def create
-    submission_params = params.require(:item_submission).permit(:instructions, import_files: [], item_files: [])
+    if params[:item_submission]
+      submission_params = params.expect(item_submission: [:instructions, {import_files: []}, {item_files: []}])
+    else
+      submission_params = {}
+    end
     @item.transaction do
       submission = @item.create_item_submission!(**submission_params.slice(:instructions), item_files_attributes: submission_params[:item_files]&.map { |file| { file: file } } || [], submitter_id: @user.id)
       @item.item_files.where(id: submission_params[:import_files]).update_all(item_id: nil, item_submission_id: submission.id)

@@ -6,6 +6,9 @@
   <% if @item.digital_submission %>
     <p>This item is digital submission! Please make sure to upload it to the team google drive folder.</p>
   <% else %>
+    <%= checkbox_tag :empty_submission %>
+    <%= label_tag :empty_submission, "Check this box if there's nothing to submit or archive (i.e. events)" %>
+    <hr>
     <%= form_for (@item.item_submission || @item.build_item_submission), url: team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url), method: :post do |f| %>
       <%= f.label :instructions, "Item Presenter Instructions" %><br>
       <small>If your item is physical, this should include where/how to find your it and what it is. It also should include any special instructions around presenting your item if you have them.</small>
@@ -22,6 +25,9 @@
         <% end %>
       <% end %>
       <%= f.submit "Submit Item" %>
+    <% end %>
+    <%= form_with model: (@item.item_submission || @item.build_item_submission), url: team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url), method: :post, id: :mark_as_done do |f| %>
+      <%= f.submit "Mark as done" %>
     <% end %>
   <% end %>
 </main>

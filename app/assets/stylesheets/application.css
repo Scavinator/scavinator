@@ -492,3 +492,16 @@ header .user-link {
   float: right;
   margin-right: 2em;
 }
+
+#mark_as_done {
+  display: none;
+}
+
+#empty_submission:checked {
+  ~ #new_item_submission {
+    display: none;
+  }
+  ~ #mark_as_done {
+    display: block;
+  }
+}
