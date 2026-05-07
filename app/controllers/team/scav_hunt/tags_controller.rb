@@ -8,6 +8,6 @@ class Team::ScavHunt::TagsController < Team::ScavHunt::BaseController
       @pending_items = @team_scav_hunt.items.joins(:team_tags).joins(:item_tags).where(team_tags: {id: params[:id]}, item_tags: {accepted: nil})
     end
     valid_tag_states = @tag.requires_approval ? true : [true, nil]
-    @items = @team_scav_hunt.items.joins(:team_tags).joins(:item_tags).where(team_tags: {id: params[:id]}, item_tags: {accepted: valid_tag_states})
+    @items = @team_scav_hunt.items.joins(:team_tags).joins(:item_tags).where(team_tags: {id: params[:id]}, item_tags: {accepted: valid_tag_states}).order(:number)
   end
 end
