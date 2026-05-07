@@ -247,6 +247,7 @@ form.inline-form {
   margin-block: 0;
   display: inline;
   white-space: pre-wrap;
+  word-break: break-all;
 }
 
 blockquote {
@@ -513,8 +514,10 @@ header .user-link {
   flex-direction: row;
   gap: 1em;
   section:not(#events) {
-    flex-grow: 1;
     flex-basis: 40%;
+  }
+  #events {
+    flex-basis: 20%;
   }
   #pins {
     display: flex;
@@ -529,6 +532,9 @@ header .user-link {
   ul {
     padding: 0.7em;
     display: block;
+    li {
+      word-break: break-all;
+    }
   }
   #hq-visit, #events, #pins div {
     border: 1px solid black;
