@@ -17,10 +17,10 @@ class Team::ScavHuntsController < Team::ScavHunt::BaseController
 
   def show
     # TODO: This is highly hacky and will need to be reworked post scav 2026
-    @pins = @team_scav_hunt.team.team_tags.where.not(pinned: nil).order(:pinned).all.map { |tag| [tag, @team_scav_hunt.items.joins(:item_tags).where(item_tags: {team_tag_id: tag.id})] }
+    @pins = @team_scav_hunt.team.team_tags.where.not(pinned: nil).order(:pinned).all.map { |tag| [tag, @team_scav_hunt.items.joins(:item_tags).where(item_tags: {team_tag_id: tag.id}).order(:number)] }
     @hq_pin = @pins.shift
     showcase_category = ListCategory.find_by(name: "Showcase")
-    @showcase = @team_scav_hunt.items.joins(:item_users).where(list_category_id: showcase_category.id) unless showcase_category.nil?
+    @showcase = @team_scav_hunt.items.joins(:item_users).where(list_category_id: showcase_category.id).order(:number) unless showcase_category.nil?
     @events = @team_scav_hunt.item_events.order(:date).where("date > ?", Date.new).limit(5)
   end
 
