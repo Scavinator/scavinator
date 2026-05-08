@@ -247,7 +247,7 @@ form.inline-form {
   margin-block: 0;
   display: inline;
   white-space: pre-wrap;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 blockquote {
@@ -533,7 +533,7 @@ header .user-link {
     padding: 0.7em;
     display: block;
     li {
-      word-break: break-all;
+      word-break: break-word;
     }
   }
   #hq-visit, #events, #pins div {
