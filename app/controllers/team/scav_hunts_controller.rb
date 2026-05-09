@@ -21,7 +21,7 @@ class Team::ScavHuntsController < Team::ScavHunt::BaseController
     @hq_pin = @pins.shift
     showcase_category = ListCategory.find_by(name: "Showcase")
     @showcase = @team_scav_hunt.items.joins(:item_users).where(list_category_id: showcase_category.id).order(:number) unless showcase_category.nil?
-    @events = @team_scav_hunt.item_events.order(:date).where("date > ?", Date.new).limit(5)
+    @events = @team_scav_hunt.item_events.order(:date).where("date > ?", DateTime.now).limit(5)
   end
 
   def new
