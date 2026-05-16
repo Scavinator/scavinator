@@ -94,8 +94,10 @@ class Team::ScavHunt::ItemsController < Team::ScavHunt::Item::BaseController
     if @item.item_submission
       @files = @files.order(item_id: :desc)
     end
-    @tags = @team.team_tags.where(enabled: true).all
-    @team_users = @team.team_users.where(approved: true).all
+    @item_tags = @item.item_tags.all
+    @tags = @team.team_tags.where(enabled: true).where.not(id: @item_tags.map(&:team_tag_id)).all
+    @assignees = @item.item_users.all
+    @team_users = @team.team_users.where(approved: true).where.not(user_id: @assignees.map(&:id)).all
     @events = @item.item_events.all.order(:date)
     @next_event = @events.select { |e| e.date > Time.current }.first || @events.last
     @discord_integration = @item.item_integrations.find_by(type: 'discord')

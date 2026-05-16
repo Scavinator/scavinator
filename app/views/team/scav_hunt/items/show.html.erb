@@ -66,7 +66,7 @@
     <% if team_user? || @item.item_tags.length > 0 %>
       <ul class="inline-list">
         Tags:
-        <% @item.item_tags.all.each do |item_tag| %>
+        <% @item_tags.each do |item_tag| %>
           <li class="item-tag" style="--tag-color:<%= item_tag.team_tag.color %>">
             <%= link_to item_tag.team_tag.name, team_scav_hunt_tag_path(@team_scav_hunt, item_tag.team_tag) %>
             <% if team_user? %>
@@ -85,7 +85,7 @@
         <%= form.submit "Add" %>
       <% end %>
     <% end %>
-    
+
     <% if !@item.item_submission %>
       <p><%= link_to "Submit completion", new_team_scav_hunt_item_submission_path(@team_scav_hunt, *@item.for_url), class: 'submit-button' %></p>
     <% end %>
@@ -93,7 +93,7 @@
   <section>
     <h3>Assignees</h3>
     <ul class="item-sidebar-list">
-      <% @item.item_users.all.each do |item_user| %>
+      <% @assignees.each do |item_user| %>
         <li>
           <%= link_to item_user.user.name, team_scav_hunt_user_path(@team_scav_hunt, item_user.user) %>
           <% if team_user? %>
