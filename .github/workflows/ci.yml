@@ -11,6 +11,7 @@ jobs:
     env:
       PGHOST: localhost
       PGUSER: postgres
+      PGPASSWORD: password
       PGDATABASE: scavinator_test
 
     services:
