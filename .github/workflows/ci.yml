@@ -10,21 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PGHOST: localhost
-      PGPORT: 5432
-      PGUSER: postgres
       PGDATABASE: scavinator_test
 
     services:
       postgres:
         image: postgres:18
         env:
-          POSTGRES_PASSWORD: password
           POSTGRES_DB: scavinator_test
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        ports:
+          - 5432:5432
     steps:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config postgresql-client
