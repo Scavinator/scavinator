@@ -20,7 +20,8 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: storage/test.sqlite3
+  database: scavinator_test
+  password: password
 
 
 # Store production database in the storage/ directory, which by default

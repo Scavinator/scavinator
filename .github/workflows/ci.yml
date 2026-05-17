@@ -45,6 +45,11 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Configuration
+        run: |
+          cp config/database.sample.yml config/database.yml
+          cp config/storage.sample.yml config/storage.yml
+
       - name: Run tests
         env:
           RAILS_ENV: test
