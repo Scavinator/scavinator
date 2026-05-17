@@ -37,7 +37,7 @@ jobs:
       - name: Setup Databases
         run: |
           bash script/pg_ci_setup.sh
-          bash script/pg_test_setup.sh
+          bash script/pg_parallel_test_setup.sh
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
