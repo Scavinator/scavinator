@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: password
+      PGDATABASE: scavinator_test
+
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: scavinator_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config postgresql-client
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Databases
+        run: |
+          bash script/pg_ci_setup.sh
+          bash script/pg_parallel_test_setup.sh
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Configuration
+        run: |
+          cp config/database.sample.yml config/database.yml
+          cp config/storage.sample.yml config/storage.yml
+
+      - name: Run tests
+        env:
+          RAILS_ENV: test
+        run: bin/rails test
