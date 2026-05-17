@@ -49,7 +49,6 @@ jobs:
         run: |
           cp config/database.sample.yml config/database.yml
           cp config/storage.sample.yml config/storage.yml
-          cp config/credentials.sample.yml config/credentials.yml
 
       - name: Run tests
         env:
