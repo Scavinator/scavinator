@@ -16,11 +16,11 @@
     </h4>
     <% if item.item_submission %>
       <p><%= item.item_submission.instructions %></p>
-      <ul>
+      <ul class="item-file-list">
         <% item.item_submission.item_files.each do |file| %>
           <li>
             <% if file.file.mime_type.split("/").first == "image" %>
-              <%= image_tag team_scav_hunt_item_file_path(@team_scav_hunt, *item.for_url, file.id), class: 'item-file' %>
+              <%= image_tag team_scav_hunt_item_file_path(@team_scav_hunt, *item.for_url, file.id) %>
             <% end %>
             <%= link_to file.file.metadata['filename'], team_scav_hunt_item_file_path(@team_scav_hunt, *item.for_url, file.id) %>
           </li>

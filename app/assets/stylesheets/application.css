@@ -457,9 +457,24 @@ header .user-link {
   margin: 1em;
 }
 
-.item-file {
-  max-width: 100%;
+.item-file-list {
+  padding-inline-start: 0;
+  list-style: none;
+
+  li {
+    display: inline-block;
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 500px;
+  }
+
+  a {
+    display: block;
+  }
 }
+
 
 .submission-button-row {
   display: flex;
