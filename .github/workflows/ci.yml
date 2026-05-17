@@ -9,7 +9,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      PGHOST: '127.0.0.1'
+      PGHOST: postgres
 
     services:
       postgres:
